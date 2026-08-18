@@ -6,6 +6,7 @@ import {
   InlineToolbarFeature,
   lexicalEditor,
 } from '@payloadcms/richtext-lexical'
+import { adminLabel } from '@/i18n/adminLabels'
 
 export const FormBlock: Block = {
   slug: 'formBlock',
@@ -14,13 +15,14 @@ export const FormBlock: Block = {
     {
       name: 'form',
       type: 'relationship',
+      label: adminLabel('表单', 'Form'),
       relationTo: 'forms',
       required: true,
     },
     {
       name: 'enableIntro',
       type: 'checkbox',
-      label: 'Enable Intro Content',
+      label: adminLabel('启用介绍内容', 'Enable intro content'),
     },
     {
       name: 'introContent',
@@ -38,14 +40,14 @@ export const FormBlock: Block = {
           ]
         },
       }),
-      label: 'Intro Content',
+      label: adminLabel('介绍内容', 'Intro content'),
     },
   ],
   graphQL: {
     singularName: 'FormBlock',
   },
   labels: {
-    plural: 'Form Blocks',
-    singular: 'Form Block',
+    plural: adminLabel('表单区块', 'Form blocks'),
+    singular: adminLabel('表单区块', 'Form block'),
   },
 }

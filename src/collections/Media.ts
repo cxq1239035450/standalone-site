@@ -10,12 +10,17 @@ import { fileURLToPath } from 'url'
 
 import { anyone } from '../access/anyone'
 import { authenticated } from '../access/authenticated'
+import { adminLabel } from '@/i18n/adminLabels'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
 export const Media: CollectionConfig = {
   slug: 'media',
+  labels: {
+    singular: adminLabel('媒体文件', 'Media'),
+    plural: adminLabel('媒体库', 'Media'),
+  },
   folders: true,
   access: {
     create: authenticated,
@@ -27,11 +32,13 @@ export const Media: CollectionConfig = {
     {
       name: 'alt',
       type: 'text',
+      label: adminLabel('替代文本', 'Alt text'),
       //required: true,
     },
     {
       name: 'caption',
       type: 'richText',
+      label: adminLabel('说明', 'Caption'),
       editor: lexicalEditor({
         features: ({ rootFeatures }) => {
           return [...rootFeatures, FixedToolbarFeature(), InlineToolbarFeature()]

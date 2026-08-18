@@ -76,7 +76,8 @@ src/app/
 
 ```text
 src/i18n/
-├── routing.ts       # locales、defaultLocale
+├── config.ts        # 唯一语言注册表
+├── routing.ts       # 从注册表生成 next-intl 路由
 ├── navigation.ts    # 国际化 Link 和 Router
 └── request.ts       # 按请求加载翻译
 
@@ -88,6 +89,28 @@ src/proxy.ts         # next-intl 路由代理
 ```
 
 默认语言为中文。访问 `/` 时由 next-intl 跳转到 `/zh`，英文站点使用 `/en`。
+
+### 新增语言
+
+语言列表统一配置在 `src/i18n/config.ts`。例如新增日语，只需在 `localeConfig.locales` 中增加：
+
+```ts
+{
+  code: 'ja',
+  label: '日本語',
+  htmlLang: 'ja-JP',
+}
+```
+
+然后创建 `messages/ja.json`，再执行：
+
+```bash
+pnpm generate:types
+pnpm payload migrate:create --name add-ja-locale
+pnpm payload migrate
+```
+
+next-intl 路由、Payload 后台语言、语言切换器、页面 fallback、预览 URL、缓存刷新和 sitemap 都会自动读取该注册表，无需分别维护语言数组。
 
 ## 核心源码结构
 

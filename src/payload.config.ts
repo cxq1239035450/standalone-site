@@ -1,4 +1,6 @@
 import { postgresAdapter } from '@payloadcms/db-postgres'
+import { en } from '@payloadcms/translations/languages/en'
+import { zh } from '@payloadcms/translations/languages/zh'
 import sharp from 'sharp'
 import path from 'path'
 import { buildConfig, PayloadRequest } from 'payload'
@@ -14,19 +16,30 @@ import { Header } from './Header/config'
 import { plugins } from './plugins'
 import { defaultLexical } from '@/fields/defaultLexical'
 import { getServerSideURL } from './utilities/getURL'
+import { defaultLocale, localeConfig } from './i18n/config'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
 export default buildConfig({
+  // Admin UI language (menus, buttons, validation messages, etc.).
+  // This is separate from `localization`, which controls localized content fields.
+  i18n: {
+    fallbackLanguage: defaultLocale,
+    supportedLanguages: {
+      zh,
+      en,
+    },
+  },
+  localization: {
+    locales: localeConfig.locales.map(({ code, label }) => ({ code, label })),
+    defaultLocale,
+    fallback: true,
+  },
   admin: {
     components: {
-      // The `BeforeLogin` component renders a message that you see while logging into your admin panel.
-      // Feel free to delete this at any time. Simply remove the line below.
-      beforeLogin: ['@/components/BeforeLogin'],
-      // The `BeforeDashboard` component renders the 'welcome' block that you see after logging into your admin panel.
-      // Feel free to delete this at any time. Simply remove the line below.
-      beforeDashboard: ['@/components/BeforeDashboard'],
+      // Keep the dashboard on Payload's translated core UI. The template's demo
+      // welcome components contain hard-coded English copy.
     },
     importMap: {
       baseDir: path.resolve(dirname),

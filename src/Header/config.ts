@@ -2,9 +2,11 @@ import type { GlobalConfig } from 'payload'
 
 import { link } from '@/fields/link'
 import { revalidateHeader } from './hooks/revalidateHeader'
+import { adminLabel } from '@/i18n/adminLabels'
 
 export const Header: GlobalConfig = {
   slug: 'header',
+  label: adminLabel('页头导航', 'Header'),
   access: {
     read: () => true,
   },
@@ -12,6 +14,7 @@ export const Header: GlobalConfig = {
     {
       name: 'navItems',
       type: 'array',
+      label: adminLabel('导航项目', 'Navigation items'),
       fields: [
         link({
           appearances: false,

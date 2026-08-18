@@ -1,9 +1,14 @@
 import type { CollectionConfig } from 'payload'
 
 import { authenticated } from '../../access/authenticated'
+import { adminLabel } from '@/i18n/adminLabels'
 
 export const Users: CollectionConfig = {
   slug: 'users',
+  labels: {
+    singular: adminLabel('用户', 'User'),
+    plural: adminLabel('用户', 'Users'),
+  },
   access: {
     admin: authenticated,
     create: authenticated,
@@ -20,6 +25,7 @@ export const Users: CollectionConfig = {
     {
       name: 'name',
       type: 'text',
+      label: adminLabel('姓名', 'Name'),
     },
   ],
   timestamps: true,

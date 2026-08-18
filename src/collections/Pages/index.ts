@@ -12,6 +12,7 @@ import { slugField } from 'payload'
 import { populatePublishedAt } from '../../hooks/populatePublishedAt'
 import { generatePreviewPath } from '../../utilities/generatePreviewPath'
 import { revalidateDelete, revalidatePage } from './hooks/revalidatePage'
+import { adminLabel } from '@/i18n/adminLabels'
 
 import {
   MetaDescriptionField,
@@ -23,6 +24,10 @@ import {
 
 export const Pages: CollectionConfig<'pages'> = {
   slug: 'pages',
+  labels: {
+    singular: adminLabel('页面', 'Page'),
+    plural: adminLabel('页面', 'Pages'),
+  },
   access: {
     create: authenticated,
     delete: authenticated,
@@ -43,6 +48,7 @@ export const Pages: CollectionConfig<'pages'> = {
         generatePreviewPath({
           slug: data?.slug,
           collection: 'pages',
+          locale: req.locale,
           req,
         }),
     },
@@ -50,6 +56,7 @@ export const Pages: CollectionConfig<'pages'> = {
       generatePreviewPath({
         slug: data?.slug as string,
         collection: 'pages',
+        locale: req.locale,
         req,
       }),
     useAsTitle: 'title',
@@ -58,6 +65,8 @@ export const Pages: CollectionConfig<'pages'> = {
     {
       name: 'title',
       type: 'text',
+      label: adminLabel('标题', 'Title'),
+      localized: true,
       required: true,
     },
     {
@@ -65,21 +74,23 @@ export const Pages: CollectionConfig<'pages'> = {
       tabs: [
         {
           fields: [hero],
-          label: 'Hero',
+          label: adminLabel('首屏', 'Hero'),
         },
         {
           fields: [
             {
               name: 'layout',
               type: 'blocks',
+              label: adminLabel('页面内容', 'Page content'),
               blocks: [CallToAction, Content, MediaBlock, Archive, FormBlock],
+              localized: true,
               required: true,
               admin: {
                 initCollapsed: true,
               },
             },
           ],
-          label: 'Content',
+          label: adminLabel('内容', 'Content'),
         },
         {
           name: 'meta',
@@ -92,12 +103,19 @@ export const Pages: CollectionConfig<'pages'> = {
             }),
             MetaTitleField({
               hasGenerateFn: true,
+              overrides: {
+                localized: true,
+              },
             }),
             MetaImageField({
               relationTo: 'media',
             }),
 
-            MetaDescriptionField({}),
+            MetaDescriptionField({
+              overrides: {
+                localized: true,
+              },
+            }),
             PreviewField({
               // if the `generateUrl` function is configured
               hasGenerateFn: true,
@@ -113,11 +131,13 @@ export const Pages: CollectionConfig<'pages'> = {
     {
       name: 'publishedAt',
       type: 'date',
+      label: adminLabel('发布时间', 'Published at'),
       admin: {
         position: 'sidebar',
       },
     },
-    slugField(),
+    // URLs are shared across locales: /zh/about and /en/about.
+    slugField({ localized: false }),
   ],
   hooks: {
     afterChange: [revalidatePage],

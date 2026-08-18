@@ -3,12 +3,7 @@
 import { useLocale, useTranslations } from 'next-intl'
 import { usePathname, useRouter } from 'next/navigation'
 
-import { routing, type Locale } from '@/i18n/routing'
-
-const localeNames: Record<Locale, string> = {
-  en: 'English',
-  zh: '中文',
-}
+import { isLocale, localeCodes, localeNames, type Locale } from '@/i18n/config'
 
 export function LanguageSwitcher() {
   const currentLocale = useLocale() as Locale
@@ -19,7 +14,7 @@ export function LanguageSwitcher() {
   function switchLocale(locale: Locale) {
     const segments = pathname.split('/')
 
-    if (routing.locales.includes(segments[1] as Locale)) {
+    if (isLocale(segments[1])) {
       segments[1] = locale
     } else {
       segments.splice(1, 0, locale)
@@ -37,7 +32,7 @@ export function LanguageSwitcher() {
         onChange={(event) => switchLocale(event.target.value as Locale)}
         value={currentLocale}
       >
-        {routing.locales.map((locale) => (
+        {localeCodes.map((locale) => (
           <option key={locale} value={locale}>
             {localeNames[locale]}
           </option>

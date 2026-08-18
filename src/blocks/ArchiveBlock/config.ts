@@ -6,6 +6,7 @@ import {
   InlineToolbarFeature,
   lexicalEditor,
 } from '@payloadcms/richtext-lexical'
+import { adminLabel } from '@/i18n/adminLabels'
 
 export const Archive: Block = {
   slug: 'archive',
@@ -24,19 +25,20 @@ export const Archive: Block = {
           ]
         },
       }),
-      label: 'Intro Content',
+      label: adminLabel('介绍内容', 'Intro content'),
     },
     {
       name: 'populateBy',
       type: 'select',
+      label: adminLabel('内容来源', 'Populate by'),
       defaultValue: 'collection',
       options: [
         {
-          label: 'Collection',
+          label: adminLabel('集合', 'Collection'),
           value: 'collection',
         },
         {
-          label: 'Individual Selection',
+          label: adminLabel('单独选择', 'Individual selection'),
           value: 'selection',
         },
       ],
@@ -48,10 +50,10 @@ export const Archive: Block = {
         condition: (_, siblingData) => siblingData.populateBy === 'collection',
       },
       defaultValue: 'posts',
-      label: 'Collections To Show',
+      label: adminLabel('要显示的集合', 'Collections to show'),
       options: [
         {
-          label: 'Posts',
+          label: adminLabel('文章', 'Posts'),
           value: 'posts',
         },
       ],
@@ -63,7 +65,7 @@ export const Archive: Block = {
         condition: (_, siblingData) => siblingData.populateBy === 'collection',
       },
       hasMany: true,
-      label: 'Categories To Show',
+      label: adminLabel('要显示的分类', 'Categories to show'),
       relationTo: 'categories',
     },
     {
@@ -74,7 +76,7 @@ export const Archive: Block = {
         step: 1,
       },
       defaultValue: 10,
-      label: 'Limit',
+      label: adminLabel('数量限制', 'Limit'),
     },
     {
       name: 'selectedDocs',
@@ -83,12 +85,12 @@ export const Archive: Block = {
         condition: (_, siblingData) => siblingData.populateBy === 'selection',
       },
       hasMany: true,
-      label: 'Selection',
+      label: adminLabel('选择内容', 'Selection'),
       relationTo: ['posts'],
     },
   ],
   labels: {
-    plural: 'Archives',
-    singular: 'Archive',
+    plural: adminLabel('内容列表', 'Archives'),
+    singular: adminLabel('内容列表', 'Archive'),
   },
 }

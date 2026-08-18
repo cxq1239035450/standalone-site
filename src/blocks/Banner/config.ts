@@ -5,19 +5,25 @@ import {
   InlineToolbarFeature,
   lexicalEditor,
 } from '@payloadcms/richtext-lexical'
+import { adminLabel } from '@/i18n/adminLabels'
 
 export const Banner: Block = {
   slug: 'banner',
+  labels: {
+    singular: adminLabel('提示横幅', 'Banner'),
+    plural: adminLabel('提示横幅', 'Banners'),
+  },
   fields: [
     {
       name: 'style',
       type: 'select',
+      label: adminLabel('样式', 'Style'),
       defaultValue: 'info',
       options: [
-        { label: 'Info', value: 'info' },
-        { label: 'Warning', value: 'warning' },
-        { label: 'Error', value: 'error' },
-        { label: 'Success', value: 'success' },
+        { label: adminLabel('信息', 'Info'), value: 'info' },
+        { label: adminLabel('警告', 'Warning'), value: 'warning' },
+        { label: adminLabel('错误', 'Error'), value: 'error' },
+        { label: adminLabel('成功', 'Success'), value: 'success' },
       ],
       required: true,
     },

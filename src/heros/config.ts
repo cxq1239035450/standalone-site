@@ -8,31 +8,33 @@ import {
 } from '@payloadcms/richtext-lexical'
 
 import { linkGroup } from '@/fields/linkGroup'
+import { adminLabel } from '@/i18n/adminLabels'
 
 export const hero: Field = {
   name: 'hero',
   type: 'group',
+  localized: true,
   fields: [
     {
       name: 'type',
       type: 'select',
       defaultValue: 'lowImpact',
-      label: 'Type',
+      label: adminLabel('类型', 'Type'),
       options: [
         {
-          label: 'None',
+          label: adminLabel('无', 'None'),
           value: 'none',
         },
         {
-          label: 'High Impact',
+          label: adminLabel('大型首屏', 'High impact'),
           value: 'highImpact',
         },
         {
-          label: 'Medium Impact',
+          label: adminLabel('中型首屏', 'Medium impact'),
           value: 'mediumImpact',
         },
         {
-          label: 'Low Impact',
+          label: adminLabel('简洁首屏', 'Low impact'),
           value: 'lowImpact',
         },
       ],
@@ -61,6 +63,7 @@ export const hero: Field = {
     {
       name: 'media',
       type: 'upload',
+      label: adminLabel('媒体', 'Media'),
       admin: {
         condition: (_, { type } = {}) => ['highImpact', 'mediumImpact'].includes(type),
       },

@@ -8,27 +8,29 @@ import {
 } from '@payloadcms/richtext-lexical'
 
 import { link } from '@/fields/link'
+import { adminLabel } from '@/i18n/adminLabels'
 
 const columnFields: Field[] = [
   {
     name: 'size',
     type: 'select',
+    label: adminLabel('列宽', 'Column size'),
     defaultValue: 'oneThird',
     options: [
       {
-        label: 'One Third',
+        label: adminLabel('三分之一', 'One third'),
         value: 'oneThird',
       },
       {
-        label: 'Half',
+        label: adminLabel('二分之一', 'Half'),
         value: 'half',
       },
       {
-        label: 'Two Thirds',
+        label: adminLabel('三分之二', 'Two thirds'),
         value: 'twoThirds',
       },
       {
-        label: 'Full',
+        label: adminLabel('整行', 'Full'),
         value: 'full',
       },
     ],
@@ -51,6 +53,7 @@ const columnFields: Field[] = [
   {
     name: 'enableLink',
     type: 'checkbox',
+    label: adminLabel('启用链接', 'Enable link'),
   },
   link({
     overrides: {
@@ -65,11 +68,16 @@ const columnFields: Field[] = [
 
 export const Content: Block = {
   slug: 'content',
+  labels: {
+    singular: adminLabel('文本内容', 'Content'),
+    plural: adminLabel('文本内容', 'Content'),
+  },
   interfaceName: 'ContentBlock',
   fields: [
     {
       name: 'columns',
       type: 'array',
+      label: adminLabel('内容列', 'Columns'),
       admin: {
         initCollapsed: true,
       },

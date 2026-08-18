@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { hasLocale, NextIntlClientProvider } from 'next-intl'
+import { NextIntlClientProvider } from 'next-intl'
 import { getMessages, setRequestLocale } from 'next-intl/server'
 import { notFound } from 'next/navigation'
 
@@ -18,10 +18,10 @@ import { draftMode } from 'next/headers'
 
 import './globals.css'
 import { getServerSideURL } from '@/utilities/getURL'
-import { routing } from '@/i18n/routing'
+import { getHtmlLang, isLocale, localeCodes } from '@/i18n/config'
 
 export function generateStaticParams() {
-  return routing.locales.map((locale) => ({ locale }))
+  return localeCodes.map((locale) => ({ locale }))
 }
 
 export default async function RootLayout({
@@ -33,7 +33,7 @@ export default async function RootLayout({
 }) {
   const { locale } = await params
 
-  if (!hasLocale(routing.locales, locale)) notFound()
+  if (!isLocale(locale)) notFound()
 
   setRequestLocale(locale)
 
@@ -41,7 +41,7 @@ export default async function RootLayout({
   const messages = await getMessages()
 
   return (
-    <html className={cn(GeistSans.variable, GeistMono.variable)} lang={locale} suppressHydrationWarning>
+    <html className={cn(GeistSans.variable, GeistMono.variable)} lang={getHtmlLang(locale)} suppressHydrationWarning>
       <head>
         <InitTheme />
         <link href="/favicon.ico" rel="icon" sizes="32x32" />

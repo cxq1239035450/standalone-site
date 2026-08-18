@@ -4,6 +4,7 @@ import type { LinkAppearances } from './link'
 
 import deepMerge from '@/utilities/deepMerge'
 import { link } from './link'
+import { adminLabel } from '@/i18n/adminLabels'
 
 type LinkGroupType = (options?: {
   appearances?: LinkAppearances[] | false
@@ -14,6 +15,7 @@ export const linkGroup: LinkGroupType = ({ appearances, overrides = {} } = {}) =
   const generatedLinkGroup: Field = {
     name: 'links',
     type: 'array',
+    label: adminLabel('链接', 'Links'),
     fields: [
       link({
         appearances,

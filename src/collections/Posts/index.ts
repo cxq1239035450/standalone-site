@@ -26,9 +26,14 @@ import {
   PreviewField,
 } from '@payloadcms/plugin-seo/fields'
 import { slugField } from 'payload'
+import { adminLabel } from '@/i18n/adminLabels'
 
 export const Posts: CollectionConfig<'posts'> = {
   slug: 'posts',
+  labels: {
+    singular: adminLabel('文章', 'Post'),
+    plural: adminLabel('文章', 'Posts'),
+  },
   access: {
     create: authenticated,
     delete: authenticated,
@@ -69,6 +74,7 @@ export const Posts: CollectionConfig<'posts'> = {
     {
       name: 'title',
       type: 'text',
+      label: adminLabel('标题', 'Title'),
       required: true,
     },
     {
@@ -79,6 +85,7 @@ export const Posts: CollectionConfig<'posts'> = {
             {
               name: 'heroImage',
               type: 'upload',
+              label: adminLabel('封面图片', 'Hero image'),
               relationTo: 'media',
             },
             {
@@ -100,13 +107,14 @@ export const Posts: CollectionConfig<'posts'> = {
               required: true,
             },
           ],
-          label: 'Content',
+          label: adminLabel('内容', 'Content'),
         },
         {
           fields: [
             {
               name: 'relatedPosts',
               type: 'relationship',
+              label: adminLabel('相关文章', 'Related posts'),
               admin: {
                 position: 'sidebar',
               },
@@ -123,6 +131,7 @@ export const Posts: CollectionConfig<'posts'> = {
             {
               name: 'categories',
               type: 'relationship',
+              label: adminLabel('分类', 'Categories'),
               admin: {
                 position: 'sidebar',
               },
@@ -130,7 +139,7 @@ export const Posts: CollectionConfig<'posts'> = {
               relationTo: 'categories',
             },
           ],
-          label: 'Meta',
+          label: adminLabel('关联信息', 'Meta'),
         },
         {
           name: 'meta',
@@ -164,6 +173,7 @@ export const Posts: CollectionConfig<'posts'> = {
     {
       name: 'publishedAt',
       type: 'date',
+      label: adminLabel('发布时间', 'Published at'),
       admin: {
         date: {
           pickerAppearance: 'dayAndTime',
@@ -184,6 +194,7 @@ export const Posts: CollectionConfig<'posts'> = {
     {
       name: 'authors',
       type: 'relationship',
+      label: adminLabel('作者', 'Authors'),
       admin: {
         position: 'sidebar',
       },
@@ -196,6 +207,7 @@ export const Posts: CollectionConfig<'posts'> = {
     {
       name: 'populatedAuthors',
       type: 'array',
+      label: adminLabel('作者信息', 'Author details'),
       access: {
         update: () => false,
       },
@@ -207,10 +219,12 @@ export const Posts: CollectionConfig<'posts'> = {
         {
           name: 'id',
           type: 'text',
+          label: adminLabel('编号', 'ID'),
         },
         {
           name: 'name',
           type: 'text',
+          label: adminLabel('姓名', 'Name'),
         },
       ],
     },
