@@ -1,0 +1,64 @@
+{
+  "navigation": {
+    "home": "Home",
+    "products": "Products",
+    "solutions": "Solutions",
+    "about": "About Us",
+    "contact": "Contact"
+  },
+  "header": {
+    "login": "Login"
+  },
+  "language": {
+    "switch": "Switch language"
+  },
+  "footer": {
+    "company": {
+      "name": "FreshConnect",
+      "description": "A professional B2B agricultural wholesale platform connecting suppliers with food service businesses."
+    },
+    "products": "Products & Services",
+    "support": "Support",
+    "contact": "Contact Us",
+    "productLinks": ["Product Center", "Solutions", "Pricing", "Case Studies"],
+    "supportLinks": ["Help Center", "FAQ", "Contact Us", "Feedback"],
+    "phone": "Phone",
+    "email": "Email",
+    "address": "Address",
+    "workTime": "Business Hours",
+    "copyright": "© 2026 FreshConnect. All rights reserved."
+  },
+  "home": {
+    "meta": {"title": "FreshConnect | B2B Produce Procurement", "description": "A reliable B2B wholesale platform connecting quality farms with restaurants, retailers and food service businesses."},
+    "hero": {"eyebrow": "Direct sourcing · Quality control · Cold-chain delivery", "title": "Produce procurement", "highlight": "made reliable and transparent", "description": "Connect with trusted farms and complete sourcing, pricing and cold-chain delivery in one efficient workflow.", "primaryAction": "Browse products", "secondaryAction": "Talk to an advisor"},
+    "dashboard": {"label": "Today's supply board", "title": "Selected farm-direct supply", "status": "Live updates", "deliveryLabel": "Fastest delivery", "deliveryValue": "Next day"},
+    "stats": {
+      "suppliers": {"value": "320+", "label": "Verified suppliers"},
+      "products": {"value": "2,800+", "label": "Reliable SKUs"},
+      "customers": {"value": "1,600+", "label": "Business customers"},
+      "cities": {"value": "42", "label": "Cold-chain cities"}
+    },
+    "categories": {
+      "eyebrow": "Complete assortment", "title": "Fresh supply updated every day", "description": "Source essentials and seasonal specialties by specification, origin and delivery window.",
+      "vegetables": {"name": "Fresh vegetables", "description": "Leafy greens, roots, mushrooms and prepared vegetables.", "count": "860+ products"},
+      "fruits": {"name": "Seasonal fruits", "description": "Domestic and imported fruits in selectable grades.", "count": "620+ products"},
+      "meat": {"name": "Meat and poultry", "description": "Inspected chilled and frozen products for food service.", "count": "540+ products"},
+      "seafood": {"name": "Seafood", "description": "Live, chilled and frozen seafood with temperature control.", "count": "780+ products"}
+    },
+    "advantages": {
+      "eyebrow": "Platform capabilities", "title": "Turn a complex supply chain into reliable delivery",
+      "source": {"title": "Verified sources", "description": "We review origins, credentials and delivery records to maintain a reliable supply pool."},
+      "quality": {"title": "Quality standards", "description": "Category-specific acceptance standards and traceable quality checkpoints."},
+      "coldChain": {"title": "Cold-chain control", "description": "Storage and transport matched to every product's temperature requirements."},
+      "delivery": {"title": "On-time fulfillment", "description": "Smart routing and regional coordination keep arrival times predictable."}
+    },
+    "process": {
+      "eyebrow": "Procurement process", "title": "Business purchasing in four steps",
+      "verify": {"title": "Verify business", "description": "Create a purchasing profile with your basic company details."},
+      "select": {"title": "Select and quote", "description": "Filter daily supply by category, grade and origin."},
+      "confirm": {"title": "Confirm order", "description": "Lock price, quantity, payment terms and delivery needs."},
+      "deliver": {"title": "Cold-chain delivery", "description": "Track fulfillment and submit quality feedback after receipt."}
+    },
+    "cta": {"title": "Ready to improve procurement efficiency?", "description": "Tell us what you need and where it should arrive. Our advisors will match the right supply plan.", "action": "Get a sourcing plan"}
+  }
+}

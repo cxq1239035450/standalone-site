@@ -1,0 +1,64 @@
+{
+  "navigation": {
+    "home": "首页",
+    "products": "产品",
+    "solutions": "解决方案",
+    "about": "关于我们",
+    "contact": "联系我们"
+  },
+  "header": {
+    "login": "登录"
+  },
+  "language": {
+    "switch": "切换语言"
+  },
+  "footer": {
+    "company": {
+      "name": "鲜联集采",
+      "description": "专业的农产品 B2B 批发平台，连接源头供应商与餐饮企业。"
+    },
+    "products": "产品与服务",
+    "support": "帮助支持",
+    "contact": "联系我们",
+    "productLinks": ["产品中心", "解决方案", "价格方案", "客户案例"],
+    "supportLinks": ["帮助中心", "常见问题", "联系我们", "意见反馈"],
+    "phone": "电话",
+    "email": "邮箱",
+    "address": "地址",
+    "workTime": "服务时间",
+    "copyright": "© 2026 鲜联集采。保留所有权利。"
+  },
+  "home": {
+    "meta": {"title": "鲜联集采｜农产品 B2B 一站式采购平台", "description": "连接优质产地与餐饮、商超及团餐企业，提供稳定、透明、高效的农产品批发采购服务。"},
+    "hero": {"eyebrow": "源头直采 · 全程品控 · 冷链履约", "title": "让农产品采购", "highlight": "更稳定、更透明", "description": "连接全国优质产地与餐饮、商超及团餐企业，从询价、选品到冷链配送，一站完成高效采购。", "primaryAction": "立即选品", "secondaryAction": "联系采购顾问"},
+    "dashboard": {"label": "今日供应看板", "title": "优选源头货盘", "status": "实时更新", "deliveryLabel": "最快履约", "deliveryValue": "次日送达"},
+    "stats": {
+      "suppliers": {"value": "320+", "label": "认证源头供应商"},
+      "products": {"value": "2,800+", "label": "稳定供应 SKU"},
+      "customers": {"value": "1,600+", "label": "企业采购客户"},
+      "cities": {"value": "42", "label": "冷链覆盖城市"}
+    },
+    "categories": {
+      "eyebrow": "全品类供应", "title": "每天更新的新鲜货盘", "description": "覆盖高频刚需与季节特色商品，按规格、产地和交付周期快速匹配采购需求。",
+      "vegetables": {"name": "新鲜蔬菜", "description": "叶菜、根茎、菌菇与净菜，产地直发。", "count": "860+ 个商品"},
+      "fruits": {"name": "时令水果", "description": "国产与进口水果，成熟度和规格可选。", "count": "620+ 个商品"},
+      "meat": {"name": "肉禽蛋品", "description": "检疫合格，支持冷鲜、冷冻多种交付。", "count": "540+ 个商品"},
+      "seafood": {"name": "水产海鲜", "description": "鲜活、冰鲜与冻品，全程温控运输。", "count": "780+ 个商品"}
+    },
+    "advantages": {
+      "eyebrow": "平台能力", "title": "把复杂供应链变成确定交付",
+      "source": {"title": "源头认证", "description": "严格审核产地、资质与履约记录，建立稳定供应池。"},
+      "quality": {"title": "标准化品控", "description": "按品类建立验收标准，关键节点留痕并支持售后追溯。"},
+      "coldChain": {"title": "全程冷链", "description": "根据商品温层匹配仓储与车辆，降低运输过程损耗。"},
+      "delivery": {"title": "准时履约", "description": "智能排线与区域协同，让采购计划和到货时间更可控。"}
+    },
+    "process": {
+      "eyebrow": "采购流程", "title": "四步完成企业采购",
+      "verify": {"title": "企业认证", "description": "提交基础资料，建立专属采购档案。"},
+      "select": {"title": "选品询价", "description": "按品类、规格、产地筛选当日货盘。"},
+      "confirm": {"title": "确认订单", "description": "锁定价格、数量、账期与交付要求。"},
+      "deliver": {"title": "冷链交付", "description": "全程跟踪配送，签收后支持质量反馈。"}
+    },
+    "cta": {"title": "准备好升级你的采购效率了吗？", "description": "告诉我们需要的品类、数量和交付城市，采购顾问将为你匹配合适的供应方案。", "action": "获取采购方案"}
+  }
+}
