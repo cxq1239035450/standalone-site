@@ -2,6 +2,7 @@ import { getServerSideSitemap } from 'next-sitemap'
 import { getPayload } from 'payload'
 import config from '@payload-config'
 import { unstable_cache } from 'next/cache'
+import { localeCodes } from '@/i18n/config'
 
 const getPostsSitemap = unstable_cache(
   async () => {
@@ -18,12 +19,14 @@ const getPostsSitemap = unstable_cache(
       depth: 0,
       limit: 1000,
       pagination: false,
+      locale: 'all',
       where: {
         _status: {
           equals: 'published',
         },
       },
       select: {
+        _status: true,
         slug: true,
         updatedAt: true,
       },
@@ -31,14 +34,17 @@ const getPostsSitemap = unstable_cache(
 
     const dateFallback = new Date().toISOString()
 
-    const sitemap = results.docs
-      ? results.docs
-          .filter((post) => Boolean(post?.slug))
-          .map((post) => ({
-            loc: `${SITE_URL}/posts/${post?.slug}`,
-            lastmod: post.updatedAt || dateFallback,
-          }))
-      : []
+    const sitemap = results.docs.flatMap((post) => {
+      if (!post?.slug) return []
+      const statuses = post._status as unknown as Record<string, 'draft' | 'published'>
+
+      return localeCodes
+        .filter((locale) => statuses?.[locale] === 'published')
+        .map((locale) => ({
+          loc: `${SITE_URL}/${locale}/posts/${post.slug}`,
+          lastmod: post.updatedAt || dateFallback,
+        }))
+    })
 
     return sitemap
   },

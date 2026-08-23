@@ -7,57 +7,104 @@ import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import React from 'react'
 import PageClient from './page.client'
+import { getTranslations } from 'next-intl/server'
+import { notFound } from 'next/navigation'
+import { isLocale } from '@/i18n/config'
+import { Newspaper } from 'lucide-react'
 
 export const dynamic = 'force-static'
 export const revalidate = 600
 
-export default async function Page() {
+type Args = {
+  params: Promise<{ locale: string }>
+}
+
+export default async function Page({ params }: Args) {
+  const { locale } = await params
+  if (!isLocale(locale)) notFound()
+
   const payload = await getPayload({ config: configPromise })
+  const t = await getTranslations({ locale, namespace: 'posts' })
 
   const posts = await payload.find({
     collection: 'posts',
     depth: 1,
+    draft: false,
+    fallbackLocale: false,
     limit: 12,
+    locale,
     overrideAccess: false,
+    where: {
+      title: {
+        exists: true,
+      },
+    },
     select: {
       title: true,
       slug: true,
       categories: true,
       meta: true,
+      publishedAt: true,
     },
   })
 
+  const rangeEnd = Math.min(posts.totalDocs, 12)
+
   return (
-    <div className="pt-24 pb-24">
+    <main className="bg-stone-50 pb-24">
       <PageClient />
-      <div className="container mb-16">
-        <div className="prose dark:prose-invert max-w-none">
-          <h1>Posts</h1>
+      <section className="relative overflow-hidden border-b border-emerald-950/10 bg-emerald-950 py-20 text-white sm:py-24">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(52,211,153,0.22),transparent_32%),linear-gradient(135deg,transparent,rgba(255,255,255,0.04))]" />
+        <div className="container relative">
+          <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl border border-white/15 bg-white/10 text-emerald-200">
+            <Newspaper className="h-6 w-6" />
+          </span>
+          <p className="mt-7 text-sm font-semibold uppercase tracking-[0.2em] text-emerald-300">
+            {t('eyebrow')}
+          </p>
+          <h1 className="mt-3 max-w-3xl text-4xl font-semibold tracking-tight sm:text-6xl">
+            {t('title')}
+          </h1>
+          <p className="mt-5 max-w-2xl text-lg leading-8 text-emerald-50/70">{t('description')}</p>
         </div>
-      </div>
+      </section>
 
-      <div className="container mb-8">
-        <PageRange
-          collection="posts"
-          currentPage={posts.page}
-          limit={12}
-          totalDocs={posts.totalDocs}
-        />
-      </div>
+      <section className="pt-12 sm:pt-16">
+        <div className="container mb-7 flex items-center justify-between">
+          <PageRange
+            className="text-sm text-slate-500"
+            collection="posts"
+            currentPage={posts.page}
+            emptyLabel={t('empty')}
+            limit={12}
+            rangeLabel={t('range', {
+              end: rangeEnd,
+              start: posts.totalDocs > 0 ? 1 : 0,
+              total: posts.totalDocs,
+            })}
+            totalDocs={posts.totalDocs}
+          />
+        </div>
 
-      <CollectionArchive posts={posts.docs} />
+        <CollectionArchive posts={posts.docs} />
 
-      <div className="container">
-        {posts.totalPages > 1 && posts.page && (
-          <Pagination page={posts.page} totalPages={posts.totalPages} />
-        )}
-      </div>
-    </div>
+        <div className="container">
+          {posts.totalPages > 1 && posts.page && (
+            <Pagination page={posts.page} totalPages={posts.totalPages} />
+          )}
+        </div>
+      </section>
+    </main>
   )
 }
 
-export function generateMetadata(): Metadata {
+export async function generateMetadata({ params }: Args): Promise<Metadata> {
+  const { locale } = await params
+  if (!isLocale(locale)) notFound()
+  const t = await getTranslations({ locale, namespace: 'posts' })
+
   return {
-    title: `Payload Website Template Posts`,
+    title: t('metaTitle'),
+    description: t('metaDescription'),
   }
 }

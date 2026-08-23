@@ -17,6 +17,7 @@ import { MediaBlock } from '../../blocks/MediaBlock/config'
 import { generatePreviewPath } from '../../utilities/generatePreviewPath'
 import { populateAuthors } from './hooks/populateAuthors'
 import { revalidateDelete, revalidatePost } from './hooks/revalidatePost'
+import { validatePublishLocales } from './hooks/validatePublishLocales'
 
 import {
   MetaDescriptionField,
@@ -53,12 +54,18 @@ export const Posts: CollectionConfig<'posts'> = {
     },
   },
   admin: {
-    defaultColumns: ['title', 'slug', 'updatedAt'],
+    components: {
+      edit: {
+        PublishButton: '@/components/TranslatePublishButton',
+      },
+    },
+    defaultColumns: ['title', 'language', 'slug', 'updatedAt'],
     livePreview: {
       url: ({ data, req }) =>
         generatePreviewPath({
           slug: data?.slug,
           collection: 'posts',
+          locale: req.locale,
           req,
         }),
     },
@@ -66,6 +73,7 @@ export const Posts: CollectionConfig<'posts'> = {
       generatePreviewPath({
         slug: data?.slug as string,
         collection: 'posts',
+        locale: req.locale,
         req,
       }),
     useAsTitle: 'title',
@@ -75,6 +83,7 @@ export const Posts: CollectionConfig<'posts'> = {
       name: 'title',
       type: 'text',
       label: adminLabel('标题', 'Title'),
+      localized: true,
       required: true,
     },
     {
@@ -91,6 +100,7 @@ export const Posts: CollectionConfig<'posts'> = {
             {
               name: 'content',
               type: 'richText',
+              localized: true,
               editor: lexicalEditor({
                 features: ({ rootFeatures }) => {
                   return [
@@ -152,12 +162,19 @@ export const Posts: CollectionConfig<'posts'> = {
             }),
             MetaTitleField({
               hasGenerateFn: true,
+              overrides: {
+                localized: true,
+              },
             }),
             MetaImageField({
               relationTo: 'media',
             }),
 
-            MetaDescriptionField({}),
+            MetaDescriptionField({
+              overrides: {
+                localized: true,
+              },
+            }),
             PreviewField({
               // if the `generateUrl` function is configured
               hasGenerateFn: true,
@@ -201,6 +218,21 @@ export const Posts: CollectionConfig<'posts'> = {
       hasMany: true,
       relationTo: 'users',
     },
+    {
+      name: 'language',
+      type: 'text',
+      label: adminLabel('发布语言', 'Published languages'),
+      virtual: true,
+      admin: {
+        components: {
+          Cell: '@/components/PostLanguageColumn#PostLanguageCell',
+          Field: '@/components/PostLanguageColumn#PostLanguageField',
+        },
+        disableListFilter: true,
+        disableGroupBy: true,
+        readOnly: true,
+      },
+    },
     // This field is only used to populate the user data via the `populateAuthors` hook
     // This is because the `user` collection has access control locked to protect user privacy
     // GraphQL will also not return mutated user data that differs from the underlying schema
@@ -231,6 +263,7 @@ export const Posts: CollectionConfig<'posts'> = {
     slugField(),
   ],
   hooks: {
+    beforeChange: [validatePublishLocales],
     afterChange: [revalidatePost],
     afterRead: [populateAuthors],
     afterDelete: [revalidateDelete],
@@ -240,6 +273,7 @@ export const Posts: CollectionConfig<'posts'> = {
       autosave: {
         interval: 100, // We set this interval for optimal live preview
       },
+      localizeStatus: true,
       schedulePublish: true,
     },
     maxPerDoc: 50,

@@ -13,8 +13,14 @@ import {
   Truck,
 } from 'lucide-react'
 import { getTranslations } from 'next-intl/server'
+import { getLocale } from 'next-intl/server'
+import { getPayload } from 'payload'
+import configPromise from '@payload-config'
 
+import { Card, type CardPostData } from '@/components/Card'
+import { ProductCard } from '@/components/ProductCard'
 import { Link } from '@/i18n/navigation'
+import { defaultLocale, isLocale } from '@/i18n/config'
 
 const categories = [
   { key: 'vegetables', icon: Leaf, accent: 'bg-emerald-100 text-emerald-700' },
@@ -38,7 +44,65 @@ const steps = [
 ] as const
 
 export async function HomePageSections() {
-  const t = await getTranslations('home')
+  const localeValue = await getLocale()
+  const locale = isLocale(localeValue) ? localeValue : defaultLocale
+  const [t, payload] = await Promise.all([getTranslations('home'), getPayload({ config: configPromise })])
+  const { docs: latestPosts } = await payload.find({
+    collection: 'posts',
+    depth: 1,
+    draft: false,
+    fallbackLocale: false,
+    limit: 3,
+    locale,
+    pagination: false,
+    sort: '-publishedAt',
+    where: {
+      _status: {
+        equals: 'published',
+      },
+      title: {
+        exists: true,
+      },
+    },
+  })
+
+  const { docs: featuredProducts } = await payload.find({
+    collection: 'products',
+    depth: 1,
+    draft: false,
+    fallbackLocale: false,
+    limit: 4,
+    locale,
+    pagination: false,
+    sort: '-publishedAt',
+    where: {
+      _status: {
+        equals: 'published',
+      },
+      'organization.featured': {
+        equals: true,
+      },
+      title: {
+        exists: true,
+      },
+    },
+    select: {
+      title: true,
+      slug: true,
+      general: {
+        heroImage: true,
+        shortDescription: true,
+      },
+      pricing: {
+        price: true,
+        unit: true,
+      },
+      organization: {
+        category: true,
+        featured: true,
+      },
+    },
+  })
 
   return (
     <main className="overflow-hidden bg-stone-50 text-slate-900">
@@ -141,6 +205,89 @@ export async function HomePageSections() {
           {steps.map(({ key, icon: Icon }, index) => (
             <article className="relative text-center" key={key}><span className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-emerald-900 text-white shadow-lg"><Icon className="h-7 w-7" /></span><span className="mt-5 block text-xs font-bold tracking-widest text-emerald-700">0{index + 1}</span><h3 className="mt-2 text-lg font-semibold">{t(`process.${key}.title`)}</h3><p className="mt-2 text-sm leading-6 text-slate-500">{t(`process.${key}.description`)}</p></article>
           ))}
+        </div>
+      </section>
+
+      <section className="border-y border-stone-200 bg-white py-24 sm:py-28">
+        <div className="container">
+          <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
+            <div>
+              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-emerald-700">
+                {t('articles.eyebrow')}
+              </p>
+              <h2 className="mt-3 text-4xl font-semibold tracking-tight sm:text-5xl">
+                {t('articles.title')}
+              </h2>
+              <p className="mt-4 max-w-2xl text-lg leading-8 text-slate-600">
+                {t('articles.description')}
+              </p>
+            </div>
+            <Link
+              className="inline-flex shrink-0 items-center gap-2 font-semibold text-emerald-700 transition hover:text-emerald-900"
+              href="/posts"
+            >
+              {t('articles.viewAll')} <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
+
+          {latestPosts.length > 0 ? (
+            <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {latestPosts.map((post) => (
+                <Card
+                  className="h-full rounded-3xl border-stone-200 shadow-sm transition hover:-translate-y-1 hover:shadow-xl"
+                  doc={post as CardPostData}
+                  key={post.id}
+                  relationTo="posts"
+                  showCategories
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="mt-12 rounded-3xl border border-dashed border-stone-300 bg-stone-50 px-6 py-14 text-center text-slate-500">
+              {t('articles.empty')}
+            </div>
+          )}
+        </div>
+      </section>
+
+      <section className="border-y border-stone-200 bg-stone-50 py-24 sm:py-28">
+        <div className="container">
+          <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
+            <div>
+              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-emerald-700">
+                {t('products.eyebrow')}
+              </p>
+              <h2 className="mt-3 text-4xl font-semibold tracking-tight sm:text-5xl">
+                {t('products.title')}
+              </h2>
+              <p className="mt-4 max-w-2xl text-lg leading-8 text-slate-600">
+                {t('products.description')}
+              </p>
+            </div>
+            <Link
+              className="inline-flex shrink-0 items-center gap-2 font-semibold text-emerald-700 transition hover:text-emerald-900"
+              href="/products"
+            >
+              {t('products.viewAll')} <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
+
+          {featuredProducts.length > 0 ? (
+            <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+              {featuredProducts.map((product) => (
+                <ProductCard
+                  className="h-full rounded-3xl border-stone-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-xl"
+                  key={product.id}
+                  product={product as Parameters<typeof ProductCard>[0]['product']}
+                  locale={locale}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="mt-12 rounded-3xl border border-dashed border-stone-300 bg-white px-6 py-14 text-center text-slate-500">
+              {t('products.empty')}
+            </div>
+          )}
         </div>
       </section>
 

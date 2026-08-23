@@ -7,13 +7,21 @@ import React from 'react'
 import { Search } from '@/search/Component'
 import PageClient from './page.client'
 import { CardPostData } from '@/components/Card'
+import { isLocale } from '@/i18n/config'
+import { notFound } from 'next/navigation'
 
 type Args = {
+  params: Promise<{ locale: string }>
   searchParams: Promise<{
     q: string
   }>
 }
-export default async function Page({ searchParams: searchParamsPromise }: Args) {
+export default async function Page({
+  params: paramsPromise,
+  searchParams: searchParamsPromise,
+}: Args) {
+  const { locale } = await paramsPromise
+  if (!isLocale(locale)) notFound()
   const { q: query } = await searchParamsPromise
   const payload = await getPayload({ config: configPromise })
 
@@ -21,6 +29,8 @@ export default async function Page({ searchParams: searchParamsPromise }: Args) 
     collection: 'search',
     depth: 1,
     limit: 12,
+    locale,
+    fallbackLocale: locale === 'en' ? 'zh' : 'en',
     select: {
       title: true,
       slug: true,

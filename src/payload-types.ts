@@ -72,6 +72,7 @@ export interface Config {
     media: Media;
     categories: Category;
     users: User;
+    products: Product;
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -94,6 +95,7 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
+    products: ProductsSelect<false> | ProductsSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
@@ -255,6 +257,7 @@ export interface Post {
   };
   publishedAt?: string | null;
   authors?: (number | User)[] | null;
+  language?: string | null;
   populatedAuthors?:
     | {
         id?: string | null;
@@ -774,6 +777,81 @@ export interface Form {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "products".
+ */
+export interface Product {
+  id: number;
+  /**
+   * Enter product name, then click "Generate" in Slug field
+   */
+  title: string;
+  general?: {
+    heroImage?: (number | null) | Media;
+    /**
+     * Add multiple images for the product
+     */
+    gallery?:
+      | {
+          image: number | Media;
+          caption?: string | null;
+          id?: string | null;
+        }[]
+      | null;
+    /**
+     * Brief description shown in product listings
+     */
+    shortDescription?: string | null;
+    description?: {
+      root: {
+        type: string;
+        children: {
+          type: any;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    } | null;
+  };
+  pricing: {
+    price: number;
+    unit: 'kg' | 'jin' | 'box' | 'piece' | 'bag' | 'ton';
+    /**
+     * Enter -1 for unlimited stock
+     */
+    stock?: number | null;
+    /**
+     * Stock Keeping Unit code
+     */
+    sku?: string | null;
+  };
+  organization?: {
+    /**
+     * Select the category for this product
+     */
+    category?: (number | null) | Category;
+    /**
+     * Show in featured products section
+     */
+    featured?: boolean | null;
+  };
+  publishedAt?: string | null;
+  language?: string | null;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
 export interface Redirect {
@@ -981,6 +1059,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'users';
         value: number | User;
+      } | null)
+    | ({
+        relationTo: 'products';
+        value: number | Product;
       } | null)
     | ({
         relationTo: 'redirects';
@@ -1198,6 +1280,7 @@ export interface PostsSelect<T extends boolean = true> {
       };
   publishedAt?: T;
   authors?: T;
+  language?: T;
   populatedAuthors?:
     | T
     | {
@@ -1346,6 +1429,48 @@ export interface UsersSelect<T extends boolean = true> {
         createdAt?: T;
         expiresAt?: T;
       };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "products_select".
+ */
+export interface ProductsSelect<T extends boolean = true> {
+  title?: T;
+  general?:
+    | T
+    | {
+        heroImage?: T;
+        gallery?:
+          | T
+          | {
+              image?: T;
+              caption?: T;
+              id?: T;
+            };
+        shortDescription?: T;
+        description?: T;
+      };
+  pricing?:
+    | T
+    | {
+        price?: T;
+        unit?: T;
+        stock?: T;
+        sku?: T;
+      };
+  organization?:
+    | T
+    | {
+        category?: T;
+        featured?: T;
+      };
+  publishedAt?: T;
+  language?: T;
+  generateSlug?: T;
+  slug?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1752,6 +1877,10 @@ export interface TaskSchedulePublish {
       | ({
           relationTo: 'posts';
           value: number | Post;
+        } | null)
+      | ({
+          relationTo: 'products';
+          value: number | Product;
         } | null);
     global?: string | null;
     user?: (number | null) | User;

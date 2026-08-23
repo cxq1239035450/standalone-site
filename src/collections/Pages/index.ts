@@ -42,6 +42,11 @@ export const Pages: CollectionConfig<'pages'> = {
     slug: true,
   },
   admin: {
+    components: {
+      edit: {
+        PublishButton: '@/components/TranslatePublishButton',
+      },
+    },
     defaultColumns: ['title', 'slug', 'updatedAt'],
     livePreview: {
       url: ({ data, req }) =>

@@ -6,6 +6,8 @@ import React from 'react'
 import RichText from '@/components/RichText'
 
 import { CollectionArchive } from '@/components/CollectionArchive'
+import { getLocale } from 'next-intl/server'
+import { defaultLocale, isLocale } from '@/i18n/config'
 
 export const ArchiveBlock: React.FC<
   ArchiveBlockProps & {
@@ -20,6 +22,8 @@ export const ArchiveBlock: React.FC<
 
   if (populateBy === 'collection') {
     const payload = await getPayload({ config: configPromise })
+    const localeValue = await getLocale()
+    const locale = isLocale(localeValue) ? localeValue : defaultLocale
 
     const flattenedCategories = categories?.map((category) => {
       if (typeof category === 'object') return category.id
@@ -29,7 +33,11 @@ export const ArchiveBlock: React.FC<
     const fetchedPosts = await payload.find({
       collection: 'posts',
       depth: 1,
+      draft: false,
+      fallbackLocale: false,
       limit,
+      locale,
+      overrideAccess: false,
       ...(flattenedCategories && flattenedCategories.length > 0
         ? {
             where: {
@@ -44,9 +52,12 @@ export const ArchiveBlock: React.FC<
     posts = fetchedPosts.docs
   } else {
     if (selectedDocs?.length) {
-      const filteredSelectedPosts = selectedDocs.map((post) => {
-        if (typeof post.value === 'object') return post.value
-      }) as Post[]
+      const filteredSelectedPosts = selectedDocs
+        .map((post) => {
+          if (typeof post.value === 'object') return post.value
+          return null
+        })
+        .filter((post): post is Post => post !== null)
 
       posts = filteredSelectedPosts
     }

@@ -1,6 +1,6 @@
 import { getTranslations } from 'next-intl/server'
 import { getCachedGlobal } from '@/utilities/getGlobals'
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import React from 'react'
 import { Facebook, Twitter, Instagram, Linkedin } from 'lucide-react'
 
@@ -24,20 +24,30 @@ export async function Footer() {
                 <span className="text-xl font-bold">{t('company.name')}</span>
               </div>
             </Link>
-            <p className="text-gray-400 mb-4">
-              {t('company.description')}
-            </p>
+            <p className="text-gray-400 mb-4">{t('company.description')}</p>
             <div className="flex gap-4">
-              <a href="#" className="w-10 h-10 bg-gray-800 hover:bg-green-600 rounded-lg flex items-center justify-center transition-colors">
+              <a
+                href="#"
+                className="w-10 h-10 bg-gray-800 hover:bg-green-600 rounded-lg flex items-center justify-center transition-colors"
+              >
                 <Facebook className="w-5 h-5" />
               </a>
-              <a href="#" className="w-10 h-10 bg-gray-800 hover:bg-green-600 rounded-lg flex items-center justify-center transition-colors">
+              <a
+                href="#"
+                className="w-10 h-10 bg-gray-800 hover:bg-green-600 rounded-lg flex items-center justify-center transition-colors"
+              >
                 <Twitter className="w-5 h-5" />
               </a>
-              <a href="#" className="w-10 h-10 bg-gray-800 hover:bg-green-600 rounded-lg flex items-center justify-center transition-colors">
+              <a
+                href="#"
+                className="w-10 h-10 bg-gray-800 hover:bg-green-600 rounded-lg flex items-center justify-center transition-colors"
+              >
                 <Instagram className="w-5 h-5" />
               </a>
-              <a href="#" className="w-10 h-10 bg-gray-800 hover:bg-green-600 rounded-lg flex items-center justify-center transition-colors">
+              <a
+                href="#"
+                className="w-10 h-10 bg-gray-800 hover:bg-green-600 rounded-lg flex items-center justify-center transition-colors"
+              >
                 <Linkedin className="w-5 h-5" />
               </a>
             </div>
@@ -47,9 +57,12 @@ export async function Footer() {
           <div>
             <h3 className="text-lg font-semibold mb-6">{t('products')}</h3>
             <ul className="space-y-3">
-              {t.raw('productLinks').map((item: string) => (
+              {t.raw('productLinks').map((item: string, index: number) => (
                 <li key={item}>
-                  <Link href="#" className="text-gray-400 hover:text-green-500 transition-colors">
+                  <Link
+                    href={['/products', '/solutions', '/contact', '/posts'][index] || '/'}
+                    className="text-gray-400 hover:text-green-500 transition-colors"
+                  >
                     {item}
                   </Link>
                 </li>
@@ -63,7 +76,10 @@ export async function Footer() {
             <ul className="space-y-3">
               {t.raw('supportLinks').map((item: string) => (
                 <li key={item}>
-                  <Link href="#" className="text-gray-400 hover:text-green-500 transition-colors">
+                  <Link
+                    href="/contact"
+                    className="text-gray-400 hover:text-green-500 transition-colors"
+                  >
                     {item}
                   </Link>
                 </li>
@@ -75,10 +91,18 @@ export async function Footer() {
           <div>
             <h3 className="text-lg font-semibold mb-6">{t('contact')}</h3>
             <ul className="space-y-3 text-gray-400">
-              <li>{t('phone')}：400-888-9999</li>
-              <li>{t('email')}：business@freshconnect.com</li>
-              <li>{t('address')}：上海市浦东新区张江高科技园区</li>
-              <li>{t('workTime')}：7x24 小时</li>
+              <li>
+                {t('phone')}：{t('phoneValue')}
+              </li>
+              <li>
+                {t('email')}：{t('emailValue')}
+              </li>
+              <li>
+                {t('address')}：{t('addressValue')}
+              </li>
+              <li>
+                {t('workTime')}：{t('workTimeValue')}
+              </li>
             </ul>
           </div>
         </div>
@@ -87,12 +111,14 @@ export async function Footer() {
       {/* Bottom Bar */}
       <div className="border-t border-gray-800">
         <div className="container py-6 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-gray-500 text-sm">
-            {t('copyright')}
-          </p>
+          <p className="text-gray-500 text-sm">{t('copyright')}</p>
           <nav className="flex gap-6 text-sm">
             {navItems.map(({ link }, i) => (
-              <Link key={i} href={link.url || '#'} className="text-gray-500 hover:text-white transition-colors">
+              <Link
+                key={i}
+                href={link.url || '#'}
+                className="text-gray-500 hover:text-white transition-colors"
+              >
                 {link.label}
               </Link>
             ))}

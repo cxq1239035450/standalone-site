@@ -13,6 +13,11 @@ import { generateMeta } from '@/utilities/generateMeta'
 import PageClient from './page.client'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
 import { defaultLocale, type Locale } from '@/i18n/config'
+import {
+  isMarketingPageSlug,
+  MarketingPageFallback,
+} from '@/components/MarketingPageFallback'
+import { getTranslations } from 'next-intl/server'
 
 export async function generateStaticParams() {
   const payload = await getPayload({ config: configPromise })
@@ -63,6 +68,10 @@ export default async function Page({ params: paramsPromise }: Args) {
     page = homeStatic
   }
 
+  if (!page && isMarketingPageSlug(decodedSlug)) {
+    return <MarketingPageFallback slug={decodedSlug} />
+  }
+
   if (!page) {
     return <PayloadRedirects url={url} />
   }
@@ -91,6 +100,14 @@ export async function generateMetadata({ params: paramsPromise }: Args): Promise
     locale,
     slug: decodedSlug,
   })
+
+  if (!page && isMarketingPageSlug(decodedSlug)) {
+    const t = await getTranslations(`marketingPages.${decodedSlug}`)
+    return {
+      title: t('title'),
+      description: t('description'),
+    }
+  }
 
   return generateMeta({ doc: page })
 }
