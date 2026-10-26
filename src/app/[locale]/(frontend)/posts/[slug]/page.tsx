@@ -17,6 +17,8 @@ import { LivePreviewListener } from '@/components/LivePreviewListener'
 import { isLocale, type Locale } from '@/i18n/config'
 import { notFound } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
+import { Link } from '@/i18n/navigation'
+import { ArrowUpRight } from 'lucide-react'
 
 export async function generateStaticParams({ params }: { params: { locale: string } }) {
   const { locale } = params
@@ -63,7 +65,7 @@ export default async function Post({ params: paramsPromise }: Args) {
   if (!post) return <PayloadRedirects url={url} />
 
   return (
-    <article className="bg-stone-50 pb-24">
+    <article className="bg-[#f7f5f0] pb-24">
       <PageClient />
 
       {/* Allows redirects for valid pages too */}
@@ -75,6 +77,7 @@ export default async function Post({ params: paramsPromise }: Args) {
 
       <div className="container relative z-10 -mt-10">
         <div className="mx-auto max-w-4xl rounded-[2rem] border border-stone-200 bg-white px-6 py-10 shadow-xl shadow-emerald-950/5 sm:px-10 sm:py-14 lg:px-16">
+          {post.discovery?.summary && <p className="mb-8 border-l-2 border-[#173f35] pl-5 text-lg leading-8 text-[#5e7169]">{post.discovery.summary}</p>}
           <RichText
             className="prose-lg max-w-none prose-headings:tracking-tight prose-headings:text-slate-900 prose-a:text-emerald-700 prose-p:leading-8 prose-p:text-slate-600"
             data={post.content}
@@ -82,6 +85,12 @@ export default async function Post({ params: paramsPromise }: Args) {
           />
         </div>
       </div>
+      {post.categories?.some(category => typeof category === 'object' && category.slug === 'pet-guides') && <section className="pet-container mt-12" aria-labelledby="guide-next-step">
+        <div className="pet-guide-next mx-auto max-w-4xl">
+          <div><h2 id="guide-next-step">{t('inquiryTitle')}</h2><p>{t('inquiryDescription')}</p></div>
+          <Link href={`/contact?sourceArticle=${encodeURIComponent(decodedSlug)}`} className="pet-button">{t('inquiryAction')} <ArrowUpRight size={18} aria-hidden="true" /></Link>
+        </div>
+      </section>}
       {post.relatedPosts && post.relatedPosts.length > 0 && (
         <section className="container mt-20">
           <div className="mx-auto max-w-5xl">
@@ -111,7 +120,7 @@ export async function generateMetadata({ params: paramsPromise }: Args): Promise
   const decodedSlug = decodeURIComponent(slug)
   const post = await queryPostBySlug({ locale, slug: decodedSlug })
 
-  return generateMeta({ doc: post })
+  return generateMeta({ doc: post, prefix: '/posts' })
 }
 
 const queryPostBySlug = cache(async ({ locale, slug }: { locale: Locale; slug: string }) => {

@@ -1,4 +1,18 @@
-# Payload Website Template
+# Standalone Site
+
+基于 Next.js 与 Payload CMS 的 PawSupply 宠物用品 B2B 网站，支持中英文产品目录、品牌定制、采购指南与询盘。原目录名为 `vegetable-and-fruit-wholesale`，现更名为 `standalone-site`；数据库名称保留以兼容已有数据。
+
+目录改名不迁移数据库：现有数据库名、容器名和 Compose 项目名保持原值，以继续使用原有数据卷。保留现有 `.env`，无需重新初始化。
+
+本地数据库使用 `127.0.0.1:5433`，避免与 Postiz 等项目占用的 `5432` 冲突。已有 `.env` 的 `DATABASE_URL` 也需使用此端口。先运行 `docker compose up -d postgres`，再运行 `pnpm dev`；修改连接后需重启开发服务。Compose 内的应用通过 `postgres:5432` 连接，继续复用原有数据卷。遇到密码认证失败时先检查连接的端口和容器，不要删除数据卷。
+
+## 宠物用品站点管理
+
+- 网站：`/zh`、`/en`；后台：`/admin`；SEO/GEO 配置：`/admin/globals/search-settings`。
+- 产品归入 `bedding`、`feeding`、`toys`、`walking` 或 `pet-` 前缀分类后显示在新目录；历史分类及内容保留。产品图片为概念展示，实际 SKU、报价和起订量须在后台补充真实资料。
+- `pnpm tsx src/scripts/seed-pet-categories.ts` 补齐四个分类；`pnpm tsx src/scripts/seed-pet-guides.ts` 补齐两篇双语采购指南，已有固定 slug 的文章会跳过。
+- `pnpm tsx src/scripts/seed-contact-form.ts` 同步宠物询盘表单。询盘在后台“表单提交”查看；邮件通知需配置真实发件人与邮件适配器，默认不使用模板邮箱发信。
+- [SEO/GEO 操作说明](design/seo-operations.md)、[视觉与内容规范](design/product-design-spec.md)、[界面验收记录](design/visual-verification.md)。
 
 This is the official [Payload Website Template](https://github.com/payloadcms/payload/blob/3.x/templates/website). Use it to power websites, blogs, or portfolios from small to enterprise. This repo includes a fully-working backend, enterprise-grade admin panel, and a beautifully designed, production-ready website.
 

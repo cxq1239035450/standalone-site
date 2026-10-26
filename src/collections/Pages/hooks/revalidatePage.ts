@@ -1,46 +1,14 @@
 import type { CollectionAfterChangeHook, CollectionAfterDeleteHook } from 'payload'
+import type { Page } from '@/payload-types'
+import { revalidatePublicSite } from '@/hooks/revalidateSearch'
 
-import { revalidatePath, revalidateTag } from 'next/cache'
-
-import type { Page } from '../../../payload-types'
-import { localeCodes } from '../../../i18n/config'
-
-const getLocalizedPaths = (slug?: string | null) =>
-  localeCodes.map((locale) => (slug === 'home' ? `/${locale}` : `/${locale}/${slug}`))
-
-export const revalidatePage: CollectionAfterChangeHook<Page> = ({
-  doc,
-  previousDoc,
-  req: { payload, context },
-}) => {
-  if (!context.disableRevalidate) {
-    if (doc._status === 'published') {
-      for (const path of getLocalizedPaths(doc.slug)) {
-        payload.logger.info(`Revalidating page at path: ${path}`)
-        revalidatePath(path)
-      }
-      revalidateTag('pages-sitemap', 'max')
-    }
-
-    // If the page was previously published, we need to revalidate the old path
-    if (previousDoc?._status === 'published' && doc._status !== 'published') {
-      for (const oldPath of getLocalizedPaths(previousDoc.slug)) {
-        payload.logger.info(`Revalidating old page at path: ${oldPath}`)
-        revalidatePath(oldPath)
-      }
-      revalidateTag('pages-sitemap', 'max')
-    }
-  }
+export const revalidatePage: CollectionAfterChangeHook<Page> = ({ doc, previousDoc, req }) => {
+  // Updating a published slug also invalidates its former URL and every listing that linked to it.
+  if (doc._status === 'published' || previousDoc?._status === 'published') revalidatePublicSite(req)
   return doc
 }
 
-export const revalidateDelete: CollectionAfterDeleteHook<Page> = ({ doc, req: { context } }) => {
-  if (!context.disableRevalidate) {
-    for (const path of getLocalizedPaths(doc?.slug)) {
-      revalidatePath(path)
-    }
-    revalidateTag('pages-sitemap', 'max')
-  }
-
+export const revalidateDelete: CollectionAfterDeleteHook<Page> = ({ doc, req }) => {
+  revalidatePublicSite(req)
   return doc
 }

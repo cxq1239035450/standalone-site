@@ -1,4 +1,5 @@
-version: '3'
+# Preserve the existing Compose project and database volume after the directory rename.
+name: vegetable-and-fruit-wholesale
 
 services:
   postgres:
@@ -9,7 +10,7 @@ services:
       POSTGRES_PASSWORD: 123456
       POSTGRES_DB: vegetable-and-fruit-wholesale
     ports:
-      - '5432:5432'
+      - '127.0.0.1:5433:5432'
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
@@ -31,6 +32,8 @@ services:
         condition: service_healthy
     env_file:
       - .env
+    environment:
+      DATABASE_URL: postgresql://postgres:123456@postgres:5432/vegetable-and-fruit-wholesale
 
 volumes:
   postgres_data:

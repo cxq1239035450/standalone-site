@@ -1,3 +1,4 @@
+import { discoveryFields } from '@/fields/discovery'
 import type { CollectionConfig } from 'payload'
 
 import { authenticated } from '../../access/authenticated'
@@ -13,6 +14,7 @@ import { populatePublishedAt } from '../../hooks/populatePublishedAt'
 import { generatePreviewPath } from '../../utilities/generatePreviewPath'
 import { revalidateDelete, revalidatePage } from './hooks/revalidatePage'
 import { adminLabel } from '@/i18n/adminLabels'
+import { contentLanguageField } from '@/fields/contentLanguageField'
 
 import {
   MetaDescriptionField,
@@ -67,6 +69,8 @@ export const Pages: CollectionConfig<'pages'> = {
     useAsTitle: 'title',
   },
   fields: [
+    contentLanguageField(),
+    discoveryFields,
     {
       name: 'title',
       type: 'text',

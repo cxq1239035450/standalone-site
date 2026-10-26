@@ -13,11 +13,14 @@ import {
   useTranslation,
 } from '@payloadcms/ui'
 import { useRouter } from 'next/navigation'
-import React, { useCallback, useEffect, useMemo, useRef } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import { localeConfig } from '@/i18n/config'
 
+import './index.scss'
+
 const pendingKey = 'payload-pending-translation'
+const baseClass = 'translate-publish-actions'
 
 type PendingTranslation = {
   collectionSlug?: string
@@ -46,16 +49,29 @@ export default function TranslatePublishButton() {
   const armedRef = useRef(false)
   const previousProcessingRef = useRef(processing)
 
-  const target = useMemo(
-    () => localeConfig.locales.find(({ code }) => code !== currentLocale),
+  const availableTargets = useMemo(
+    () => localeConfig.locales.filter(({ code }) => code !== currentLocale),
     [currentLocale],
   )
+  const [targetLocale, setTargetLocale] = useState<string>(availableTargets[0]?.code ?? '')
+  const target = availableTargets.find(({ code }) => code === targetLocale) ?? availableTargets[0]
+  const activeLocale =
+    localeConfig.locales.find(({ code }) => code === currentLocale) ??
+    localeConfig.locales.find(({ code }) => code === localeConfig.defaultLocale) ??
+    localeConfig.locales[0]
   const isEnglishAdmin = i18n.language === 'en'
+  const publishLabel = isEnglishAdmin
+    ? `Publish ${activeLocale.label}`
+    : `发布${activeLocale.label}`
   const canPublish = Boolean(
     hasPublishPermission &&
-      (modified || unpublishedVersionCount > 0 || !hasPublishedDoc) &&
-      uploadStatus !== 'uploading',
+    (modified || unpublishedVersionCount > 0 || !hasPublishedDoc) &&
+    uploadStatus !== 'uploading',
   )
+
+  useEffect(() => {
+    setTargetLocale(availableTargets[0]?.code ?? '')
+  }, [availableTargets])
 
   const copyAndContinue = useCallback(
     async (pending: PendingTranslation) => {
@@ -129,7 +145,7 @@ export default function TranslatePublishButton() {
     if (raw) void copyAndContinue(JSON.parse(raw) as PendingTranslation)
   }, [copyAndContinue, isValid, processing])
 
-  if (!target) return <PublishButton />
+  if (!target) return <PublishButton label={publishLabel} />
 
   const publishAndTranslate = () => {
     const pending: PendingTranslation = {
@@ -143,8 +159,24 @@ export default function TranslatePublishButton() {
   }
 
   return (
-    <div style={{ alignItems: 'center', display: 'flex', gap: 8 }}>
-      <PublishButton />
+    <div className={baseClass}>
+      <PublishButton label={publishLabel} />
+      {availableTargets.length > 1 && (
+        <label className={`${baseClass}__target`}>
+          <span>{isEnglishAdmin ? 'Translate next' : '下一翻译语言'}</span>
+          <select
+            disabled={processing}
+            onChange={(event) => setTargetLocale(event.target.value)}
+            value={target.code}
+          >
+            {availableTargets.map((locale) => (
+              <option key={locale.code} value={locale.code}>
+                {locale.label}
+              </option>
+            ))}
+          </select>
+        </label>
+      )}
       <Button
         buttonStyle="secondary"
         disabled={!canPublish || processing}
@@ -154,7 +186,7 @@ export default function TranslatePublishButton() {
         type="button"
       >
         {isEnglishAdmin ? 'Publish & translate' : '发布并继续翻译'}
-        <span style={{ marginInlineStart: 6, opacity: 0.65 }}>→ {target.label}</span>
+        <span className={`${baseClass}__destination`}>→ {target.label}</span>
       </Button>
     </div>
   )

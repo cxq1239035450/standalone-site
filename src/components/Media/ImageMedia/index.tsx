@@ -68,7 +68,7 @@ export const ImageMedia: React.FC<MediaProps> = (props) => {
 
     width = fullWidth!
     height = fullHeight!
-    alt = altFromResource || ''
+    alt = altFromProps ?? altFromResource ?? ''
 
     const cacheTag = resource.updatedAt
 
@@ -85,7 +85,7 @@ export const ImageMedia: React.FC<MediaProps> = (props) => {
         .join(', ')
 
   return (
-    <picture className={cn(pictureClassName)}>
+    <picture className={cn(fill && 'absolute inset-0 block', pictureClassName)}>
       <NextImage
         alt={alt || ''}
         className={cn(imgClassName)}

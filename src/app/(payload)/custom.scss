@@ -1,0 +1,6 @@
+// Content locale selection lives inside localized edit forms. Keep Payload's
+// locale context and query-string behavior, but remove the redundant global UI.
+.app-header__localizer,
+.app-header__localizer-spacing {
+  display: none !important;
+}

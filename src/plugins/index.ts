@@ -13,15 +13,21 @@ import { beforeSyncWithSearch } from '@/search/beforeSync'
 import { Page, Post } from '@/payload-types'
 import { getServerSideURL } from '@/utilities/getURL'
 import { adminLabel } from '@/i18n/adminLabels'
+import { contentLanguageField } from '@/fields/contentLanguageField'
+import { siteInsightsPlugin } from '@/integrations/insights/plugin'
+import { validateFormSubmission } from '@/hooks/validateFormSubmission'
 
-const generateTitle: GenerateTitle<Post | Page> = ({ doc }) => {
-  return doc?.title ? `${doc.title} | Payload Website Template` : 'Payload Website Template'
+const generateTitle: GenerateTitle<Post | Page> = async ({ doc, req }) => {
+  const settings = await req.payload.findGlobal({ slug: 'search-settings', req, overrideAccess: false })
+  return doc?.title ? `${doc.title} | ${settings.siteName || 'PawSupply'}` : settings.siteName || 'PawSupply'
 }
 
-const generateURL: GenerateURL<Post | Page> = ({ doc }) => {
-  const url = getServerSideURL()
-
-  return doc?.slug ? `${url}/${doc.slug}` : url
+const generateURL: GenerateURL<Post | Page> = async ({ doc, req, locale, collectionSlug }) => {
+  const settings = await req.payload.findGlobal({ slug: 'search-settings', req, overrideAccess: false })
+  const origin = new URL(settings.siteUrl || getServerSideURL()).origin
+  const language = locale === 'en' ? 'en' : 'zh'
+  const prefix = collectionSlug === 'posts' || collectionSlug === 'products' ? `/${collectionSlug}` : ''
+  return `${origin}/${language}${doc?.slug && doc.slug !== 'home' ? `${prefix}/${encodeURIComponent(doc.slug)}` : ''}`
 }
 
 export const plugins: Plugin[] = [
@@ -72,7 +78,7 @@ export const plugins: Plugin[] = [
         plural: adminLabel('表单', 'Forms'),
       },
       fields: ({ defaultFields }) => {
-        return defaultFields.map((field) => {
+        const fields = defaultFields.map((field) => {
           if ('name' in field && field.name === 'confirmationMessage') {
             return {
               ...field,
@@ -89,12 +95,22 @@ export const plugins: Plugin[] = [
           }
           return field
         })
+
+        return [contentLanguageField(), ...fields]
       },
     },
     formSubmissionOverrides: {
+      hooks: { beforeValidate: [validateFormSubmission] },
       labels: {
         singular: adminLabel('表单提交', 'Form submission'),
         plural: adminLabel('表单提交', 'Form submissions'),
+      },
+      access: {
+        // B2B inquiry: anyone can submit, only authenticated users can read
+        create: () => true,
+        read: ({ req: { user } }) => Boolean(user),
+        update: () => false,
+        delete: ({ req: { user } }) => Boolean(user),
       },
     },
   }),
@@ -102,6 +118,8 @@ export const plugins: Plugin[] = [
     collections: ['posts'],
     beforeSync: beforeSyncWithSearch,
     searchOverrides: {
+      // Public search reads live published collections, not these internal sync records.
+      access: { read: ({ req }) => Boolean(req.user) },
       labels: {
         singular: adminLabel('搜索索引', 'Search result'),
         plural: adminLabel('搜索索引', 'Search results'),
@@ -111,4 +129,5 @@ export const plugins: Plugin[] = [
       },
     },
   }),
+  siteInsightsPlugin,
 ]

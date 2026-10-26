@@ -91,6 +91,7 @@ export const FormBlock: React.FC<
 
           setIsLoading(false)
           setHasSubmitted(true)
+          window.dispatchEvent(new CustomEvent('insights:inquiry-submitted', { detail: { formId: String(formID) } }))
 
           if (confirmationType === 'redirect' && redirect) {
             const { url } = redirect
@@ -126,7 +127,7 @@ export const FormBlock: React.FC<
           {isLoading && !hasSubmitted && <p>Loading, please wait...</p>}
           {error && <div>{`${error.status || '500'}: ${error.message || ''}`}</div>}
           {!hasSubmitted && (
-            <form id={formID} onSubmit={handleSubmit(onSubmit)}>
+            <form data-insights-form={String(formID)} id={formID} onSubmit={handleSubmit(onSubmit)}>
               <div className="mb-4 last:mb-0">
                 {formFromProps &&
                   formFromProps.fields &&

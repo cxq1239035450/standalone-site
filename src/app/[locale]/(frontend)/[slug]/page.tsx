@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { pageMetadata } from '@/utilities/searchSettings'
 
 import { PayloadRedirects } from '@/components/PayloadRedirects'
 import configPromise from '@payload-config'
@@ -80,6 +81,7 @@ export default async function Page({ params: paramsPromise }: Args) {
 
   return (
     <article className="pt-16 pb-24">
+      {page.discovery?.summary && <p className="container my-6 text-lg leading-8">{page.discovery.summary}</p>}
       <PageClient />
       {/* Allows redirects for valid pages too */}
       <PayloadRedirects disableNotFound url={url} />
@@ -94,8 +96,8 @@ export default async function Page({ params: paramsPromise }: Args) {
 
 export async function generateMetadata({ params: paramsPromise }: Args): Promise<Metadata> {
   const { locale, slug = 'home' } = await paramsPromise
-  // Decode to support slugs with special characters
   const decodedSlug = decodeURIComponent(slug)
+
   const page = await queryPageBySlug({
     locale,
     slug: decodedSlug,
@@ -103,10 +105,7 @@ export async function generateMetadata({ params: paramsPromise }: Args): Promise
 
   if (!page && isMarketingPageSlug(decodedSlug)) {
     const t = await getTranslations(`marketingPages.${decodedSlug}`)
-    return {
-      title: t('title'),
-      description: t('description'),
-    }
+    return pageMetadata({ locale, path: `/${decodedSlug}`, title: t('title'), description: t('description') })
   }
 
   return generateMeta({ doc: page })

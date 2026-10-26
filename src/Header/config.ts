@@ -12,6 +12,11 @@ export const Header: GlobalConfig = {
   },
   fields: [
     {
+      name: 'useCustomNavigation', type: 'checkbox', defaultValue: false,
+      label: adminLabel('使用下方自定义导航', 'Use custom navigation below'),
+      admin: { description: adminLabel('关闭时使用宠物产品、品牌定制和采购指南导航。', 'When off, use the default product, customization and resources navigation.') },
+    },
+    {
       name: 'navItems',
       type: 'array',
       label: adminLabel('导航项目', 'Navigation items'),

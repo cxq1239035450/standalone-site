@@ -1,3 +1,5 @@
+import { SearchSettings } from './globals/SearchSettings'
+import { IndustryTemplates } from './collections/IndustryTemplates'
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import { en } from '@payloadcms/translations/languages/en'
 import { zh } from '@payloadcms/translations/languages/zh'
@@ -21,6 +23,26 @@ import { defaultLocale, localeConfig } from './i18n/config'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
+const adminZh = {
+  ...zh,
+  translations: {
+    ...zh.translations,
+    version: {
+      ...zh.translations.version,
+      publishIn: '发布{{locale}}',
+    },
+  },
+}
+const adminEn = {
+  ...en,
+  translations: {
+    ...en.translations,
+    version: {
+      ...en.translations.version,
+      publishIn: 'Publish {{locale}}',
+    },
+  },
+}
 
 export default buildConfig({
   // Admin UI language (menus, buttons, validation messages, etc.).
@@ -28,8 +50,8 @@ export default buildConfig({
   i18n: {
     fallbackLanguage: defaultLocale,
     supportedLanguages: {
-      zh,
-      en,
+      zh: adminZh,
+      en: adminEn,
     },
   },
   localization: {
@@ -80,9 +102,9 @@ export default buildConfig({
       connectionString: process.env.DATABASE_URL || '',
     },
   }),
-  collections: [Pages, Posts, Media, Categories, Users, Products],
+  collections: [Pages, Posts, Media, Categories, Users, Products, IndustryTemplates],
   cors: [getServerSideURL()].filter(Boolean),
-  globals: [Header, Footer],
+  globals: [Header, Footer, SearchSettings],
   plugins,
   secret: process.env.PAYLOAD_SECRET,
   sharp,

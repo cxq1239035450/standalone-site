@@ -1,3 +1,4 @@
+import { default as default_4fc4d0523cdd759ba45cc71dc7500123 } from '@/components/ContentLanguageControl'
 import { RscEntryLexicalCell as RscEntryLexicalCell_44fe37237e0ebf4470c9990d8cb7b07e } from '@payloadcms/richtext-lexical/rsc'
 import { RscEntryLexicalField as RscEntryLexicalField_44fe37237e0ebf4470c9990d8cb7b07e } from '@payloadcms/richtext-lexical/rsc'
 import { LexicalDiffComponent as LexicalDiffComponent_44fe37237e0ebf4470c9990d8cb7b07e } from '@payloadcms/richtext-lexical/rsc'
@@ -22,6 +23,8 @@ import { PostLanguageCell as PostLanguageCell_ffedfae176aa446351483e934a6386be }
 import { PostLanguageField as PostLanguageField_ffedfae176aa446351483e934a6386be } from '@/components/PostLanguageColumn'
 import { FolderTableCell as FolderTableCell_f9c02e79a4aed9a3924487c0cd4cafb1 } from '@payloadcms/next/rsc'
 import { FolderField as FolderField_f9c02e79a4aed9a3924487c0cd4cafb1 } from '@payloadcms/next/rsc'
+import { default as default_485d1f03d73c431c5f36e006176de57a } from '@/components/IndustryParameters'
+import { default as default_293285dbf25e52a29d00375035bbfcf6 } from '@/components/ProductSearchPreview'
 import { ProductLanguageCell as ProductLanguageCell_d0606d711db0e9185d5428b0dfae0bef } from '@/components/ProductLanguageColumn'
 import { ProductLanguageField as ProductLanguageField_d0606d711db0e9185d5428b0dfae0bef } from '@/components/ProductLanguageColumn'
 import { LinkToDoc as LinkToDoc_aead06e4cbf6b2620c5c51c9ab283634 } from '@payloadcms/plugin-search/client'
@@ -33,6 +36,7 @@ import { CollectionCards as CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1 } f
 
 /** @type import('payload').ImportMap */
 export const importMap = {
+  "@/components/ContentLanguageControl#default": default_4fc4d0523cdd759ba45cc71dc7500123,
   "@payloadcms/richtext-lexical/rsc#RscEntryLexicalCell": RscEntryLexicalCell_44fe37237e0ebf4470c9990d8cb7b07e,
   "@payloadcms/richtext-lexical/rsc#RscEntryLexicalField": RscEntryLexicalField_44fe37237e0ebf4470c9990d8cb7b07e,
   "@payloadcms/richtext-lexical/rsc#LexicalDiffComponent": LexicalDiffComponent_44fe37237e0ebf4470c9990d8cb7b07e,
@@ -57,6 +61,8 @@ export const importMap = {
   "@/components/PostLanguageColumn#PostLanguageField": PostLanguageField_ffedfae176aa446351483e934a6386be,
   "@payloadcms/next/rsc#FolderTableCell": FolderTableCell_f9c02e79a4aed9a3924487c0cd4cafb1,
   "@payloadcms/next/rsc#FolderField": FolderField_f9c02e79a4aed9a3924487c0cd4cafb1,
+  "@/components/IndustryParameters#default": default_485d1f03d73c431c5f36e006176de57a,
+  "@/components/ProductSearchPreview#default": default_293285dbf25e52a29d00375035bbfcf6,
   "@/components/ProductLanguageColumn#ProductLanguageCell": ProductLanguageCell_d0606d711db0e9185d5428b0dfae0bef,
   "@/components/ProductLanguageColumn#ProductLanguageField": ProductLanguageField_d0606d711db0e9185d5428b0dfae0bef,
   "@payloadcms/plugin-search/client#LinkToDoc": LinkToDoc_aead06e4cbf6b2620c5c51c9ab283634,

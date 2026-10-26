@@ -1,0 +1,43 @@
+name: pet-site
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: pet_site
+      POSTGRES_DB: pet_site
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?required}
+    volumes:
+      - ./shared/postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: [CMD-SHELL, pg_isready -U pet_site -d pet_site]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+  app:
+    build:
+      context: ./runtime
+    image: pet-site-runtime:20261026
+    user: '1000:1000'
+    init: true
+    restart: unless-stopped
+    working_dir: /app
+    env_file: ./shared/site.env
+    environment:
+      NODE_ENV: production
+      NEXT_TELEMETRY_DISABLED: '1'
+    volumes:
+      - ./releases/20261026:/app
+      - ./shared/media:/app/public/media
+    ports:
+      - '127.0.0.1:3100:3000'
+    command: [node, node_modules/next/dist/bin/next, start, --hostname, 0.0.0.0, --port, '3000']
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: [CMD, node, -e, "fetch('http://127.0.0.1:3000/zh').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 30s
+      timeout: 15s
+      start_period: 60s
+      retries: 3

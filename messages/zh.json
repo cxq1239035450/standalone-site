@@ -1,28 +1,33 @@
 {
   "navigation": {
     "home": "首页",
-    "products": "产品",
-    "articles": "文章",
-    "solutions": "解决方案",
+    "products": "产品系列",
+    "articles": "采购指南",
+    "solutions": "品牌定制",
     "about": "关于我们",
-    "contact": "联系我们"
+    "contact": "联系询价",
+    "main": "主导航"
   },
   "header": {
-    "brand": "鲜联集采",
+    "brand": "PawSupply",
     "login": "登录",
     "register": "注册",
-    "search": "搜索"
+    "search": "搜索",
+    "quote": "获取报价",
+    "openMenu": "打开菜单",
+    "closeMenu": "关闭菜单",
+    "skipToContent": "跳到主要内容"
   },
   "language": {
     "switch": "切换语言"
   },
   "posts": {
-    "title": "文章",
+    "title": "采购指南",
     "eyebrow": "采购洞察",
-    "description": "关注农产品行情、采购方法与供应链实践，帮助企业做出更稳健的采购决策。",
-    "metaTitle": "文章｜鲜联集采",
-    "pageMetaTitle": "文章第 {page} 页｜鲜联集采",
-    "metaDescription": "查看农产品行情、采购方法和供应链管理文章。",
+    "description": "了解宠物用品选品、材料、品牌定制与采购流程。",
+    "metaTitle": "采购指南｜PawSupply",
+    "pageMetaTitle": "采购指南第 {page} 页｜PawSupply",
+    "metaDescription": "宠物用品采购与品牌定制实用指南。",
     "range": "显示第 {start}–{end} 篇，共 {total} 篇",
     "empty": "当前语言暂无已发布文章",
     "readMore": "阅读全文",
@@ -32,175 +37,394 @@
     "publishedAt": "发布时间",
     "author": "作者",
     "continueReading": "延伸阅读",
-    "relatedPosts": "相关文章"
+    "relatedPosts": "相关文章",
+    "inquiryTitle": "把指南变成您的采购清单",
+    "inquiryDescription": "告诉我们产品方向、预计数量和目标市场，一起确认下一步。",
+    "inquiryAction": "讨论采购需求"
   },
   "marketingPages": {
     "products": {
-      "eyebrow": "产品中心",
-      "title": "稳定供应的全品类农产品",
-      "description": "覆盖蔬菜、水果、肉禽蛋与水产等高频采购品类，支持按产地、规格和交付周期灵活选品。",
-      "action": "咨询产品供应"
+      "eyebrow": "宠物用品",
+      "title": "为宠物的每一天，精选好物。",
+      "description": "喂养、出行、窝垫与玩具，发现适合您客户与市场的产品系列。",
+      "action": "讨论您的项目"
     },
     "solutions": {
-      "eyebrow": "行业解决方案",
-      "title": "为不同采购场景定制供应方案",
-      "description": "面向餐饮、商超、团餐和食品加工企业，提供寻源、品控、仓配与履约一体化服务。",
-      "action": "获取解决方案"
+      "eyebrow": "品牌定制",
+      "title": "中国宠物用品品牌定制与采购服务。",
+      "description": "与我们的中国团队及数十家长期合作工厂沟通材料、样品、标识与包装，按项目确认定制方案、起订量和交期。",
+      "action": "讨论您的项目"
     },
     "about": {
-      "eyebrow": "关于鲜联集采",
-      "title": "连接优质产地与企业采购需求",
-      "description": "我们通过数字化采购和标准化供应链服务，让农产品交易更加稳定、透明和高效。",
-      "action": "联系我们"
+      "eyebrow": "关于 PawSupply",
+      "title": "您在中国的宠物用品采购伙伴。",
+      "description": "PawSupply 来自中国，与数十家工厂保持长期合作。我们为零售商、分销商及宠物品牌协调产品选型、样品和品牌定制需求，让跨品类采购沟通更清晰。",
+      "action": "讨论您的项目"
     },
     "contact": {
-      "eyebrow": "联系我们",
-      "title": "让我们了解你的采购需求",
-      "description": "告诉我们所需品类、数量和交付城市，采购顾问将尽快为你匹配合适的供应方案。",
-      "action": "返回首页"
+      "eyebrow": "联系团队",
+      "title": "一起讨论下一份采购计划。",
+      "description": "告诉我们您的产品想法、采购数量与目标市场。",
+      "action": "讨论您的项目"
     }
   },
   "footer": {
     "company": {
-      "name": "鲜联集采",
-      "description": "专业的农产品 B2B 批发平台，连接源头供应商与餐饮企业。"
+      "name": "PawSupply",
+      "description": "来自中国的宠物用品采购与品牌定制伙伴，与数十家工厂保持长期合作。"
     },
-    "products": "产品与服务",
-    "support": "帮助支持",
-    "contact": "联系我们",
+    "products": "产品系列",
+    "support": "探索更多",
+    "contact": "一起创造新可能",
     "productLinks": ["产品中心", "解决方案", "价格方案", "客户案例"],
     "supportLinks": ["帮助中心", "常见问题", "联系我们", "意见反馈"],
     "phone": "电话",
-    "phoneValue": "400-888-9999",
     "email": "邮箱",
-    "emailValue": "business@freshconnect.com",
     "address": "地址",
-    "addressValue": "上海市浦东新区张江高科技园区",
     "workTime": "服务时间",
-    "workTimeValue": "7×24 小时",
-    "copyright": "© 2026 鲜联集采。保留所有权利。"
+    "copyright": "© {year} {brand}. 保留所有权利。",
+    "categories": {
+      "feeding": "喂养用品",
+      "walking": "出行装备",
+      "bedding": "窝垫家居",
+      "toys": "玩具互动"
+    },
+    "faq": "采购常见问题",
+    "contactDescription": "告诉我们您的产品想法、采购数量和目标市场。",
+    "contactAction": "开启采购对话",
+    "businessOnly": "面向零售商、分销商与宠物品牌"
   },
   "home": {
     "meta": {
-      "title": "鲜联集采｜农产品 B2B 一站式采购平台",
-      "description": "连接优质产地与餐饮、商超及团餐企业，提供稳定、透明、高效的农产品批发采购服务。"
+      "title": "中国宠物用品采购与品牌定制 | PawSupply",
+      "description": "PawSupply 来自中国，与数十家工厂保持长期合作，为宠物零售商、分销商及品牌提供窝垫、食水碗、玩具与出行用品采购及品牌定制服务。"
     },
     "hero": {
-      "eyebrow": "源头直采 · 全程品控 · 冷链履约",
-      "title": "让农产品采购",
-      "highlight": "更稳定、更透明",
-      "description": "连接全国优质产地与餐饮、商超及团餐企业，从询价、选品到冷链配送，一站完成高效采购。",
-      "primaryAction": "立即选品",
-      "secondaryAction": "联系采购顾问"
+      "title": "中国宠物用品，",
+      "highlight": "连接您的品牌与市场。",
+      "description": "依托数十家长期合作工厂，为零售商、分销商与宠物品牌协调选品、样品和品牌定制。从中国供应链出发，把采购需求逐项落实。",
+      "primaryAction": "探索产品系列",
+      "secondaryAction": "聊聊您的采购计划",
+      "imageAlt": "温暖家居中的金毛犬、鼠尾草绿宠物窝与陶瓷食盆",
+      "notes": ["中国采购团队", "数十家合作工厂", "多港口发运"],
+      "eyebrow": "立足中国 · 宠物用品采购与定制"
     },
-    "dashboard": {
-      "label": "今日供应看板",
-      "title": "优选源头货盘",
-      "status": "实时更新",
-      "deliveryLabel": "最快履约",
-      "deliveryValue": "次日送达"
-    },
-    "stats": {
-      "suppliers": { "value": "320+", "label": "认证源头供应商" },
-      "products": { "value": "2,800+", "label": "稳定供应 SKU" },
-      "customers": { "value": "1,600+", "label": "企业采购客户" },
-      "cities": { "value": "42", "label": "冷链覆盖城市" }
-    },
+    "audience": ["宠物用品零售商", "批发与分销商", "独立宠物品牌"],
     "categories": {
-      "eyebrow": "全品类供应",
-      "title": "每天更新的新鲜货盘",
-      "description": "覆盖高频刚需与季节特色商品，按规格、产地和交付周期快速匹配采购需求。",
-      "vegetables": {
-        "name": "新鲜蔬菜",
-        "description": "叶菜、根茎、菌菇与净菜，产地直发。",
-        "count": "860+ 个商品"
+      "title": "为每一种日常，选好每一件。",
+      "description": "从喂养、休息到互动与出行，按品类建立更清晰的采购清单。",
+      "viewAll": "探索全部产品",
+      "feeding": {
+        "name": "喂养用品",
+        "description": "食盆 · 慢食碗 · 喂水用品"
       },
-      "fruits": {
-        "name": "时令水果",
-        "description": "国产与进口水果，成熟度和规格可选。",
-        "count": "620+ 个商品"
+      "walking": {
+        "name": "出行装备",
+        "description": "胸背 · 牵引 · 户外配件"
       },
-      "meat": {
-        "name": "肉禽蛋品",
-        "description": "检疫合格，支持冷鲜、冷冻多种交付。",
-        "count": "540+ 个商品"
+      "bedding": {
+        "name": "窝垫家居",
+        "description": "宠物窝 · 睡垫 · 家居用品"
       },
-      "seafood": {
-        "name": "水产海鲜",
-        "description": "鲜活、冰鲜与冻品，全程温控运输。",
-        "count": "780+ 个商品"
+      "toys": {
+        "name": "玩具互动",
+        "description": "绳结 · 互动 · 益智玩具"
       }
     },
-    "advantages": {
-      "eyebrow": "平台能力",
-      "title": "把复杂供应链变成确定交付",
-      "source": {
-        "title": "源头认证",
-        "description": "严格审核产地、资质与履约记录，建立稳定供应池。"
-      },
-      "quality": {
-        "title": "标准化品控",
-        "description": "按品类建立验收标准，关键节点留痕并支持售后追溯。"
-      },
-      "coldChain": {
-        "title": "全程冷链",
-        "description": "根据商品温层匹配仓储与车辆，降低运输过程损耗。"
-      },
-      "delivery": {
-        "title": "准时履约",
-        "description": "智能排线与区域协同，让采购计划和到货时间更可控。"
-      }
+    "custom": {
+      "title": "您的品牌，\n值得更好的表达。",
+      "description": "由我们的中国团队与合作工厂协调材料、配色、标识和包装，将您的品牌想法转化为可沟通、可确认的产品要求。",
+      "action": "探索品牌定制",
+      "steps": [
+        {
+          "title": "分享需求",
+          "description": "明确产品方向、目标市场与计划数量，整理一份可评估的采购需求。"
+        },
+        {
+          "title": "确认方案",
+          "description": "逐项确认材料、样品、标识与包装，将品牌想法落实到产品规格。"
+        },
+        {
+          "title": "规划交付",
+          "description": "以确认后的规格核对报价、起订量、验收要求和交付安排。"
+        }
+      ]
     },
-    "process": {
-      "eyebrow": "采购流程",
-      "title": "四步完成企业采购",
-      "verify": { "title": "企业认证", "description": "提交基础资料，建立专属采购档案。" },
-      "select": { "title": "选品询价", "description": "按品类、规格、产地筛选当日货盘。" },
-      "confirm": { "title": "确认订单", "description": "锁定价格、数量、账期与交付要求。" },
-      "deliver": { "title": "冷链交付", "description": "全程跟踪配送，签收后支持质量反馈。" }
+    "guides": {
+      "title": "好采购，从细节说清开始。",
+      "description": "把样品和验收要求提前对齐，让每一次产品沟通都有据可循。",
+      "items": [
+        {
+          "title": "打样前，先对齐产品细节",
+          "description": "适用宠物、尺寸与材质、品牌标识、颜色及包装。用一份规格清单，把概念变成双方可以确认的样品要求。",
+          "action": "查看样品确认清单"
+        },
+        {
+          "title": "下单前，约定好验收方式",
+          "description": "从外观与尺寸，到标签、包装和目的地要求，提前约定检查项目、判定标准与相关文件。",
+          "action": "查看采购验收要点"
+        }
+      ]
     },
-    "articles": {
-      "eyebrow": "行业资讯",
-      "title": "最新文章",
-      "description": "分享农产品行情、采购方法和供应链管理经验，帮助企业做出更高效的采购决策。",
-      "viewAll": "查看全部文章",
-      "empty": "暂无已发布文章"
+    "brief": {
+      "title": "准备好您的采购简报",
+      "description": "从这四项开始，方便进一步评估。",
+      "action": "填写采购需求",
+      "items": [
+        {
+          "title": "产品与规格",
+          "description": "款式、适用宠物、材料与尺寸"
+        },
+        {
+          "title": "计划数量",
+          "description": "每款数量与样品需求"
+        },
+        {
+          "title": "目标市场",
+          "description": "销售地区与收货目的地"
+        },
+        {
+          "title": "品牌与包装",
+          "description": "标识、配色及包装要求"
+        }
+      ]
+    },
+    "faq": {
+      "title": "采购前，\n您可能想了解。",
+      "description": "把采购细节先说清，让下一步更轻松。",
+      "action": "还有其他问题？联系团队",
+      "items": [
+        {
+          "question": "你们在哪里？合作工厂是自有工厂吗？",
+          "answer": "PawSupply 来自中国，与数十家工厂保持长期合作。我们负责采购沟通与协调，页面所说的工厂指合作工厂，并非宣称为自有工厂。具体生产安排与要求按订单确认。"
+        },
+        {
+          "question": "最低起订量是多少？",
+          "answer": "起订量取决于产品、材料和定制要求。提交您感兴趣的品类及预计数量，我们将在报价中确认具体起订量。"
+        },
+        {
+          "question": "可以定制品牌标识和包装吗？",
+          "answer": "您可以提交标识、颜色、材料和包装需求。具体可定制范围、打样费用及交期，以产品评估后的书面方案为准。"
+        },
+        {
+          "question": "批量采购前可以先确认样品吗？",
+          "answer": "请在询盘中说明样品需求，我们会根据产品可用性确认样品安排、费用及寄送方式。建议在批量订单前确认最终样品规格。"
+        },
+        {
+          "question": "报价需要提供哪些信息？",
+          "answer": "请提供产品品类、计划数量、目标市场、收货地区及定制要求。有参考图片、材料或预算要求，也可以一并说明。"
+        },
+        {
+          "question": "可以从中国不同港口安排发货吗？",
+          "answer": "可以。我们支持厦门港、天津港、广州港发运，并协调多渠道物流。具体选择哪个港口、采用什么路线，以及费用和时间，按货物及目的地要求逐单确认。"
+        }
+      ]
     },
     "products": {
-      "eyebrow": "精选产品",
-      "title": "推荐产品",
-      "description": "严选优质供应商产品，品质有保障。",
+      "title": "精选采购产品",
+      "description": "查看产品详情与采购规格，开始您的下一份采购计划。",
       "viewAll": "查看全部产品",
-      "empty": "暂无推荐产品"
+      "empty": "具体产品及规格可通过询盘获取。"
     },
     "cta": {
-      "title": "准备好升级你的采购效率了吗？",
-      "description": "告诉我们需要的品类、数量和交付城市，采购顾问将为你匹配合适的供应方案。",
+      "title": "下一款好产品，\n从一次对话开始。",
+      "description": "让我们一起找到适合您品牌的宠物日常好物。",
       "action": "获取采购方案"
     }
   },
   "products": {
-    "title": "全部产品",
-    "eyebrow": "源头好货",
-    "description": "按品类、产地与规格快速筛选稳定货源，满足餐饮、商超和团餐企业的日常采购需求。",
-    "metaTitle": "产品中心｜鲜联集采",
-    "metaDescription": "浏览新鲜蔬菜、水果、肉禽蛋和水产海鲜等全品类农产品。",
-    "empty": "暂无产品",
+    "title": "为宠物日常，精选好物。",
+    "eyebrow": "宠物用品系列",
+    "description": "探索喂养、出行、窝垫与玩具系列。按品类发现产品，并与我们确认规格、起订量与定制方案。",
+    "metaTitle": "中国宠物用品批发采购目录 | PawSupply",
+    "metaDescription": "通过我们的中国采购团队与长期合作工厂，探索宠物窝垫、食水碗、玩具及胸背牵引用品，沟通批量采购与品牌定制需求。",
+    "empty": "该系列的产品详情正在整理，您可以先向我们说明采购需求。",
     "featuredBadge": "精选",
     "featuredLabel": "精选产品",
     "untitled": "未命名产品",
     "askPrice": "询价",
     "stock": "库存",
-    "unlimited": "长期供应",
+    "unlimited": "库存请询价确认",
     "yes": "是",
     "details": "产品详情",
     "related": "相关产品",
-    "breadcrumb": { "home": "首页", "products": "产品" },
+    "breadcrumb": {
+      "home": "首页",
+      "products": "产品"
+    },
     "filter": {
       "all": "全部",
       "featured": "精选",
       "allCategories": "全部分类",
-      "showing": "共 {count} 个产品"
+      "showing": "共 {count} 个产品",
+      "loading": "正在更新产品…",
+      "reset": "重置筛选",
+      "unknownCategory": "未找到该品类",
+      "consult": "具体规格与可选款式，请与我们沟通"
+    },
+    "inquire": "咨询该系列",
+    "categoryOverview": "按日常场景探索",
+    "sourcing": "采购信息",
+    "minimumOrderQuantity": "起订量",
+    "materials": "材料",
+    "customization": "定制选项",
+    "leadTime": "交期",
+    "productInquiry": "咨询这款产品",
+    "categorySpecs": {
+      "bedding": "确认尺寸、面料与填充方案",
+      "feeding": "确认容量、材质与清洁需求",
+      "toys": "确认尺寸、材料与互动方式",
+      "walking": "确认尺码、扣具与牵引规格"
+    },
+    "specifications": "产品规格与参数"
+  },
+  "contact": {
+    "hero": {
+      "eyebrow": "宠物用品采购咨询",
+      "title": "好产品，从了解您的需求开始。",
+      "highlight": "一起聊聊吧。",
+      "description": "告诉中国团队您的目标品类、采购数量和销售市场，我们将结合长期合作工厂网络，沟通产品、样品与报价需求。"
+    },
+    "sidebar": {
+      "eyebrow": "联系方式",
+      "title": "让需求更清晰",
+      "description": "无论您正在拓展新品类，还是打造自有品牌，都可以从一次需求沟通开始。",
+      "phone": "服务热线",
+      "email": "企业邮箱",
+      "address": "公司地址",
+      "addressValue": "上海市浦东新区张江高科技园区",
+      "workTime": "服务时间",
+      "workTimeValue": "周一至周日 8:00 - 22:00",
+      "promiseTitle": "接下来会发生什么",
+      "promise1": "了解产品与数量需求",
+      "promise2": "确认样品、规格与定制范围",
+      "promise3": "沟通报价和交付安排"
+    },
+    "form": {
+      "title": "在线询盘",
+      "subtitle": "请填写以下信息，我们会尽快与您联系",
+      "formNotConfigured": "询盘表单正在配置中，请稍后再试。",
+      "fields": {
+        "companyName": "公司名称",
+        "contactName": "联系人",
+        "email": "企业邮箱",
+        "phone": "联系电话（选填）",
+        "businessType": "业务类型",
+        "productCategory": "产品品类",
+        "monthlyVolume": "预计采购数量",
+        "deliveryCity": "收货国家 / 城市",
+        "requirements": "产品规格 / 品牌定制需求（选填）"
+      },
+      "placeholders": {
+        "select": "请选择"
+      },
+      "businessTypeOptions": {
+        "pet-store": "宠物零售店",
+        "ecommerce": "电商零售",
+        "brand": "宠物品牌",
+        "distributor": "批发分销",
+        "grooming": "宠物服务 / 美容",
+        "other": "其他"
+      },
+      "productCategoryOptions": {
+        "feeding": "喂养用品",
+        "walking": "出行装备",
+        "bedding": "窝垫家居",
+        "toys": "玩具互动",
+        "multiple": "多个品类"
+      },
+      "monthlyVolumeOptions": {
+        "under-100": "100 件以下",
+        "100-500": "100–500 件",
+        "500-2000": "500–2,000 件",
+        "over-2000": "2,000 件以上",
+        "not-sure": "需要选品建议"
+      },
+      "submit": "提交询盘",
+      "submitting": "正在提交...",
+      "success": {
+        "title": "询盘提交成功！",
+        "message": "我们已收到您的采购需求，将根据您留下的联系方式与您沟通。",
+        "backToProducts": "继续浏览产品系列"
+      },
+      "error": "提交失败，请稍后重试或直接联系我们。",
+      "privacy": "提交即表示您同意我们处理您的信息用于询盘服务。",
+      "validation": {
+        "required": "请填写此项",
+        "email": "请输入有效的邮箱地址"
+      },
+      "productContext": "咨询产品",
+      "articleContext": "参考采购指南"
+    },
+    "process": {
+      "eyebrow": "询盘流程",
+      "title": "四步完成企业采购",
+      "step1": {
+        "title": "提交需求",
+        "description": "填写询盘表单，告诉我们您的产品需求和数量。"
+      },
+      "step2": {
+        "title": "方案匹配",
+        "description": "采购顾问会根据您的需求匹配合适的供应商和方案。"
+      },
+      "step3": {
+        "title": "确认报价",
+        "description": "我们将提供详细报价单，确认价格、规格和交付安排。"
+      },
+      "step4": {
+        "title": "确认交付",
+        "description": "根据订单确认包装、运输与交付安排。"
+      }
     }
+  },
+  "notFound": {
+    "title": "暂时找不到这个页面",
+    "description": "页面可能已更新，或筛选结果超出了现有范围。您可以返回产品目录，继续了解可采购的品类。",
+    "products": "浏览产品目录",
+    "home": "返回首页"
+  },
+  "factoryNetwork": {
+    "eyebrow": "长期合作 · 中国供应链",
+    "title": "扎根中国，\n让采购衔接更清晰。",
+    "stat": "长期合作工厂",
+    "note": "我们与工厂长期合作，具体生产能力、起订量与交期按产品及订单确认。",
+    "action": "沟通您的采购需求",
+    "items": [
+      {
+        "title": "按需求对接工厂",
+        "description": "围绕产品品类、材质与定制要求，与中国团队及合作工厂沟通可行方案。"
+      },
+      {
+        "title": "协调样品与规格",
+        "description": "集中沟通产品问题、样品反馈和包装要求，让需求与确认结果有据可循。"
+      },
+      {
+        "title": "逐单确认采购条件",
+        "description": "下单前明确规格、数量、验收标准和交付条件，按确认后的要求推进。"
+      }
+    ],
+    "count": "数十家"
+  },
+  "shipping": {
+    "title": "多渠道物流，\n多港口灵活发运。",
+    "description": "连接数十家长期合作工厂，协调多渠道物流，支持厦门港、天津港、广州港发运。结合出货地点、目的地和货物要求，为您的订单沟通适合的运输方案。",
+    "action": "沟通物流与发运需求",
+    "items": [
+      {
+        "title": "多个港口安排出货",
+        "description": "结合生产地点、备货进度与可用航线讨论发货港口，为不同订单提供更灵活的出运选择。"
+      },
+      {
+        "title": "协调多渠道物流方案",
+        "description": "围绕货量、目的地与时间要求沟通可用方案，在订舱前确认承运方、路线及报价。"
+      },
+      {
+        "title": "提前明确发运要求",
+        "description": "将包装、货物尺寸、运输条款及文件要求与产品订单一起确认，让工厂备货与物流安排衔接更清晰。"
+      }
+    ],
+    "portsTitle": "支持发运的中国港口",
+    "portsDescription": "请提供收货目的地、数量、包装信息与期望时间。我们将沟通适合的发货港口和可用物流方案，运费、船期及服务范围以具体报价确认为准。",
+    "ports": ["厦门港", "天津港", "广州港"]
   }
 }

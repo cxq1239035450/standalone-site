@@ -1,71 +1,23 @@
-import {
-  ArrowRight,
-  BadgeCheck,
-  Beef,
-  Building2,
-  Clock3,
-  Fish,
-  Leaf,
-  PackageCheck,
-  ShieldCheck,
-  Snowflake,
-  Sprout,
-  Truck,
-} from 'lucide-react'
-import { getTranslations } from 'next-intl/server'
-import { getLocale } from 'next-intl/server'
+import { ArrowRight, ArrowUpRight, ClipboardCheck, PackageCheck, Palette, Plus } from 'lucide-react'
+import Image from 'next/image'
+import { getTranslations, getLocale } from 'next-intl/server'
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
-
-import { Card, type CardPostData } from '@/components/Card'
 import { ProductCard } from '@/components/ProductCard'
 import { Link } from '@/i18n/navigation'
 import { defaultLocale, isLocale } from '@/i18n/config'
+import { getSearchSettings, jsonLd } from '@/utilities/searchSettings'
+import styles from './index.module.css'
+import { FactoryNetwork } from '@/components/FactoryNetwork'
+import { ShippingOptions } from '@/components/ShippingOptions'
 
-const categories = [
-  { key: 'vegetables', icon: Leaf, accent: 'bg-emerald-100 text-emerald-700' },
-  { key: 'fruits', icon: Sprout, accent: 'bg-amber-100 text-amber-700' },
-  { key: 'meat', icon: Beef, accent: 'bg-rose-100 text-rose-700' },
-  { key: 'seafood', icon: Fish, accent: 'bg-sky-100 text-sky-700' },
-] as const
-
-const advantages = [
-  { key: 'source', icon: BadgeCheck },
-  { key: 'quality', icon: ShieldCheck },
-  { key: 'coldChain', icon: Snowflake },
-  { key: 'delivery', icon: Truck },
-] as const
-
-const steps = [
-  { key: 'verify', icon: Building2 },
-  { key: 'select', icon: Leaf },
-  { key: 'confirm', icon: PackageCheck },
-  { key: 'deliver', icon: Truck },
-] as const
+const categories = ['bedding', 'feeding', 'toys', 'walking'] as const
 
 export async function HomePageSections() {
-  const localeValue = await getLocale()
-  const locale = isLocale(localeValue) ? localeValue : defaultLocale
-  const [t, payload] = await Promise.all([getTranslations('home'), getPayload({ config: configPromise })])
-  const { docs: latestPosts } = await payload.find({
-    collection: 'posts',
-    depth: 1,
-    draft: false,
-    fallbackLocale: false,
-    limit: 3,
-    locale,
-    pagination: false,
-    sort: '-publishedAt',
-    where: {
-      _status: {
-        equals: 'published',
-      },
-      title: {
-        exists: true,
-      },
-    },
-  })
-
+  const value = await getLocale()
+  const locale = isLocale(value) ? value : defaultLocale
+  const t = await getTranslations('home')
+  const payload = await getPayload({ config: configPromise })
   const { docs: featuredProducts } = await payload.find({
     collection: 'products',
     depth: 1,
@@ -74,228 +26,220 @@ export async function HomePageSections() {
     limit: 4,
     locale,
     pagination: false,
-    sort: '-publishedAt',
+    overrideAccess: false,
     where: {
-      _status: {
-        equals: 'published',
-      },
-      'organization.featured': {
-        equals: true,
-      },
-      title: {
-        exists: true,
-      },
-    },
-    select: {
-      title: true,
-      slug: true,
-      general: {
-        heroImage: true,
-        shortDescription: true,
-      },
-      pricing: {
-        price: true,
-        unit: true,
-      },
-      organization: {
-        category: true,
-        featured: true,
-      },
+      'organization.category.slug': { in: ['bedding', 'feeding', 'toys', 'walking'] },
+      _status: { equals: 'published' },
+      'organization.featured': { equals: true },
+      title: { exists: true },
     },
   })
-
+  const steps = t.raw('custom.steps') as Array<{ title: string; description: string }>
+  const briefItems = t.raw('brief.items') as Array<{ title: string; description: string }>
+  const guides = t.raw('guides.items') as Array<{
+    title: string
+    description: string
+    action: string
+  }>
+  const settings = await getSearchSettings(locale)
+  const configuredQuestions = settings.geo?.faq?.filter((item) => item.question && item.answer)
+  const questions = configuredQuestions?.length
+    ? configuredQuestions
+    : (t.raw('faq.items') as Array<{ question: string; answer: string }>)
   return (
-    <main className="overflow-hidden bg-stone-50 text-slate-900">
-      <section className="relative isolate border-b border-emerald-950/10 bg-emerald-950 text-white">
-        <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_80%_20%,rgba(52,211,153,0.22),transparent_34%),linear-gradient(135deg,transparent_0%,rgba(255,255,255,0.04)_100%)]" />
-        <div className="container grid min-h-[650px] items-center gap-14 py-20 lg:grid-cols-[1.08fr_0.92fr] lg:py-28">
-          <div className="max-w-3xl">
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-emerald-300/25 bg-white/10 px-4 py-2 text-sm text-emerald-100 backdrop-blur">
-              <BadgeCheck className="h-4 w-4" />
-              {t('hero.eyebrow')}
-            </div>
-            <h1 className="text-balance text-5xl font-semibold leading-[1.08] tracking-tight sm:text-6xl lg:text-7xl">
-              {t('hero.title')}
-              <span className="mt-2 block text-emerald-300">{t('hero.highlight')}</span>
-            </h1>
-            <p className="mt-7 max-w-2xl text-lg leading-8 text-emerald-50/75 sm:text-xl">
-              {t('hero.description')}
-            </p>
-            <div className="mt-10 flex flex-col gap-4 sm:flex-row">
-              <Link className="inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-400 px-6 py-3.5 font-semibold text-emerald-950 transition hover:bg-emerald-300" href="/search">
-                {t('hero.primaryAction')} <ArrowRight className="h-4 w-4" />
-              </Link>
-              <Link className="inline-flex items-center justify-center rounded-xl border border-white/20 bg-white/5 px-6 py-3.5 font-semibold text-white transition hover:bg-white/10" href="/contact">
-                {t('hero.secondaryAction')}
-              </Link>
-            </div>
+    <main className="pet-site">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: jsonLd({
+            '@context': 'https://schema.org',
+            '@type': 'FAQPage',
+            mainEntity: questions.map((item) => ({
+              '@type': 'Question',
+              name: item.question,
+              acceptedAnswer: { '@type': 'Answer', text: item.answer },
+            })),
+          }),
+        }}
+      />
+      <section className="pet-container pet-hero">
+        <div className="pet-hero-copy">
+          <span className={styles.eyebrow}>{t('hero.eyebrow')}</span>
+          <h1>
+            {t('hero.title')}
+            <span>{t('hero.highlight')}</span>
+          </h1>
+          <p>{t('hero.description')}</p>
+          <div className="pet-hero-actions">
+            <Link className="pet-button" href="/products">
+              {t('hero.primaryAction')} <ArrowRight size={20} />
+            </Link>
+            <Link className="pet-button pet-button-outline" href="/contact">
+              {t('hero.secondaryAction')}
+            </Link>
           </div>
-
-          <div className="relative mx-auto w-full max-w-xl">
-            <div className="rounded-[2rem] border border-white/15 bg-white/10 p-5 shadow-2xl shadow-black/25 backdrop-blur-xl">
-              <div className="rounded-[1.5rem] bg-stone-50 p-6 text-slate-900">
-                <div className="mb-6 flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-emerald-700">{t('dashboard.label')}</p>
-                    <p className="mt-1 text-2xl font-semibold">{t('dashboard.title')}</p>
-                  </div>
-                  <span className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-700">{t('dashboard.status')}</span>
-                </div>
-                <div className="grid grid-cols-2 gap-3">
-                  {categories.map(({ key, icon: Icon, accent }) => (
-                    <div className="rounded-2xl border border-stone-200 bg-white p-4" key={key}>
-                      <span className={`mb-5 inline-flex rounded-xl p-2.5 ${accent}`}><Icon className="h-5 w-5" /></span>
-                      <p className="font-semibold">{t(`categories.${key}.name`)}</p>
-                      <p className="mt-1 text-xs text-slate-500">{t(`categories.${key}.count`)}</p>
-                    </div>
-                  ))}
-                </div>
+          <ul className={styles.heroNotes}>
+            {[PackageCheck, Palette, ClipboardCheck].map((Icon, index) => (
+              <li key={index}>
+                <Icon size={16} aria-hidden="true" />
+                {t(`hero.notes.${index}`)}
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div className="pet-hero-media">
+          <Image
+            src="/pet-assets/hero-pets.webp"
+            alt={t('hero.imageAlt')}
+            fill
+            loading="eager"
+            fetchPriority="high"
+            sizes="(max-width: 767px) 100vw, 50vw"
+          />
+        </div>
+      </section>
+      <div className="pet-container">
+        <div className="pet-audience">
+          {(t.raw('audience') as string[]).map((item) => (
+            <p key={item}>{item}</p>
+          ))}
+        </div>
+      </div>
+      <section className={`pet-container pet-section ${styles.collection}`} id="collection">
+        <div className="pet-section-heading">
+          <div>
+            <h2>{t('categories.title')}</h2>
+            <p>{t('categories.description')}</p>
+          </div>
+          <Link className="pet-text-link" href="/products">
+            {t('categories.viewAll')} <ArrowUpRight size={20} />
+          </Link>
+        </div>
+        <div className={styles.categoryGrid}>
+          {categories.map((key) => (
+            <Link key={key} href={`/products?category=${key}`} className={styles.category}>
+              <div className={styles.categoryImage}>
+                <Image src={`/pet-assets/${key}.webp`} alt="" fill sizes="80px" />
               </div>
+              <div>
+                <h3>{t(`categories.${key}.name`)}</h3>
+                <p>{t(`categories.${key}.description`)}</p>
+              </div>
+              <ArrowUpRight size={18} aria-hidden="true" />
+            </Link>
+          ))}
+        </div>
+      </section>
+      {featuredProducts.length > 0 && (
+        <section className={`pet-container pet-section ${styles.featured}`}>
+          <div className="pet-section-heading">
+            <div>
+              <h2>{t('products.title')}</h2>
+              <p>{t('products.description')}</p>
             </div>
-            <div className="absolute -bottom-6 -left-5 flex items-center gap-3 rounded-2xl bg-white px-4 py-3 text-slate-900 shadow-xl">
-              <span className="rounded-xl bg-amber-100 p-2 text-amber-700"><Clock3 className="h-5 w-5" /></span>
-              <div><p className="text-xs text-slate-500">{t('dashboard.deliveryLabel')}</p><p className="font-semibold">{t('dashboard.deliveryValue')}</p></div>
-            </div>
+            <Link href="/products" className="pet-text-link">
+              {t('products.viewAll')} <ArrowRight size={20} />
+            </Link>
           </div>
-        </div>
-      </section>
-
-      <section className="border-b border-stone-200 bg-white">
-        <div className="container grid grid-cols-2 divide-x divide-stone-200 py-10 lg:grid-cols-4">
-          {(['suppliers', 'products', 'customers', 'cities'] as const).map((key) => (
-            <div className="px-5 py-3 text-center" key={key}>
-              <p className="text-3xl font-semibold tracking-tight text-emerald-800 sm:text-4xl">{t(`stats.${key}.value`)}</p>
-              <p className="mt-2 text-sm text-slate-500">{t(`stats.${key}.label`)}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section className="container py-24 sm:py-28">
-        <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
-          <div><p className="text-sm font-semibold uppercase tracking-[0.2em] text-emerald-700">{t('categories.eyebrow')}</p><h2 className="mt-3 text-4xl font-semibold tracking-tight sm:text-5xl">{t('categories.title')}</h2></div>
-          <p className="max-w-xl text-lg leading-8 text-slate-600">{t('categories.description')}</p>
-        </div>
-        <div className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-4">
-          {categories.map(({ key, icon: Icon, accent }) => (
-            <article className="group rounded-3xl border border-stone-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-xl" key={key}>
-              <span className={`inline-flex rounded-2xl p-3 ${accent}`}><Icon className="h-7 w-7" /></span>
-              <h3 className="mt-8 text-xl font-semibold">{t(`categories.${key}.name`)}</h3>
-              <p className="mt-3 min-h-12 leading-6 text-slate-500">{t(`categories.${key}.description`)}</p>
-              <p className="mt-6 text-sm font-semibold text-emerald-700">{t(`categories.${key}.count`)}</p>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section className="bg-white py-24 sm:py-28">
-        <div className="container">
-          <div className="max-w-2xl"><p className="text-sm font-semibold uppercase tracking-[0.2em] text-emerald-700">{t('advantages.eyebrow')}</p><h2 className="mt-3 text-4xl font-semibold tracking-tight sm:text-5xl">{t('advantages.title')}</h2></div>
-          <div className="mt-12 grid gap-px overflow-hidden rounded-3xl border border-stone-200 bg-stone-200 md:grid-cols-2 lg:grid-cols-4">
-            {advantages.map(({ key, icon: Icon }) => (
-              <article className="bg-white p-7" key={key}><Icon className="h-7 w-7 text-emerald-700" /><h3 className="mt-8 text-xl font-semibold">{t(`advantages.${key}.title`)}</h3><p className="mt-3 leading-7 text-slate-500">{t(`advantages.${key}.description`)}</p></article>
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {featuredProducts.map((product) => (
+              <ProductCard key={product.id} product={product} locale={locale} />
+            ))}
+          </div>
+        </section>
+      )}
+      <FactoryNetwork />
+      <section className="pet-custom" id="customization">
+        <div className="pet-container pet-custom-inner">
+          <div className="pet-custom-intro">
+            <h2>{t('custom.title')}</h2>
+            <p>{t('custom.description')}</p>
+            <Link className="pet-text-link" href="/solutions">
+              {t('custom.action')} <ArrowUpRight size={20} />
+            </Link>
+          </div>
+          <div className="pet-steps">
+            {steps.map((step, i) => (
+              <article key={step.title}>
+                <span>0{i + 1}</span>
+                <h3>{step.title}</h3>
+                <p>{step.description}</p>
+              </article>
             ))}
           </div>
         </div>
       </section>
-
-      <section className="container py-24 sm:py-28">
-        <div className="text-center"><p className="text-sm font-semibold uppercase tracking-[0.2em] text-emerald-700">{t('process.eyebrow')}</p><h2 className="mt-3 text-4xl font-semibold tracking-tight sm:text-5xl">{t('process.title')}</h2></div>
-        <div className="mt-14 grid gap-8 md:grid-cols-4">
-          {steps.map(({ key, icon: Icon }, index) => (
-            <article className="relative text-center" key={key}><span className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-emerald-900 text-white shadow-lg"><Icon className="h-7 w-7" /></span><span className="mt-5 block text-xs font-bold tracking-widest text-emerald-700">0{index + 1}</span><h3 className="mt-2 text-lg font-semibold">{t(`process.${key}.title`)}</h3><p className="mt-2 text-sm leading-6 text-slate-500">{t(`process.${key}.description`)}</p></article>
+      <section className={`pet-container pet-section ${styles.guides}`}>
+        <div className="pet-section-heading">
+          <div>
+            <h2>{t('guides.title')}</h2>
+            <p>{t('guides.description')}</p>
+          </div>
+        </div>
+        <div className={styles.guideGrid}>
+          {guides.map((guide, index) => (
+            <article className={styles.guide} key={guide.title}>
+              <span className={styles.guideNumber}>0{index + 1}</span>
+              <div>
+                <h3>{guide.title}</h3>
+                <p>{guide.description}</p>
+                <Link
+                  href={`/solutions#${index === 0 ? 'samples' : 'quality'}`}
+                  className="pet-text-link"
+                >
+                  {guide.action} <ArrowUpRight size={18} aria-hidden="true" />
+                </Link>
+              </div>
+            </article>
+          ))}
+        </div>
+        <aside className={styles.brief} aria-labelledby="procurement-brief-title">
+          <div className={styles.briefIntro}>
+            <ClipboardCheck size={24} aria-hidden="true" />
+            <h3 id="procurement-brief-title">{t('brief.title')}</h3>
+            <p>{t('brief.description')}</p>
+          </div>
+          <ol>
+            {briefItems.map((item) => (
+              <li key={item.title}>
+                <strong>{item.title}</strong>
+                <span>{item.description}</span>
+              </li>
+            ))}
+          </ol>
+          <Link className="pet-text-link" href="/contact">
+            {t('brief.action')} <ArrowUpRight size={18} aria-hidden="true" />
+          </Link>
+        </aside>
+      </section>
+      <ShippingOptions />
+      <section className="pet-container pet-section pet-faq" id="faq">
+        <div>
+          <h2>{t('faq.title')}</h2>
+          <p>{t('faq.description')}</p>
+          <Link className="pet-text-link" href="/contact">
+            {t('faq.action')} <ArrowUpRight size={18} />
+          </Link>
+        </div>
+        <div>
+          {questions.map((item, i) => (
+            <details key={item.question} open={i === 0}>
+              <summary>
+                {item.question}
+                <Plus size={19} />
+              </summary>
+              <p>{item.answer}</p>
+            </details>
           ))}
         </div>
       </section>
-
-      <section className="border-y border-stone-200 bg-white py-24 sm:py-28">
-        <div className="container">
-          <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
-            <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-emerald-700">
-                {t('articles.eyebrow')}
-              </p>
-              <h2 className="mt-3 text-4xl font-semibold tracking-tight sm:text-5xl">
-                {t('articles.title')}
-              </h2>
-              <p className="mt-4 max-w-2xl text-lg leading-8 text-slate-600">
-                {t('articles.description')}
-              </p>
-            </div>
-            <Link
-              className="inline-flex shrink-0 items-center gap-2 font-semibold text-emerald-700 transition hover:text-emerald-900"
-              href="/posts"
-            >
-              {t('articles.viewAll')} <ArrowRight className="h-4 w-4" />
-            </Link>
-          </div>
-
-          {latestPosts.length > 0 ? (
-            <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {latestPosts.map((post) => (
-                <Card
-                  className="h-full rounded-3xl border-stone-200 shadow-sm transition hover:-translate-y-1 hover:shadow-xl"
-                  doc={post as CardPostData}
-                  key={post.id}
-                  relationTo="posts"
-                  showCategories
-                />
-              ))}
-            </div>
-          ) : (
-            <div className="mt-12 rounded-3xl border border-dashed border-stone-300 bg-stone-50 px-6 py-14 text-center text-slate-500">
-              {t('articles.empty')}
-            </div>
-          )}
-        </div>
-      </section>
-
-      <section className="border-y border-stone-200 bg-stone-50 py-24 sm:py-28">
-        <div className="container">
-          <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
-            <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-emerald-700">
-                {t('products.eyebrow')}
-              </p>
-              <h2 className="mt-3 text-4xl font-semibold tracking-tight sm:text-5xl">
-                {t('products.title')}
-              </h2>
-              <p className="mt-4 max-w-2xl text-lg leading-8 text-slate-600">
-                {t('products.description')}
-              </p>
-            </div>
-            <Link
-              className="inline-flex shrink-0 items-center gap-2 font-semibold text-emerald-700 transition hover:text-emerald-900"
-              href="/products"
-            >
-              {t('products.viewAll')} <ArrowRight className="h-4 w-4" />
-            </Link>
-          </div>
-
-          {featuredProducts.length > 0 ? (
-            <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-              {featuredProducts.map((product) => (
-                <ProductCard
-                  className="h-full rounded-3xl border-stone-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-xl"
-                  key={product.id}
-                  product={product as Parameters<typeof ProductCard>[0]['product']}
-                  locale={locale}
-                />
-              ))}
-            </div>
-          ) : (
-            <div className="mt-12 rounded-3xl border border-dashed border-stone-300 bg-white px-6 py-14 text-center text-slate-500">
-              {t('products.empty')}
-            </div>
-          )}
-        </div>
-      </section>
-
-      <section className="container pb-24 sm:pb-28">
-        <div className="relative overflow-hidden rounded-[2rem] bg-emerald-900 px-7 py-14 text-white sm:px-14 lg:flex lg:items-center lg:justify-between lg:py-16">
-          <div className="absolute -right-24 -top-28 h-80 w-80 rounded-full bg-emerald-400/20 blur-3xl" />
-          <div className="relative max-w-2xl"><h2 className="text-3xl font-semibold sm:text-4xl">{t('cta.title')}</h2><p className="mt-4 text-lg leading-8 text-emerald-100/75">{t('cta.description')}</p></div>
-          <Link className="relative mt-8 inline-flex shrink-0 items-center gap-2 rounded-xl bg-white px-6 py-3.5 font-semibold text-emerald-950 transition hover:bg-emerald-100 lg:mt-0" href="/contact">{t('cta.action')} <ArrowRight className="h-4 w-4" /></Link>
+      <section className="pet-cta">
+        <div className="pet-container">
+          <h2>{t('cta.title')}</h2>
+          <p>{t('cta.description')}</p>
+          <Link className="pet-button" href="/contact">
+            {t('cta.action')} <ArrowUpRight size={20} />
+          </Link>
         </div>
       </section>
     </main>

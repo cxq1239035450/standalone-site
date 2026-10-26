@@ -1,0 +1,1158 @@
+
+> standalone-site@1.0.0 dev E:\code\jsCode\my-sites\standalone-site
+> cross-env NODE_OPTIONS=--no-deprecation next dev
+
+▲ Next.js 16.3.0 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://172.19.0.1:3000
+- Environments: .env
+✓ Ready in 4.9s
+✓ Running next.config.ts took 1629ms
+- Experiments (use with caution):
+  ⨯ turbopackServerFastRefresh
+
+○ Compiling /[locale] ...
+[⣷] Pulling schema from database...
+[2K[1G[⣯] Pulling schema from database...
+[2K[1G[⣟] Pulling schema from database...
+[2K[1G[⡿] Pulling schema from database...
+[2K[1G[⢿] Pulling schema from database...
+[2K[1G[⣻] Pulling schema from database...
+[2K[1G[⣽] Pulling schema from database...
+[2K[1G[⣷] Pulling schema from database...
+[2K[1G[✓] Pulling schema from database...
+[12:03:34] [33mWARN[39m: [36mNo email adapter provided. Email will be written to console. More info at https://payloadcms.com/docs/email/overview.[39m
+ GET /zh 200 in 35.5s (next.js: 4.9s, proxy.ts: 443ms, generate-params: 26.2s, application-code: 3.9s)
+key not found: plugin-redirects:fromUrl
+key not found: plugin-redirects:toUrlType
+key not found: plugin-redirects:internalLink
+key not found: plugin-redirects:customUrl
+key not found: plugin-redirects:documentToRedirect
+key not found: plugin-redirects:customUrl
+ GET /admin 200 in 5.7s (next.js: 4.7s, application-code: 1018ms)
+ GET /api/users/me 200 in 2.1s (next.js: 2.0s, application-code: 145ms)
+ GET /api/users/me 200 in 19ms (next.js: 13ms, application-code: 6ms)
+ GET /api/payload-preferences/nav 200 in 10ms (next.js: 4ms, application-code: 6ms)
+ GET /api/payload-preferences/nav 200 in 10ms (next.js: 5ms, application-code: 5ms)
+ GET /admin/login 200 in 235ms (next.js: 23ms, application-code: 212ms)
+ GET /admin/login 200 in 128ms (next.js: 15ms, application-code: 113ms)
+ POST /api/users/login 200 in 134ms (next.js: 16ms, application-code: 118ms)
+ GET /admin 200 in 210ms (next.js: 15ms, application-code: 196ms)
+ GET /api/payload-preferences/locale 200 in 21ms (next.js: 3ms, application-code: 18ms)
+ GET /admin/collections/pages 200 in 227ms (next.js: 15ms, application-code: 211ms)
+ GET /api/payload-preferences/locale 200 in 30ms (next.js: 14ms, application-code: 16ms)
+ GET /zh 200 in 310ms (next.js: 7ms, proxy.ts: 5ms, generate-params: 9ms, application-code: 289ms)
+ GET /api/users/me 200 in 26ms (next.js: 13ms, application-code: 13ms)
+ GET /api/users/me 200 in 15ms (next.js: 2ms, application-code: 13ms)
+✓ Compiled in 274ms
+Generating import map
+No new imports found, skipping writing import map
+[⣷] Pulling schema from database...
+[2K[1G[⣯] Pulling schema from database...
+[2K[1G[⣟] Pulling schema from database...
+[2K[1G[⡿] Pulling schema from database...
+[2K[1G[⢿] Pulling schema from database...
+[2K[1G[⣻] Pulling schema from database...
+[2K[1G[✓] Pulling schema from database...
+key not found: plugin-redirects:fromUrl
+key not found: plugin-redirects:toUrlType
+key not found: plugin-redirects:internalLink
+key not found: plugin-redirects:customUrl
+key not found: plugin-redirects:documentToRedirect
+key not found: plugin-redirects:customUrl
+ GET /zh 200 in 1846ms (next.js: 382ms, proxy.ts: 4ms, generate-params: 6ms, application-code: 1455ms)
+ GET /admin/collections/pages?depth=1&limit=10&sort=-slug 200 in 1880ms (next.js: 271ms, application-code: 1609ms)
+ GET /api/payload-preferences/locale 200 in 110ms (next.js: 71ms, application-code: 39ms)
+✓ Compiled in 73ms
+Generating import map
+No new imports found, skipping writing import map
+[⣷] Pulling schema from database...
+[2K[1G[⣯] Pulling schema from database...
+[2K[1G[⣟] Pulling schema from database...
+[2K[1G[⡿] Pulling schema from database...
+[2K[1G[⢿] Pulling schema from database...
+[2K[1G[⣻] Pulling schema from database...
+[2K[1G[⣽] Pulling schema from database...
+[2K[1G[⣷] Pulling schema from database...
+[2K[1G[✓] Pulling schema from database...
+key not found: plugin-redirects:fromUrl
+key not found: plugin-redirects:toUrlType
+key not found: plugin-redirects:internalLink
+key not found: plugin-redirects:customUrl
+key not found: plugin-redirects:documentToRedirect
+key not found: plugin-redirects:customUrl
+ GET /zh 200 in 1793ms (next.js: 177ms, proxy.ts: 324ms, generate-params: 6ms, application-code: 1286ms)
+ GET /admin/collections/pages?depth=1&limit=10&sort=-slug 200 in 1836ms (next.js: 131ms, application-code: 1706ms)
+ GET /api/payload-preferences/locale 200 in 106ms (next.js: 68ms, application-code: 39ms)
+ GET /zh 200 in 278ms (next.js: 3ms, proxy.ts: 3ms, generate-params: 6ms, application-code: 265ms)
+ GET /zh 200 in 187ms (next.js: 3ms, proxy.ts: 3ms, generate-params: 0.0ms, application-code: 181ms)
+ GET /api/users/me 200 in 13ms (next.js: 9ms, application-code: 4ms)
+ GET /api/users/me 200 in 4ms (next.js: 1.3ms, application-code: 2ms)
+✓ Compiled in 48ms
+Generating import map
+No new imports found, skipping writing import map
+key not found: plugin-redirects:fromUrl
+key not found: plugin-redirects:toUrlType
+key not found: plugin-redirects:internalLink
+key not found: plugin-redirects:customUrl
+key not found: plugin-redirects:documentToRedirect
+key not found: plugin-redirects:customUrl
+ GET /zh 200 in 1745ms (next.js: 639ms, proxy.ts: 59ms, generate-params: 6ms, application-code: 1042ms)
+ GET /zh 200 in 1754ms (next.js: 764ms, proxy.ts: 59ms, generate-params: 0.0ms, application-code: 931ms)
+ GET /admin/collections/pages?depth=1&limit=10&sort=-slug 200 in 1750ms (next.js: 239ms, application-code: 1511ms)
+ GET /admin/collections/pages?depth=1&limit=10&sort=-slug 200 in 974ms (next.js: 36ms, application-code: 938ms)
+ GET /zh 200 in 998ms (next.js: 68ms, proxy.ts: 54ms, generate-params: 0.0ms, application-code: 876ms)
+ GET /zh 200 in 999ms (next.js: 55ms, proxy.ts: 54ms, generate-params: 0.0ms, application-code: 890ms)
+ GET /admin/collections/pages?depth=1&limit=10&sort=-slug 200 in 1019ms (next.js: 46ms, application-code: 973ms)
+ GET /zh 200 in 1132ms (next.js: 188ms, proxy.ts: 144ms, generate-params: 0.0ms, application-code: 800ms)
+ GET /zh 200 in 1142ms (next.js: 201ms, proxy.ts: 144ms, generate-params: 0.0ms, application-code: 798ms)
+ GET /zh 200 in 1099ms (next.js: 51ms, proxy.ts: 148ms, generate-params: 0.0ms, application-code: 899ms)
+ GET /zh 200 in 1024ms (next.js: 30ms, proxy.ts: 33ms, generate-params: 0.0ms, application-code: 961ms)
+ GET /admin/collections/pages?depth=1&limit=10&sort=-slug 200 in 1001ms (next.js: 23ms, application-code: 978ms)
+ GET /zh 200 in 1029ms (next.js: 64ms, proxy.ts: 29ms, generate-params: 0.0ms, application-code: 936ms)
+ GET /zh 200 in 1011ms (next.js: 134ms, proxy.ts: 35ms, generate-params: 0.0ms, application-code: 842ms)
+ GET /admin/collections/pages?depth=1&limit=10&sort=-slug 200 in 915ms (next.js: 69ms, application-code: 846ms)
+ GET /zh 200 in 967ms (next.js: 191ms, proxy.ts: 55ms, generate-params: 0.0ms, application-code: 721ms)
+ GET /zh 200 in 976ms (next.js: 199ms, proxy.ts: 54ms, generate-params: 0.0ms, application-code: 723ms)
+ GET /admin/collections/pages?depth=1&limit=10&sort=-slug 200 in 885ms (next.js: 39ms, application-code: 845ms)
+ GET /zh 200 in 910ms (next.js: 239ms, proxy.ts: 82ms, generate-params: 6ms, application-code: 583ms)
+ GET /admin/collections/pages?depth=1&limit=10&sort=-slug 200 in 685ms (next.js: 41ms, application-code: 644ms)
+ GET /zh 200 in 803ms (next.js: 47ms, proxy.ts: 79ms, generate-params: 0.0ms, application-code: 678ms)
+ GET /zh 200 in 886ms (next.js: 37ms, proxy.ts: 23ms, generate-params: 0.0ms, application-code: 827ms)
+ GET /zh 200 in 893ms (next.js: 50ms, proxy.ts: 28ms, generate-params: 0.0ms, application-code: 815ms)
+ GET /zh 200 in 872ms (next.js: 80ms, proxy.ts: 29ms, generate-params: 0.0ms, application-code: 764ms)
+ GET /admin/collections/pages?depth=1&limit=10&sort=-slug 200 in 841ms (next.js: 27ms, application-code: 814ms)
+ GET /zh 200 in 852ms (next.js: 121ms, proxy.ts: 70ms, generate-params: 0.0ms, application-code: 661ms)
+ GET /zh 200 in 849ms (next.js: 100ms, proxy.ts: 87ms, generate-params: 0.0ms, application-code: 662ms)
+ GET /admin/collections/pages?depth=1&limit=10&sort=-slug 200 in 813ms (next.js: 20ms, application-code: 793ms)
+ GET /zh 200 in 910ms (next.js: 163ms, proxy.ts: 90ms, generate-params: 0.0ms, application-code: 657ms)
+ GET /zh 200 in 836ms (next.js: 150ms, proxy.ts: 89ms, generate-params: 0.0ms, application-code: 597ms)
+ GET /admin/collections/pages?depth=1&limit=10&sort=-slug 200 in 721ms (next.js: 13ms, application-code: 708ms)
+ GET /zh 200 in 750ms (next.js: 35ms, proxy.ts: 58ms, generate-params: 0.0ms, application-code: 657ms)
+ GET /zh 200 in 822ms (next.js: 28ms, proxy.ts: 21ms, generate-params: 0.0ms, application-code: 774ms)
+ GET /admin/collections/pages?depth=1&limit=10&sort=-slug 200 in 819ms (next.js: 26ms, application-code: 793ms)
+ GET /zh 200 in 816ms (next.js: 89ms, proxy.ts: 60ms, generate-params: 0.0ms, application-code: 668ms)
+ GET /zh 200 in 825ms (next.js: 102ms, proxy.ts: 27ms, generate-params: 0.0ms, application-code: 695ms)
+ GET /admin/collections/pages?depth=1&limit=10&sort=-slug 200 in 751ms (next.js: 40ms, application-code: 710ms)
+ GET /zh 200 in 788ms (next.js: 99ms, proxy.ts: 77ms, generate-params: 0.0ms, application-code: 612ms)
+ GET /zh 200 in 760ms (next.js: 57ms, proxy.ts: 36ms, generate-params: 0.0ms, application-code: 666ms)
+ GET /admin/collections/pages?depth=1&limit=10&sort=-slug 200 in 821ms (next.js: 60ms, application-code: 761ms)
+ GET /zh 200 in 824ms (next.js: 151ms, proxy.ts: 56ms, generate-params: 6ms, application-code: 611ms)
+ GET /zh 200 in 772ms (next.js: 113ms, proxy.ts: 48ms, generate-params: 0.0ms, application-code: 611ms)
+ GET /zh 200 in 820ms (next.js: 75ms, proxy.ts: 54ms, generate-params: 0.0ms, application-code: 691ms)
+ GET /zh 200 in 835ms (next.js: 27ms, proxy.ts: 24ms, generate-params: 0.0ms, application-code: 784ms)
+ GET /admin/collections/pages?depth=1&limit=10&sort=-slug 200 in 842ms (next.js: 24ms, application-code: 817ms)
+ GET /zh 200 in 854ms (next.js: 115ms, proxy.ts: 18ms, generate-params: 0.0ms, application-code: 722ms)
+ GET /zh 200 in 849ms (next.js: 129ms, proxy.ts: 27ms, generate-params: 0.0ms, application-code: 693ms)
+ GET /admin/collections/pages?depth=1&limit=10&sort=-slug 200 in 739ms (next.js: 31ms, application-code: 708ms)
+ GET /zh 200 in 783ms (next.js: 47ms, proxy.ts: 104ms, generate-params: 0.0ms, application-code: 633ms)
+ GET /zh 200 in 803ms (next.js: 56ms, proxy.ts: 72ms, generate-params: 0.0ms, application-code: 675ms)
+ GET /admin/collections/pages?depth=1&limit=10&sort=-slug 200 in 814ms (next.js: 40ms, application-code: 774ms)
+ GET /zh 200 in 858ms (next.js: 150ms, proxy.ts: 58ms, generate-params: 0.0ms, application-code: 649ms)
+ GET /zh 200 in 875ms (next.js: 99ms, proxy.ts: 83ms, generate-params: 0.0ms, application-code: 693ms)
+ GET /zh 200 in 870ms (next.js: 67ms, proxy.ts: 62ms, generate-params: 0.0ms, application-code: 740ms)
+ GET /zh 200 in 885ms (next.js: 30ms, proxy.ts: 31ms, generate-params: 0.0ms, application-code: 823ms)
+ GET /zh 200 in 893ms (next.js: 126ms, proxy.ts: 24ms, generate-params: 0.0ms, application-code: 742ms)
+ GET /admin/collections/pages?depth=1&limit=10&sort=-slug 200 in 867ms (next.js: 25ms, application-code: 842ms)
+ GET /zh 200 in 873ms (next.js: 150ms, proxy.ts: 27ms, generate-params: 0.0ms, application-code: 697ms)
+ GET /admin/collections/pages?depth=1&limit=10&sort=-slug 200 in 743ms (next.js: 38ms, application-code: 706ms)
+ GET /zh 200 in 802ms (next.js: 49ms, proxy.ts: 92ms, generate-params: 0.0ms, application-code: 661ms)
+ GET /zh 200 in 806ms (next.js: 78ms, proxy.ts: 90ms, generate-params: 0.0ms, application-code: 639ms)
+ GET /admin/collections/pages?depth=1&limit=10&sort=-slug 200 in 782ms (next.js: 52ms, application-code: 730ms)
+ GET /zh 200 in 824ms (next.js: 139ms, proxy.ts: 58ms, generate-params: 6ms, application-code: 622ms)
+ GET /zh 200 in 844ms (next.js: 90ms, proxy.ts: 87ms, generate-params: 0.0ms, application-code: 667ms)
+ GET /zh 200 in 779ms (next.js: 66ms, proxy.ts: 61ms, generate-params: 0.0ms, application-code: 652ms)
+ GET /zh 200 in 832ms (next.js: 32ms, proxy.ts: 21ms, generate-params: 0.0ms, application-code: 779ms)
+ GET /zh 200 in 855ms (next.js: 116ms, proxy.ts: 25ms, generate-params: 0.0ms, application-code: 715ms)
+ GET /admin/collections/pages?depth=1&limit=10&sort=-slug 200 in 827ms (next.js: 24ms, application-code: 803ms)
+ GET /zh 200 in 832ms (next.js: 146ms, proxy.ts: 26ms, generate-params: 0.0ms, application-code: 659ms)
+ GET /admin/collections/pages?depth=1&limit=10&sort=-slug 200 in 713ms (next.js: 53ms, application-code: 660ms)
+ GET /zh 200 in 727ms (next.js: 75ms, proxy.ts: 55ms, generate-params: 0.0ms, application-code: 598ms)
+ GET /zh 200 in 763ms (next.js: 89ms, proxy.ts: 55ms, generate-params: 0.0ms, application-code: 619ms)
+ GET /admin/collections/pages?depth=1&limit=10&sort=-slug 200 in 771ms (next.js: 45ms, application-code: 727ms)
+ GET /zh 200 in 845ms (next.js: 93ms, proxy.ts: 76ms, generate-params: 0.0ms, application-code: 676ms)
+ GET /zh 200 in 842ms (next.js: 80ms, proxy.ts: 49ms, generate-params: 0.0ms, application-code: 713ms)
+ GET /zh 200 in 863ms (next.js: 71ms, proxy.ts: 63ms, generate-params: 0.0ms, application-code: 729ms)
+ GET /zh 200 in 876ms (next.js: 32ms, proxy.ts: 21ms, generate-params: 0.0ms, application-code: 823ms)
+ GET /admin/collections/pages?depth=1&limit=10&sort=-slug 200 in 866ms (next.js: 10ms, application-code: 856ms)
+ GET /zh 200 in 898ms (next.js: 124ms, proxy.ts: 26ms, generate-params: 0.0ms, application-code: 748ms)
+ GET /zh 200 in 873ms (next.js: 126ms, proxy.ts: 44ms, generate-params: 0.0ms, application-code: 703ms)
+ GET /admin/collections/pages?depth=1&limit=10&sort=-slug 200 in 747ms (next.js: 33ms, application-code: 714ms)
+ GET /zh 200 in 788ms (next.js: 146ms, proxy.ts: 86ms, generate-params: 0.0ms, application-code: 555ms)
+ GET /zh 200 in 796ms (next.js: 66ms, proxy.ts: 116ms, generate-params: 0.0ms, application-code: 613ms)
+ GET /admin/collections/pages?depth=1&limit=10&sort=-slug 200 in 790ms (next.js: 50ms, application-code: 740ms)
+ GET /zh 200 in 820ms (next.js: 101ms, proxy.ts: 58ms, generate-params: 6ms, application-code: 655ms)
+ GET /zh 200 in 799ms (next.js: 79ms, proxy.ts: 70ms, generate-params: 0.0ms, application-code: 649ms)
+ GET /zh 200 in 820ms (next.js: 48ms, proxy.ts: 62ms, generate-params: 0.0ms, application-code: 710ms)
+ GET /zh 200 in 868ms (next.js: 32ms, proxy.ts: 21ms, generate-params: 0.0ms, application-code: 814ms)
+ GET /zh 200 in 887ms (next.js: 140ms, proxy.ts: 5ms, generate-params: 0.0ms, application-code: 742ms)
+ GET /admin/collections/pages?depth=1&limit=10&sort=-slug 200 in 873ms (next.js: 9ms, application-code: 864ms)
+ GET /zh 200 in 876ms (next.js: 156ms, proxy.ts: 49ms, generate-params: 0.0ms, application-code: 671ms)
+ GET /admin/collections/pages?depth=1&limit=10&sort=-slug 200 in 740ms (next.js: 26ms, application-code: 714ms)
+ GET /zh 200 in 772ms (next.js: 169ms, proxy.ts: 61ms, generate-params: 0.0ms, application-code: 541ms)
+ GET /zh 200 in 656ms (next.js: 100ms, proxy.ts: 83ms, generate-params: 0.0ms, application-code: 473ms)
+✓ Compiled in 106ms
+Generating import map
+No new imports found, skipping writing import map
+ GET /admin/collections/pages?depth=1&limit=10&sort=-slug 200 in 1025ms (next.js: 24ms, application-code: 1002ms)
+key not found: plugin-redirects:fromUrl
+key not found: plugin-redirects:toUrlType
+key not found: plugin-redirects:internalLink
+key not found: plugin-redirects:customUrl
+key not found: plugin-redirects:documentToRedirect
+key not found: plugin-redirects:customUrl
+ GET /zh 200 in 1100ms (next.js: 129ms, proxy.ts: 16ms, generate-params: 0.0ms, application-code: 954ms)
+ GET /zh 200 in 1130ms (next.js: 135ms, proxy.ts: 26ms, generate-params: 0.0ms, application-code: 969ms)
+ GET /zh 200 in 1145ms (next.js: 22ms, proxy.ts: 89ms, generate-params: 0.0ms, application-code: 1034ms)
+ GET /admin/collections/pages?depth=1&limit=10&sort=-slug 200 in 1117ms (next.js: 5ms, application-code: 1112ms)
+ GET /zh 200 in 1227ms (next.js: 367ms, proxy.ts: 25ms, generate-params: 0.0ms, application-code: 834ms)
+ GET /zh 200 in 1172ms (next.js: 209ms, proxy.ts: 9ms, generate-params: 0.0ms, application-code: 954ms)
+ GET /admin/collections/pages?depth=1&limit=10&sort=-slug 200 in 1097ms (next.js: 303ms, application-code: 794ms)
+ GET /zh 200 in 814ms (next.js: 127ms, proxy.ts: 103ms, generate-params: 6ms, application-code: 578ms)
+ GET /zh 200 in 721ms (next.js: 169ms, proxy.ts: 41ms, generate-params: 0.0ms, application-code: 512ms)
+ GET /admin/collections/pages?depth=1&limit=10&sort=-slug 200 in 660ms (next.js: 49ms, application-code: 611ms)
+ GET /zh 200 in 626ms (next.js: 48ms, proxy.ts: 9ms, generate-params: 0.0ms, application-code: 570ms)
+ GET /admin/collections/pages?depth=1&limit=10&sort=-slug 200 in 620ms (next.js: 4ms, application-code: 615ms)
+ GET /zh 200 in 554ms (next.js: 109ms, proxy.ts: 69ms, generate-params: 0.0ms, application-code: 376ms)
+ GET /admin/collections/pages?depth=1&limit=10&sort=-slug 200 in 556ms (next.js: 39ms, application-code: 517ms)
+ GET /admin/collections/pages?depth=1&limit=10&sort=-slug 200 in 628ms (next.js: 25ms, application-code: 603ms)
+ GET /zh 200 in 656ms (next.js: 93ms, proxy.ts: 45ms, generate-params: 0.0ms, application-code: 518ms)
+ GET /zh 200 in 694ms (next.js: 132ms, proxy.ts: 9ms, generate-params: 0.0ms, application-code: 553ms)
+ GET /admin/collections/pages?depth=1&limit=10&sort=-slug 200 in 687ms (next.js: 5ms, application-code: 682ms)
+ GET /zh 200 in 545ms (next.js: 124ms, proxy.ts: 72ms, generate-params: 0.0ms, application-code: 349ms)
+ GET /admin/collections/pages?depth=1&limit=10&sort=-slug 200 in 549ms (next.js: 32ms, application-code: 517ms)
+ GET /admin/collections/pages?depth=1&limit=10&sort=-slug 200 in 509ms (next.js: 29ms, application-code: 480ms)
+ GET /zh 200 in 555ms (next.js: 63ms, proxy.ts: 37ms, generate-params: 0.0ms, application-code: 455ms)
+ GET /zh 200 in 533ms (next.js: 80ms, proxy.ts: 4ms, generate-params: 0.0ms, application-code: 450ms)
+ GET /admin/collections/pages?depth=1&limit=10&sort=-slug 200 in 534ms (next.js: 5ms, application-code: 530ms)
+ GET /admin/collections/pages?depth=1&limit=10&sort=-slug 200 in 460ms (next.js: 33ms, application-code: 427ms)
+ GET /zh 200 in 460ms (next.js: 94ms, proxy.ts: 68ms, generate-params: 6ms, application-code: 293ms)
+ GET /zh 200 in 498ms (next.js: 88ms, proxy.ts: 45ms, generate-params: 0.0ms, application-code: 364ms)
+ GET /admin/collections/pages?depth=1&limit=10&sort=-slug 200 in 522ms (next.js: 44ms, application-code: 478ms)
+ GET /zh 200 in 535ms (next.js: 81ms, proxy.ts: 5ms, generate-params: 0.0ms, application-code: 449ms)
+ GET /admin/collections/pages?depth=1&limit=10&sort=-slug 200 in 536ms (next.js: 5ms, application-code: 531ms)
+ GET /admin/collections/pages?depth=1&limit=10&sort=-slug 200 in 452ms (next.js: 16ms, application-code: 436ms)
+ GET /zh 200 in 521ms (next.js: 98ms, proxy.ts: 58ms, generate-params: 0.0ms, application-code: 365ms)
+ GET /zh 200 in 466ms (next.js: 62ms, proxy.ts: 54ms, generate-params: 0.0ms, application-code: 351ms)
+ GET /admin/collections/pages?depth=1&limit=10&sort=-slug 200 in 476ms (next.js: 37ms, application-code: 439ms)
+ GET /zh 200 in 530ms (next.js: 69ms, proxy.ts: 3ms, generate-params: 0.0ms, application-code: 458ms)
+ GET /admin/collections/pages?depth=1&limit=10&sort=-slug 200 in 530ms (next.js: 4ms, application-code: 526ms)
+ GET /zh 200 in 425ms (next.js: 71ms, proxy.ts: 54ms, generate-params: 0.0ms, application-code: 301ms)
+ GET /admin/collections/pages?depth=1&limit=10&sort=-slug 200 in 391ms (next.js: 30ms, application-code: 362ms)
+ GET /zh 200 in 333ms (next.js: 50ms, proxy.ts: 52ms, generate-params: 0.0ms, application-code: 231ms)
+ GET /admin/collections/pages?depth=1&limit=10&sort=-slug 200 in 307ms (next.js: 14ms, application-code: 293ms)
+ GET /zh 200 in 305ms (next.js: 6ms, proxy.ts: 7ms, generate-params: 0.0ms, application-code: 292ms)
+ GET /api/payload-preferences/locale 200 in 84ms (next.js: 45ms, application-code: 39ms)
+ GET /zh 200 in 277ms (next.js: 29ms, proxy.ts: 25ms, generate-params: 0.0ms, application-code: 223ms)
+ GET /zh 200 in 204ms (next.js: 25ms, proxy.ts: 25ms, generate-params: 0.0ms, application-code: 153ms)
+✓ Compiled in 607ms
+Generating import map
+No new imports found, skipping writing import map
+key not found: plugin-redirects:fromUrl
+key not found: plugin-redirects:toUrlType
+key not found: plugin-redirects:internalLink
+key not found: plugin-redirects:customUrl
+key not found: plugin-redirects:documentToRedirect
+key not found: plugin-redirects:customUrl
+ GET /zh 200 in 821ms (next.js: 291ms, proxy.ts: 7ms, generate-params: 0.0ms, application-code: 523ms)
+ GET /zh 200 in 863ms (next.js: 138ms, proxy.ts: 9ms, generate-params: 6ms, application-code: 710ms)
+ GET /admin/collections/pages?depth=1&limit=10&sort=-slug 200 in 889ms (next.js: 270ms, application-code: 618ms)
+ GET /api/users/me 200 in 23ms (next.js: 19ms, application-code: 4ms)
+ GET /api/users/me 200 in 15ms (next.js: 3ms, application-code: 12ms)
+ GET /api/users/me 200 in 6ms (next.js: 4ms, application-code: 2ms)
+ GET /api/payload-preferences/locale 200 in 17ms (next.js: 1.7ms, application-code: 15ms)
+ GET /api/users/me 200 in 10ms (next.js: 1.4ms, application-code: 9ms)
+✓ Compiled in 88ms
+Generating import map
+No new imports found, skipping writing import map
+key not found: plugin-redirects:fromUrl
+key not found: plugin-redirects:toUrlType
+key not found: plugin-redirects:internalLink
+key not found: plugin-redirects:customUrl
+key not found: plugin-redirects:documentToRedirect
+key not found: plugin-redirects:customUrl
+ GET /admin/collections/pages?depth=1&limit=10&sort=-slug 200 in 1242ms (next.js: 159ms, application-code: 1083ms)
+ GET /zh 200 in 872ms (next.js: 345ms, proxy.ts: 6ms, generate-params: 0.0ms, application-code: 521ms)
+ GET /zh 200 in 1243ms (next.js: 142ms, proxy.ts: 366ms, generate-params: 9ms, application-code: 726ms)
+ GET /api/payload-preferences/locale 200 in 130ms (next.js: 88ms, application-code: 41ms)
+✓ Compiled in 46ms
+Generating import map
+No new imports found, skipping writing import map
+key not found: plugin-redirects:fromUrl
+key not found: plugin-redirects:toUrlType
+key not found: plugin-redirects:internalLink
+key not found: plugin-redirects:customUrl
+key not found: plugin-redirects:documentToRedirect
+key not found: plugin-redirects:customUrl
+ GET /admin/collections/pages?depth=1&limit=10&sort=-slug 200 in 1059ms (next.js: 9ms, application-code: 1050ms)
+ GET /zh 200 in 1070ms (next.js: 292ms, proxy.ts: 4ms, generate-params: 0.0ms, application-code: 774ms)
+ GET /zh 200 in 1084ms (next.js: 175ms, proxy.ts: 3ms, generate-params: 6ms, application-code: 899ms)
+ GET /api/payload-preferences/locale 200 in 22ms (next.js: 8ms, application-code: 13ms)
+ GET /robots.txt 200 in 409ms (next.js: 393ms, application-code: 16ms)
+ GET /sitemap.xml 200 in 344ms (next.js: 299ms, application-code: 45ms)
+ GET /llms.txt 200 in 195ms (next.js: 191ms, application-code: 5ms)
+ GET /api/globals/search-settings 200 in 12ms (next.js: 7ms, application-code: 5ms)
+ GET /zh/products 200 in 1977ms (next.js: 311ms, proxy.ts: 3ms, generate-params: 1465ms, application-code: 198ms)
+ GET /en/contact 200 in 1998ms (next.js: 358ms, proxy.ts: 2ms, generate-params: 1459ms, application-code: 180ms)
+[12:21:26] [32mINFO[39m: [36m您无权执行此操作。[39m
+ POST /api/globals/search-settings 403 in 16ms (next.js: 7ms, application-code: 9ms)
+✓ Compiled in 47ms
+Generating import map
+No new imports found, skipping writing import map
+key not found: plugin-redirects:fromUrl
+key not found: plugin-redirects:toUrlType
+key not found: plugin-redirects:internalLink
+key not found: plugin-redirects:customUrl
+key not found: plugin-redirects:documentToRedirect
+key not found: plugin-redirects:customUrl
+ GET /admin/collections/pages?depth=1&limit=10&sort=-slug 200 in 1489ms (next.js: 454ms, application-code: 1035ms)
+ GET /zh 200 in 1517ms (next.js: 259ms, proxy.ts: 3ms, generate-params: 8ms, application-code: 1247ms)
+ GET /zh 200 in 1524ms (next.js: 705ms, proxy.ts: 3ms, generate-params: 0.0ms, application-code: 816ms)
+ GET /api/payload-preferences/locale 200 in 112ms (next.js: 69ms, application-code: 43ms)
+✓ Compiled in 349ms
+Generating import map
+No new imports found, skipping writing import map
+key not found: plugin-redirects:fromUrl
+key not found: plugin-redirects:toUrlType
+key not found: plugin-redirects:internalLink
+key not found: plugin-redirects:customUrl
+key not found: plugin-redirects:documentToRedirect
+key not found: plugin-redirects:customUrl
+ GET /zh 200 in 497ms (next.js: 148ms, proxy.ts: 5ms, generate-params: 7ms, application-code: 337ms)
+ GET /zh 200 in 200ms (next.js: 46ms, proxy.ts: 62ms, generate-params: 0.0ms, application-code: 91ms)
+ GET /admin/collections/pages?depth=1&limit=10&sort=-slug 200 in 548ms (next.js: 11ms, application-code: 538ms)
+ GET /api/payload-preferences/locale 200 in 20ms (next.js: 8ms, application-code: 12ms)
+✓ Compiled in 42ms
+Generating import map
+No new imports found, skipping writing import map
+[⣷] Pulling schema from database...
+[2K[1G[⣯] Pulling schema from database...
+[2K[1G[⣟] Pulling schema from database...
+[2K[1G[⡿] Pulling schema from database...
+[2K[1G[⢿] Pulling schema from database...
+[2K[1G[⣻] Pulling schema from database...
+[2K[1G[⣽] Pulling schema from database...
+[2K[1G[⣷] Pulling schema from database...
+[2K[1G[✓] Pulling schema from database...
+key not found: plugin-redirects:fromUrl
+key not found: plugin-redirects:toUrlType
+key not found: plugin-redirects:internalLink
+key not found: plugin-redirects:customUrl
+key not found: plugin-redirects:documentToRedirect
+key not found: plugin-redirects:customUrl
+ GET /zh 500 in 2.6s (next.js: 170ms, proxy.ts: 272ms, generate-params: 0.0ms, application-code: 2.2s)
+ GET /zh 500 in 2.6s (next.js: 116ms, proxy.ts: 3ms, generate-params: 6ms, application-code: 2.5s)
+ GET /admin/collections/pages?depth=1&limit=10&sort=-slug 200 in 2.4s (next.js: 176ms, application-code: 2.2s)
+ GET /api/payload-preferences/locale 200 in 133ms (next.js: 77ms, application-code: 56ms)
+▲ Next.js 16.3.0 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://172.19.0.1:3000
+- Environments: .env
+✓ Ready in 300ms
+✓ Running next.config.ts took 47ms
+- Experiments (use with caution):
+  ⨯ turbopackServerFastRefresh
+
+[⣷] Pulling schema from database...
+[2K[1G[⣯] Pulling schema from database...
+[2K[1G[⣟] Pulling schema from database...
+[2K[1G[⡿] Pulling schema from database...
+[2K[1G[⢿] Pulling schema from database...
+[2K[1G[✓] Pulling schema from database...
+[12:23:25] [33mWARN[39m: [36mNo email adapter provided. Email will be written to console. More info at https://payloadcms.com/docs/email/overview.[39m
+key not found: plugin-redirects:fromUrl
+key not found: plugin-redirects:toUrlType
+key not found: plugin-redirects:internalLink
+key not found: plugin-redirects:customUrl
+key not found: plugin-redirects:documentToRedirect
+key not found: plugin-redirects:customUrl
+ GET /zh 200 in 5.0s (next.js: 518ms, proxy.ts: 123ms, generate-params: 3.0s, application-code: 1275ms)
+ GET /admin/collections/pages?depth=1&limit=10&sort=-slug 200 in 5.1s (next.js: 1839ms, application-code: 3.3s)
+ GET /api/users/me 200 in 1849ms (next.js: 1753ms, application-code: 96ms)
+ GET /api/payload-preferences/nav 200 in 1262ms (next.js: 1164ms, application-code: 98ms)
+ GET /api/payload-preferences/locale 200 in 1721ms (next.js: 1620ms, application-code: 100ms)
+ GET /api/users/me 200 in 23ms (next.js: 7ms, application-code: 15ms)
+ GET /api/payload-preferences/locale 200 in 16ms (next.js: 4ms, application-code: 12ms)
+ GET /api/users/me 200 in 9ms (next.js: 1.6ms, application-code: 8ms)
+ GET /api/users/me 200 in 10ms (next.js: 1.7ms, application-code: 8ms)
+ GET /zh 200 in 119ms (next.js: 3ms, proxy.ts: 3ms, generate-params: 6ms, application-code: 107ms)
+ GET /api/users/me 200 in 11ms (next.js: 7ms, application-code: 5ms)
+ GET /api/users/me 200 in 13ms (next.js: 6ms, application-code: 7ms)
+[⣷] Pulling schema from database...
+[2K[1G[⣯] Pulling schema from database...
+[2K[1G[⣟] Pulling schema from database...
+[2K[1G[⡿] Pulling schema from database...
+[2K[1G[⢿] Pulling schema from database...
+[2K[1G[✓] Pulling schema from database...
+[12:23:32] [33mWARN[39m: [36mNo email adapter provided. Email will be written to console. More info at https://payloadcms.com/docs/email/overview.[39m
+ GET /pet-assets/bedding.png 404 in 3.2s (next.js: 3.0s, application-code: 251ms)
+ GET /pet-assets/walking.png 404 in 3.2s (next.js: 3.0s, application-code: 254ms)
+ GET /pet-assets/feeding.png 404 in 3.2s (next.js: 3.0s, application-code: 257ms)
+ GET /pet-assets/toys.png 404 in 3.2s (next.js: 3.0s, application-code: 259ms)
+✓ Compiled in 91ms
+Generating import map
+No new imports found, skipping writing import map
+key not found: plugin-redirects:fromUrl
+key not found: plugin-redirects:toUrlType
+key not found: plugin-redirects:internalLink
+key not found: plugin-redirects:customUrl
+key not found: plugin-redirects:documentToRedirect
+key not found: plugin-redirects:customUrl
+ GET /zh 200 in 501ms (next.js: 65ms, proxy.ts: 3ms, generate-params: 6ms, application-code: 427ms)
+ GET /zh 200 in 498ms (next.js: 250ms, proxy.ts: 4ms, generate-params: 0.0ms, application-code: 244ms)
+ GET /admin/collections/pages?depth=1&limit=10&sort=-slug 200 in 545ms (next.js: 218ms, application-code: 327ms)
+ GET /api/payload-preferences/locale 200 in 23ms (next.js: 9ms, application-code: 15ms)
+✓ Compiled in 409ms
+ GET /pet-assets/bedding.png 404 in 456ms (next.js: 173ms, application-code: 283ms)
+ GET /pet-assets/toys.png 404 in 458ms (next.js: 177ms, application-code: 281ms)
+ GET /pet-assets/walking.png 404 in 467ms (next.js: 182ms, application-code: 286ms)
+ GET /pet-assets/feeding.png 404 in 475ms (next.js: 185ms, application-code: 290ms)
+[⣷] Pulling schema from database...
+[2K[1G[⣯] Pulling schema from database...
+[2K[1G[⣟] Pulling schema from database...
+[2K[1G[⡿] Pulling schema from database...
+[2K[1G[⢿] Pulling schema from database...
+[2K[1G[✓] Pulling schema from database...
+[12:23:38] [33mWARN[39m: [36mNo email adapter provided. Email will be written to console. More info at https://payloadcms.com/docs/email/overview.[39m
+✓ Compiled in 343ms
+ GET /pet-assets/toys.png 404 in 219ms (next.js: 17ms, application-code: 201ms)
+ GET /pet-assets/feeding.png 404 in 227ms (next.js: 14ms, application-code: 213ms)
+ GET /pet-assets/walking.png 404 in 238ms (next.js: 77ms, application-code: 161ms)
+ GET /pet-assets/bedding.png 404 in 248ms (next.js: 10ms, application-code: 238ms)
+[⣷] Pulling schema from database...
+[2K[1G[⣯] Pulling schema from database...
+[2K[1G[⣟] Pulling schema from database...
+✓ Compiled in 74ms
+[2K[1G[⡿] Pulling schema from database...
+[2K[1G[⢿] Pulling schema from database...
+[2K[1G[✓] Pulling schema from database...
+[12:24:12] [33mWARN[39m: [36mNo email adapter provided. Email will be written to console. More info at https://payloadcms.com/docs/email/overview.[39m
+Generating import map
+✓ Compiled in 69ms
+No new imports found, skipping writing import map
+key not found: plugin-redirects:fromUrl
+key not found: plugin-redirects:toUrlType
+key not found: plugin-redirects:internalLink
+key not found: plugin-redirects:customUrl
+key not found: plugin-redirects:documentToRedirect
+key not found: plugin-redirects:customUrl
+ GET /zh 200 in 1906ms (next.js: 105ms, proxy.ts: 5ms, generate-params: 9ms, application-code: 1787ms)
+ GET /zh 200 in 1900ms (next.js: 827ms, proxy.ts: 6ms, generate-params: 0.0ms, application-code: 1067ms)
+ GET /zh 200 in 1142ms (next.js: 732ms, proxy.ts: 170ms, generate-params: 0.0ms, application-code: 240ms)
+ GET /zh 200 in 972ms (next.js: 668ms, proxy.ts: 182ms, generate-params: 0.0ms, application-code: 122ms)
+ GET /admin/collections/pages?depth=1&limit=10&sort=-slug 200 in 1898ms (next.js: 434ms, application-code: 1463ms)
+ GET /admin/collections/pages?depth=1&limit=10&sort=-slug 200 in 870ms (next.js: 300ms, application-code: 569ms)
+ GET /api/payload-preferences/locale 200 in 205ms (next.js: 114ms, application-code: 90ms)
+ GET /zh/contact 200 in 1700ms (next.js: 85ms, proxy.ts: 3ms, generate-params: 1506ms, application-code: 105ms)
+✓ Compiled in 395ms
+Generating import map
+No new imports found, skipping writing import map
+key not found: plugin-redirects:fromUrl
+key not found: plugin-redirects:toUrlType
+key not found: plugin-redirects:internalLink
+key not found: plugin-redirects:customUrl
+key not found: plugin-redirects:documentToRedirect
+key not found: plugin-redirects:customUrl
+ GET /zh/contact 200 in 500ms (next.js: 55ms, proxy.ts: 5ms, generate-params: 7ms, application-code: 433ms)
+ GET /zh 200 in 492ms (next.js: 117ms, proxy.ts: 45ms, generate-params: 6ms, application-code: 323ms)
+ GET /admin/collections/pages?depth=1&limit=10&sort=-slug 200 in 559ms (next.js: 12ms, application-code: 547ms)
+ GET /api/payload-preferences/locale 200 in 22ms (next.js: 9ms, application-code: 14ms)
+✓ Compiled in 66ms
+[12:25:31] [32mINFO[39m: [36mNo emails to send.[39m
+ POST /api/form-submissions 201 in 201ms (next.js: 7ms, application-code: 194ms)
+✓ Compiled in 112ms
+Generating import map
+No new imports found, skipping writing import map
+key not found: plugin-redirects:fromUrl
+key not found: plugin-redirects:toUrlType
+key not found: plugin-redirects:internalLink
+key not found: plugin-redirects:customUrl
+key not found: plugin-redirects:documentToRedirect
+key not found: plugin-redirects:customUrl
+ GET /zh/contact 200 in 638ms (next.js: 256ms, proxy.ts: 4ms, generate-params: 6ms, application-code: 372ms)
+ GET /zh 200 in 639ms (next.js: 95ms, proxy.ts: 5ms, generate-params: 6ms, application-code: 533ms)
+ GET /admin/collections/pages?depth=1&limit=10&sort=-slug 200 in 681ms (next.js: 79ms, application-code: 602ms)
+ GET /api/payload-preferences/locale 200 in 23ms (next.js: 10ms, application-code: 14ms)
+ GET /zh 200 in 226ms (next.js: 4ms, proxy.ts: 4ms, generate-params: 6ms, application-code: 212ms)
+ GET /pet-assets/walking.webp 404 in 327ms (next.js: 120ms, application-code: 207ms)
+ GET /api/users/me 200 in 15ms (next.js: 8ms, application-code: 7ms)
+ GET /api/users/me 200 in 5ms (next.js: 2ms, application-code: 3ms)
+[⣷] Pulling schema from database...
+[2K[1G[⣯] Pulling schema from database...
+[2K[1G[⣟] Pulling schema from database...
+[2K[1G[⡿] Pulling schema from database...
+[2K[1G[⢿] Pulling schema from database...
+[2K[1G[✓] Pulling schema from database...
+[12:26:37] [33mWARN[39m: [36mNo email adapter provided. Email will be written to console. More info at https://payloadcms.com/docs/email/overview.[39m
+✓ Compiled in 61ms
+✓ Compiled in 386ms
+ GET /zh/products?category=bedding 200 in 1724ms (next.js: 131ms, proxy.ts: 2ms, generate-params: 1493ms, application-code: 97ms)
+✓ Compiled in 46ms
+Generating import map
+No new imports found, skipping writing import map
+key not found: plugin-redirects:fromUrl
+key not found: plugin-redirects:toUrlType
+key not found: plugin-redirects:internalLink
+key not found: plugin-redirects:customUrl
+key not found: plugin-redirects:documentToRedirect
+key not found: plugin-redirects:customUrl
+ GET /zh/products?category=bedding 200 in 618ms (next.js: 105ms, proxy.ts: 3ms, generate-params: 8ms, application-code: 502ms)
+ GET /zh 200 in 626ms (next.js: 265ms, proxy.ts: 4ms, generate-params: 6ms, application-code: 350ms)
+ GET /admin/collections/pages?depth=1&limit=10&sort=-slug 200 in 650ms (next.js: 9ms, application-code: 641ms)
+ GET /api/payload-preferences/locale 200 in 23ms (next.js: 8ms, application-code: 15ms)
+✓ Compiled in 52ms
+Generating import map
+No new imports found, skipping writing import map
+key not found: plugin-redirects:fromUrl
+key not found: plugin-redirects:toUrlType
+key not found: plugin-redirects:internalLink
+key not found: plugin-redirects:customUrl
+key not found: plugin-redirects:documentToRedirect
+key not found: plugin-redirects:customUrl
+✓ Compiled in 69ms
+Generating import map
+[12:28:52] [31mERROR[39m: [36mError checking version status for collection pages[39m
+    err: {
+      "type": "TypeError",
+      "message": "Cannot read properties of undefined (reading 'id')",
+      "stack":
+          TypeError: Cannot read properties of undefined (reading 'id')
+              at buildQuery (file:///E:/code/jsCode/my-sites/standalone-site/node_modules/.pnpm/@payloadcms+drizzle@3.88.0__7134269dae8a50d7d5c87e2b0c89d70f/node_modules/@payloadcms/drizzle/dist/queries/buildQuery.js:5:39)
+              at find (file:///E:/code/jsCode/my-sites/standalone-site/node_modules/.pnpm/@payloadcms+drizzle@3.88.0__7134269dae8a50d7d5c87e2b0c89d70f/node_modules/@payloadcms/drizzle/dist/find/findMany.js:20:53)
+              at Object.findVersions (file:///E:/code/jsCode/my-sites/standalone-site/node_modules/.pnpm/@payloadcms+drizzle@3.88.0__7134269dae8a50d7d5c87e2b0c89d70f/node_modules/@payloadcms/drizzle/dist/findVersions.js:9:12)
+              at findVersionsOperation (file:///E:/code/jsCode/my-sites/standalone-site/node_modules/.pnpm/payload@3.88.0_graphql@16.14.2_typescript@5.7.3/node_modules/payload/dist/collections/operations/findVersions.js:80:48)
+              at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+              at async enrichDocsWithVersionStatus (E:\code\jsCode\my-sites\standalone-site\.next\dev\server\chunks\ssr\0_so_@payloadcms_next_dist_0hai-mc._.js:4291:35)
+              at async renderListView (E:\code\jsCode\my-sites\standalone-site\.next\dev\server\chunks\ssr\0_so_@payloadcms_next_dist_0hai-mc._.js:4882:20)
+              at async ListView (E:\code\jsCode\my-sites\standalone-site\.next\dev\server\chunks\ssr\0_so_@payloadcms_next_dist_0hai-mc._.js:5013:40)
+    }
+ GET /zh/products?category=bedding 200 in 782ms (next.js: 122ms, proxy.ts: 5ms, generate-params: 5ms, application-code: 649ms)
+No new imports found, skipping writing import map
+ GET /zh 200 in 805ms (next.js: 235ms, proxy.ts: 5ms, generate-params: 6ms, application-code: 559ms)
+key not found: plugin-redirects:fromUrl
+key not found: plugin-redirects:toUrlType
+key not found: plugin-redirects:internalLink
+key not found: plugin-redirects:customUrl
+key not found: plugin-redirects:documentToRedirect
+key not found: plugin-redirects:customUrl
+ GET /admin/collections/pages?depth=1&limit=10&sort=-slug 200 in 864ms (next.js: 73ms, application-code: 790ms)
+ GET /admin/collections/pages?depth=1&limit=10&sort=-slug 200 in 253ms (next.js: 9ms, application-code: 244ms)
+ GET /zh/products?category=bedding 200 in 777ms (next.js: 457ms, proxy.ts: 29ms, generate-params: 0.0ms, application-code: 291ms)
+ GET /zh 200 in 779ms (next.js: 529ms, proxy.ts: 29ms, generate-params: 0.0ms, application-code: 221ms)
+ GET /api/payload-preferences/locale 200 in 39ms (next.js: 23ms, application-code: 16ms)
+✓ Compiled in 107ms
+Generating import map
+No new imports found, skipping writing import map
+key not found: plugin-redirects:fromUrl
+key not found: plugin-redirects:toUrlType
+key not found: plugin-redirects:internalLink
+key not found: plugin-redirects:customUrl
+key not found: plugin-redirects:documentToRedirect
+key not found: plugin-redirects:customUrl
+ GET /zh/products?category=bedding 200 in 1023ms (next.js: 442ms, proxy.ts: 4ms, generate-params: 6ms, application-code: 572ms)
+ GET /zh 200 in 1025ms (next.js: 380ms, proxy.ts: 4ms, generate-params: 6ms, application-code: 635ms)
+ GET /admin/collections/pages?depth=1&limit=10&sort=-slug 200 in 1074ms (next.js: 251ms, application-code: 824ms)
+ GET /api/payload-preferences/locale 200 in 241ms (next.js: 120ms, application-code: 122ms)
+ GET /zh/products?category=bedding 200 in 490ms (next.js: 3ms, proxy.ts: 3ms, generate-params: 6ms, application-code: 478ms)
+ GET /api/users/me 200 in 12ms (next.js: 8ms, application-code: 3ms)
+ GET /api/users/me 200 in 5ms (next.js: 1.5ms, application-code: 4ms)
+ GET /zh/contact?category=bedding 200 in 170ms (next.js: 73ms, proxy.ts: 2ms, generate-params: 5ms, application-code: 90ms)
+✓ Compiled in 50ms
+Generating import map
+No new imports found, skipping writing import map
+✓ Compiled in 53ms
+Generating import map
+ GET /admin/collections/pages?depth=1&limit=10&sort=-slug 200 in 348ms (next.js: 46ms, application-code: 302ms)
+No new imports found, skipping writing import map
+ GET /zh/contact?category=bedding 200 in 376ms (next.js: 11ms, proxy.ts: 5ms, generate-params: 6ms, application-code: 354ms)
+ GET /zh 200 in 386ms (next.js: 67ms, proxy.ts: 5ms, generate-params: 8ms, application-code: 306ms)
+key not found: plugin-redirects:fromUrl
+key not found: plugin-redirects:toUrlType
+key not found: plugin-redirects:internalLink
+key not found: plugin-redirects:customUrl
+key not found: plugin-redirects:documentToRedirect
+key not found: plugin-redirects:customUrl
+ GET /zh/contact?category=bedding 200 in 368ms (next.js: 114ms, proxy.ts: 7ms, generate-params: 0.0ms, application-code: 246ms)
+ GET /zh 200 in 371ms (next.js: 131ms, proxy.ts: 8ms, generate-params: 0.0ms, application-code: 232ms)
+ GET /admin/collections/pages?depth=1&limit=10&sort=-slug 200 in 411ms (next.js: 5ms, application-code: 407ms)
+ GET /api/payload-preferences/locale 200 in 22ms (next.js: 9ms, application-code: 13ms)
+ GET /admin/globals/search-settings 200 in 145ms (next.js: 8ms, application-code: 137ms)
+ GET /api/users/me 200 in 11ms (next.js: 8ms, application-code: 3ms)
+ GET /api/users/me 200 in 4ms (next.js: 1.4ms, application-code: 3ms)
+ GET /admin/login?redirect=%2Fadmin%2Fglobals%2Fsearch-settings 200 in 110ms (next.js: 3ms, application-code: 107ms)
+ GET /admin/login?redirect=%2Fadmin%2Fglobals%2Fsearch-settings 200 in 72ms (next.js: 5ms, application-code: 67ms)
+ GET /zh/contact?category=bedding 200 in 192ms (next.js: 3ms, proxy.ts: 3ms, generate-params: 6ms, application-code: 180ms)
+ GET /api/users/me 200 in 9ms (next.js: 7ms, application-code: 3ms)
+ GET /api/users/me 200 in 4ms (next.js: 1.3ms, application-code: 2ms)
+✓ Compiled in 56ms
+Generating import map
+No new imports found, skipping writing import map
+key not found: plugin-redirects:fromUrl
+key not found: plugin-redirects:toUrlType
+key not found: plugin-redirects:internalLink
+key not found: plugin-redirects:customUrl
+key not found: plugin-redirects:documentToRedirect
+key not found: plugin-redirects:customUrl
+ GET /admin/login?redirect=%2Fadmin%2Fglobals%2Fsearch-settings 200 in 608ms (next.js: 12ms, application-code: 596ms)
+ GET /zh/contact?category=bedding 200 in 568ms (next.js: 234ms, proxy.ts: 9ms, generate-params: 7ms, application-code: 318ms)
+ GET /zh 200 in 658ms (next.js: 83ms, proxy.ts: 39ms, generate-params: 6ms, application-code: 529ms)
+ GET /admin/collections/pages?depth=1&limit=10&sort=-slug 200 in 656ms (next.js: 40ms, application-code: 616ms)
+ GET /api/payload-preferences/locale 200 in 24ms (next.js: 9ms, application-code: 15ms)
+✓ Compiled in 0ms
+ GET /zh/solutions 200 in 179ms (next.js: 94ms, proxy.ts: 2ms, application-code: 83ms)
+[⣷] Pulling schema from database...
+[2K[1G[⣯] Pulling schema from database...
+[2K[1G[⣟] Pulling schema from database...
+[2K[1G[⡿] Pulling schema from database...
+[2K[1G[✓] Pulling schema from database...
+[12:30:47] [33mWARN[39m: [36mNo email adapter provided. Email will be written to console. More info at https://payloadcms.com/docs/email/overview.[39m
+✓ Compiled in 50ms
+✓ Compiled in 54ms
+Generating import map
+No new imports found, skipping writing import map
+key not found: plugin-redirects:fromUrl
+key not found: plugin-redirects:toUrlType
+key not found: plugin-redirects:internalLink
+key not found: plugin-redirects:customUrl
+key not found: plugin-redirects:documentToRedirect
+key not found: plugin-redirects:customUrl
+ GET /admin/login?redirect=%2Fadmin%2Fglobals%2Fsearch-settings 200 in 549ms (next.js: 13ms, application-code: 537ms)
+ GET /zh/solutions 200 in 577ms (next.js: 150ms, proxy.ts: 5ms, application-code: 422ms)
+ GET /zh 200 in 576ms (next.js: 277ms, proxy.ts: 9ms, generate-params: 7ms, application-code: 283ms)
+ GET /admin/collections/pages?depth=1&limit=10&sort=-slug 200 in 566ms (next.js: 7ms, application-code: 559ms)
+ GET /api/payload-preferences/locale 200 in 27ms (next.js: 11ms, application-code: 16ms)
+[⣷] Pulling schema from database...
+[2K[1G[⣯] Pulling schema from database...
+[2K[1G[⣟] Pulling schema from database...
+[2K[1G[⡿] Pulling schema from database...
+[2K[1G[⢿] Pulling schema from database...
+[2K[1G[✓] Pulling schema from database...
+[12:31:05] [33mWARN[39m: [36mNo email adapter provided. Email will be written to console. More info at https://payloadcms.com/docs/email/overview.[39m
+ GET /zh/contact?category=bedding 200 in 333ms (next.js: 56ms, proxy.ts: 2ms, generate-params: 5ms, application-code: 269ms)
+ GET /api/users/me 200 in 11ms (next.js: 8ms, application-code: 3ms)
+ GET /api/users/me 200 in 5ms (next.js: 1.9ms, application-code: 3ms)
+ GET /zh 200 in 175ms (next.js: 4ms, proxy.ts: 3ms, generate-params: 6ms, application-code: 163ms)
+ GET /api/users/me 200 in 4ms (next.js: 1.4ms, application-code: 3ms)
+ GET /api/users/me 200 in 4ms (next.js: 1.4ms, application-code: 2ms)
+ GET /en 200 in 107ms (next.js: 6ms, proxy.ts: 6ms, generate-params: 6ms, application-code: 90ms)
+ GET /api/users/me 200 in 13ms (next.js: 7ms, application-code: 6ms)
+ GET /api/users/me 200 in 4ms (next.js: 1.4ms, application-code: 3ms)
+✓ Compiled in 153ms
+Generating import map
+No new imports found, skipping writing import map
+key not found: plugin-redirects:fromUrl
+key not found: plugin-redirects:toUrlType
+key not found: plugin-redirects:internalLink
+key not found: plugin-redirects:customUrl
+key not found: plugin-redirects:documentToRedirect
+key not found: plugin-redirects:customUrl
+ GET /admin/login?redirect=%2Fadmin%2Fglobals%2Fsearch-settings 200 in 633ms (next.js: 11ms, application-code: 622ms)
+ GET /zh 200 in 650ms (next.js: 273ms, proxy.ts: 9ms, generate-params: 0.0ms, application-code: 368ms)
+ GET /en 200 in 662ms (next.js: 176ms, proxy.ts: 7ms, generate-params: 7ms, application-code: 473ms)
+ GET /admin/collections/pages?depth=1&limit=10&sort=-slug 200 in 683ms (next.js: 46ms, application-code: 636ms)
+ GET /api/payload-preferences/locale 200 in 24ms (next.js: 11ms, application-code: 13ms)
+ GET /zh 200 in 73ms (next.js: 8ms, proxy.ts: 3ms, generate-params: 6ms, application-code: 56ms)
+ GET /api/users/me 200 in 10ms (next.js: 8ms, application-code: 3ms)
+ GET /api/users/me 200 in 5ms (next.js: 1.2ms, application-code: 3ms)
+ GET /zh/contact?category=bedding 200 in 426ms (next.js: 137ms, proxy.ts: 2ms, generate-params: 6ms, application-code: 281ms)
+ GET /api/users/me 200 in 10ms (next.js: 7ms, application-code: 3ms)
+ GET /api/users/me 200 in 3ms (next.js: 1.1ms, application-code: 2ms)
+ GET /zh/posts 200 in 1705ms (next.js: 158ms, proxy.ts: 2ms, generate-params: 1493ms, application-code: 52ms)
+ GET /zh 200 in 164ms (next.js: 6ms, proxy.ts: 2ms, generate-params: 6ms, application-code: 150ms)
+ GET /api/users/me 200 in 10ms (next.js: 7ms, application-code: 3ms)
+ GET /api/users/me 200 in 4ms (next.js: 1.3ms, application-code: 2ms)
+✓ Compiled in 84ms
+✓ Compiled in 56ms
+ GET /zh 200 in 153ms (next.js: 6ms, proxy.ts: 3ms, generate-params: 5ms, application-code: 139ms)
+ GET /en 200 in 121ms (next.js: 3ms, proxy.ts: 4ms, generate-params: 0.0ms, application-code: 114ms)
+ GET /zh/solutions 200 in 321ms (next.js: 107ms, proxy.ts: 2ms, application-code: 212ms)
+ GET /en/about 200 in 100ms (next.js: 5ms, proxy.ts: 3ms, application-code: 92ms)
+ GET /zh/posts 200 in 314ms (next.js: 102ms, proxy.ts: 3ms, generate-params: 9ms, application-code: 200ms)
+ GET /en/posts 200 in 88ms (next.js: 3ms, proxy.ts: 2ms, generate-params: 0.0ms, application-code: 83ms)
+[⣷] Pulling schema from database...
+[2K[1G[⣯] Pulling schema from database...
+[2K[1G[⣟] Pulling schema from database...
+[2K[1G[⡿] Pulling schema from database...
+[2K[1G[⢿] Pulling schema from database...
+[2K[1G[✓] Pulling schema from database...
+[12:38:13] [33mWARN[39m: [36mNo email adapter provided. Email will be written to console. More info at https://payloadcms.com/docs/email/overview.[39m
+[⣷] Pulling schema from database...
+[2K[1G[⣯] Pulling schema from database...
+[2K[1G[⣟] Pulling schema from database...
+[2K[1G[⡿] Pulling schema from database...
+[2K[1G[⢿] Pulling schema from database...
+[2K[1G[✓] Pulling schema from database...
+[12:38:15] [33mWARN[39m: [36mNo email adapter provided. Email will be written to console. More info at https://payloadcms.com/docs/email/overview.[39m
+ GET /zh/posts/pet-sourcing-specification-checklist 200 in 3.7s (next.js: 175ms, proxy.ts: 2ms, generate-params: 3.4s, application-code: 127ms)
+ GET /en/posts/private-label-sampling-checklist 200 in 114ms (next.js: 3ms, proxy.ts: 1.9ms, generate-params: 5ms, application-code: 104ms)
+ GET /robots.txt 200 in 94ms (next.js: 81ms, application-code: 13ms)
+ GET /sitemap.xml 200 in 87ms (next.js: 59ms, application-code: 28ms)
+ GET /llms.txt 200 in 82ms (next.js: 76ms, application-code: 6ms)
+[⣷] Pulling schema from database...
+[2K[1G[⣯] Pulling schema from database...
+[2K[1G[⣟] Pulling schema from database...
+[2K[1G[⡿] Pulling schema from database...
+[2K[1G[✓] Pulling schema from database...
+[12:38:17] [33mWARN[39m: [36mNo email adapter provided. Email will be written to console. More info at https://payloadcms.com/docs/email/overview.[39m
+ GET /admin/globals/search-settings 200 in 336ms (next.js: 23ms, application-code: 313ms)
+ GET /api/payload-preferences/global-search-settings 200 in 35ms (next.js: 13ms, application-code: 22ms)
+ GET /api/payload-preferences/locale 200 in 18ms (next.js: 2ms, application-code: 15ms)
+ POST /api/payload-preferences/global-search-settings 200 in 78ms (next.js: 2ms, application-code: 75ms)
+ GET /admin/collections/posts 200 in 326ms (next.js: 15ms, application-code: 312ms)
+ GET /api/payload-preferences/locale 200 in 29ms (next.js: 13ms, application-code: 16ms)
+ GET /admin/collections/posts/7 200 in 220ms (next.js: 14ms, application-code: 206ms)
+ GET /api/payload-preferences/collection-posts-7 200 in 25ms (next.js: 13ms, application-code: 12ms)
+ GET /api/payload-preferences/collection-posts 200 in 25ms (next.js: 3ms, application-code: 21ms)
+ GET /api/payload-preferences/locale 200 in 25ms (next.js: 4ms, application-code: 21ms)
+ GET /admin/collections/posts/7?locale=en 200 in 231ms (next.js: 15ms, application-code: 217ms)
+ GET /admin/collections/posts/7?locale=zh 200 in 226ms (next.js: 4ms, application-code: 222ms)
+ GET /admin/collections/posts/7?locale=en 200 in 217ms (next.js: 14ms, application-code: 203ms)
+ GET /admin/collections/posts/7?locale=zh 200 in 204ms (next.js: 4ms, application-code: 200ms)
+ GET /admin/collections/posts/7?locale=en 200 in 226ms (next.js: 10ms, application-code: 216ms)
+ GET /admin/collections/posts/7?locale=zh 200 in 229ms (next.js: 4ms, application-code: 224ms)
+ POST /api/payload-preferences/nav 200 in 55ms (next.js: 13ms, application-code: 42ms)
+ POST /api/payload-preferences/nav 200 in 51ms (next.js: 3ms, application-code: 48ms)
+ GET /admin/browse-by-folder 200 in 189ms (next.js: 12ms, application-code: 177ms)
+ GET /api/payload-preferences/locale 200 in 25ms (next.js: 13ms, application-code: 13ms)
+ GET /api/payload-preferences/locale 200 in 18ms (next.js: 5ms, application-code: 13ms)
+ POST /admin/browse-by-folder 200 in 54ms (next.js: 13ms, application-code: 41ms)
+  └─ ƒ <inline action>({"args":{"collectionSlug":"payload-folders","drawerSlug":"doc-drawer_payload-folders_0__r_37_","fallbackLocale":false,"...":"6 items not stringified"},"name":"render-document"}) in 26ms src/app/(payload)/layout.tsx
+ GET /api/payload-preferences/collection-payload-folders 200 in 22ms (next.js: 13ms, application-code: 10ms)
+ POST /api/payload-preferences/collection-payload-folders 200 in 31ms (next.js: 3ms, application-code: 29ms)
+ POST /admin/browse-by-folder 200 in 40ms (next.js: 12ms, application-code: 28ms)
+  └─ ƒ <inline action>({"args":{"collectionSlug":"payload-folders","drawerSlug":"doc-drawer_payload-folders_0__r_37_","fallbackLocale":false,"...":"6 items not stringified"},"name":"render-document"}) in 18ms src/app/(payload)/layout.tsx
+ GET /admin/collections/media 200 in 171ms (next.js: 13ms, application-code: 158ms)
+ GET /api/payload-preferences/locale 200 in 27ms (next.js: 12ms, application-code: 15ms)
+ GET /admin/collections/posts 200 in 273ms (next.js: 6ms, application-code: 267ms)
+ GET /api/payload-preferences/locale 200 in 23ms (next.js: 3ms, application-code: 20ms)
+ GET /admin/collections/posts/3 200 in 221ms (next.js: 14ms, application-code: 207ms)
+ GET /api/payload-preferences/collection-posts-3 200 in 32ms (next.js: 13ms, application-code: 20ms)
+ GET /api/payload-preferences/locale 200 in 16ms (next.js: 3ms, application-code: 13ms)
+ GET /admin/collections/posts/3?locale=en 200 in 230ms (next.js: 4ms, application-code: 226ms)
+ GET /admin/collections/posts/3?locale=zh 200 in 235ms (next.js: 16ms, application-code: 219ms)
+ GET /zh/posts 200 in 92ms (next.js: 6ms, proxy.ts: 4ms, generate-params: 9ms, application-code: 72ms)
+ GET /zh/solutions 200 in 81ms (next.js: 17ms, proxy.ts: 4ms, application-code: 60ms)
+ GET /zh/products 200 in 353ms (next.js: 153ms, proxy.ts: 4ms, generate-params: 10ms, application-code: 187ms)
+ GET /zh/solutions 200 in 66ms (next.js: 6ms, proxy.ts: 4ms, application-code: 57ms)
+[⣷] Pulling schema from database...
+[2K[1G[⣯] Pulling schema from database...
+[2K[1G[⣟] Pulling schema from database...
+[2K[1G[⡿] Pulling schema from database...
+[2K[1G[⢿] Pulling schema from database...
+[2K[1G[✓] Pulling schema from database...
+[12:43:17] [33mWARN[39m: [36mNo email adapter provided. Email will be written to console. More info at https://payloadcms.com/docs/email/overview.[39m
+ GET /zh/posts 200 in 86ms (next.js: 6ms, proxy.ts: 4ms, generate-params: 10ms, application-code: 66ms)
+✓ Compiled in 98ms
+Generating import map
+No new imports found, skipping writing import map
+key not found: plugin-redirects:fromUrl
+key not found: plugin-redirects:toUrlType
+key not found: plugin-redirects:internalLink
+key not found: plugin-redirects:customUrl
+key not found: plugin-redirects:documentToRedirect
+key not found: plugin-redirects:customUrl
+key not found: plugin-redirects:fromUrl
+key not found: plugin-redirects:toUrlType
+key not found: plugin-redirects:internalLink
+key not found: plugin-redirects:customUrl
+key not found: plugin-redirects:documentToRedirect
+key not found: plugin-redirects:customUrl
+ GET /zh/posts 200 in 1318ms (next.js: 650ms, proxy.ts: 31ms, generate-params: 0.0ms, application-code: 637ms)
+ GET /zh/posts 200 in 2.1s (next.js: 517ms, proxy.ts: 4ms, generate-params: 7ms, application-code: 1613ms)
+ GET /zh 200 in 1335ms (next.js: 506ms, proxy.ts: 32ms, generate-params: 0.0ms, application-code: 796ms)
+ GET /zh 200 in 2.2s (next.js: 449ms, proxy.ts: 9ms, generate-params: 6ms, application-code: 1688ms)
+ GET /admin/collections/posts/3?locale=zh 200 in 1311ms (next.js: 147ms, application-code: 1164ms)
+ GET /admin/collections/posts/3?locale=zh 200 in 2.2s (next.js: 316ms, application-code: 1839ms)
+✓ Compiled in 55ms
+Generating import map
+No new imports found, skipping writing import map
+key not found: plugin-redirects:fromUrl
+key not found: plugin-redirects:toUrlType
+key not found: plugin-redirects:internalLink
+key not found: plugin-redirects:customUrl
+key not found: plugin-redirects:documentToRedirect
+key not found: plugin-redirects:customUrl
+ GET /zh/posts 200 in 338ms (next.js: 36ms, proxy.ts: 8ms, generate-params: 5ms, application-code: 289ms)
+ GET /zh 200 in 340ms (next.js: 14ms, proxy.ts: 6ms, generate-params: 6ms, application-code: 314ms)
+ GET /admin/collections/posts/3?locale=zh 200 in 396ms (next.js: 71ms, application-code: 325ms)
+✓ Compiled in 110ms
+✓ Compiled in 69ms
+✓ Compiled in 80ms
+Generating import map
+No new imports found, skipping writing import map
+key not found: plugin-redirects:fromUrl
+key not found: plugin-redirects:toUrlType
+key not found: plugin-redirects:internalLink
+key not found: plugin-redirects:customUrl
+key not found: plugin-redirects:documentToRedirect
+key not found: plugin-redirects:customUrl
+ GET /zh/posts 200 in 514ms (next.js: 154ms, proxy.ts: 118ms, generate-params: 6ms, application-code: 236ms)
+ GET /zh 200 in 526ms (next.js: 127ms, proxy.ts: 2ms, generate-params: 6ms, application-code: 391ms)
+ GET /admin/collections/posts/3?locale=zh 200 in 628ms (next.js: 12ms, application-code: 616ms)
+✓ Compiled in 44ms
+Generating import map
+No new imports found, skipping writing import map
+key not found: plugin-redirects:fromUrl
+key not found: plugin-redirects:toUrlType
+key not found: plugin-redirects:internalLink
+key not found: plugin-redirects:customUrl
+key not found: plugin-redirects:documentToRedirect
+key not found: plugin-redirects:customUrl
+ GET /zh/posts 200 in 506ms (next.js: 38ms, proxy.ts: 4ms, generate-params: 5ms, application-code: 459ms)
+ GET /zh 200 in 509ms (next.js: 138ms, proxy.ts: 3ms, generate-params: 6ms, application-code: 361ms)
+ GET /admin/collections/posts/3?locale=zh 200 in 619ms (next.js: 9ms, application-code: 610ms)
+✓ Compiled in 95ms
+Generating import map
+No new imports found, skipping writing import map
+[⣷] Pulling schema from database...
+[2K[1G[⣯] Pulling schema from database...
+[2K[1G[⣟] Pulling schema from database...
+[2K[1G[⡿] Pulling schema from database...
+[2K[1G[⢿] Pulling schema from database...
+[2K[1G[⣻] Pulling schema from database...
+[2K[1G[⣽] Pulling schema from database...
+[2K[1G[⣷] Pulling schema from database...
+[2K[1G[✓] Pulling schema from database...
+key not found: plugin-redirects:fromUrl
+key not found: plugin-redirects:toUrlType
+key not found: plugin-redirects:internalLink
+key not found: plugin-redirects:customUrl
+key not found: plugin-redirects:documentToRedirect
+key not found: plugin-redirects:customUrl
+ GET /zh/posts 200 in 2.7s (next.js: 206ms, proxy.ts: 10ms, generate-params: 6ms, application-code: 2.5s)
+ GET /zh 200 in 2.3s (next.js: 94ms, proxy.ts: 236ms, generate-params: 5ms, application-code: 1988ms)
+ GET /admin/collections/posts/3?locale=zh 200 in 2.7s (next.js: 220ms, application-code: 2.5s)
+ GET /api/users/me 200 in 184ms (next.js: 113ms, application-code: 72ms)
+ GET /api/users/me 200 in 5ms (next.js: 1.4ms, application-code: 3ms)
+ GET /api/users/me 200 in 14ms (next.js: 1.5ms, application-code: 12ms)
+ GET /api/users/me 200 in 9ms (next.js: 1.4ms, application-code: 8ms)
+✓ Compiled in 66ms
+Generating import map
+No new imports found, skipping writing import map
+key not found: plugin-redirects:fromUrl
+key not found: plugin-redirects:toUrlType
+key not found: plugin-redirects:internalLink
+key not found: plugin-redirects:customUrl
+key not found: plugin-redirects:documentToRedirect
+key not found: plugin-redirects:customUrl
+ GET /zh 200 in 606ms (next.js: 109ms, proxy.ts: 4ms, generate-params: 6ms, application-code: 488ms)
+ GET /zh/posts 200 in 572ms (next.js: 306ms, proxy.ts: 69ms, generate-params: 10ms, application-code: 187ms)
+ GET /admin/collections/posts/3?locale=zh 200 in 630ms (next.js: 9ms, application-code: 621ms)
+ GET /en/search?q=dog%20%26%20cat 200 in 2.3s (next.js: 353ms, proxy.ts: 4ms, generate-params: 1747ms, application-code: 185ms)
+ GET /zh/search 200 in 84ms (next.js: 5ms, proxy.ts: 2ms, generate-params: 6ms, application-code: 71ms)
+[12:52:16] [32mINFO[39m: [36m您无权执行此操作。[39m
+ GET /api/search?limit=1 403 in 16ms (next.js: 7ms, application-code: 8ms)
+ GET /api/forms?limit=1 200 in 23ms (next.js: 1.8ms, application-code: 21ms)
+[12:52:16] [32mINFO[39m: [36mThe following fields are invalid: submissionData, submissionData, submissionData, submissionData, submissionData, submissionData, submissionData, submissionData[39m
+ POST /api/form-submissions 400 in 17ms (next.js: 1.5ms, application-code: 15ms)
+✓ Compiled in 105ms
+Generating import map
+✓ Compiled in 48ms
+No new imports found, skipping writing import map
+key not found: plugin-redirects:fromUrl
+key not found: plugin-redirects:toUrlType
+key not found: plugin-redirects:internalLink
+key not found: plugin-redirects:customUrl
+key not found: plugin-redirects:documentToRedirect
+key not found: plugin-redirects:customUrl
+ GET /zh/posts 200 in 1398ms (next.js: 302ms, proxy.ts: 7ms, generate-params: 6ms, application-code: 1083ms)
+ GET /zh/posts 200 in 987ms (next.js: 250ms, proxy.ts: 8ms, generate-params: 0.0ms, application-code: 729ms)
+ GET /zh 200 in 994ms (next.js: 185ms, proxy.ts: 8ms, generate-params: 0.0ms, application-code: 801ms)
+ GET /zh 200 in 1422ms (next.js: 141ms, proxy.ts: 10ms, generate-params: 6ms, application-code: 1266ms)
+ GET /admin/collections/posts/3?locale=zh 200 in 1420ms (next.js: 13ms, application-code: 1407ms)
+ GET /admin/collections/posts/3?locale=zh 200 in 997ms (next.js: 6ms, application-code: 991ms)
+✓ Compiled in 224ms
+Generating import map
+No new imports found, skipping writing import map
+key not found: plugin-redirects:fromUrl
+key not found: plugin-redirects:toUrlType
+key not found: plugin-redirects:internalLink
+key not found: plugin-redirects:customUrl
+key not found: plugin-redirects:documentToRedirect
+key not found: plugin-redirects:customUrl
+✓ Compiled in 60ms
+ GET /zh/posts 200 in 342ms (next.js: 30ms, proxy.ts: 47ms, generate-params: 9ms, application-code: 257ms)
+ GET /zh 200 in 387ms (next.js: 7ms, proxy.ts: 3ms, generate-params: 6ms, application-code: 370ms)
+✓ Compiled in 63ms
+✓ Compiled in 94ms
+Generating import map
+✓ Compiled in 73ms
+No new imports found, skipping writing import map
+key not found: plugin-redirects:fromUrl
+key not found: plugin-redirects:toUrlType
+key not found: plugin-redirects:internalLink
+key not found: plugin-redirects:customUrl
+key not found: plugin-redirects:documentToRedirect
+key not found: plugin-redirects:customUrl
+ GET /zh/posts 200 in 1269ms (next.js: 292ms, proxy.ts: 18ms, generate-params: 0.0ms, application-code: 959ms)
+ GET /zh 200 in 1352ms (next.js: 204ms, proxy.ts: 27ms, generate-params: 0.0ms, application-code: 1121ms)
+ GET /zh 200 in 1151ms (next.js: 479ms, proxy.ts: 47ms, generate-params: 0.0ms, application-code: 625ms)
+ GET /admin/collections/posts/3?locale=zh 200 in 2.0s (next.js: 55ms, application-code: 1988ms)
+ GET /zh/posts 200 in 1166ms (next.js: 404ms, proxy.ts: 145ms, generate-params: 0.0ms, application-code: 617ms)
+ GET /zh 200 in 570ms (next.js: 205ms, proxy.ts: 78ms, generate-params: 0.0ms, application-code: 288ms)
+ GET /zh/posts 200 in 246ms (next.js: 71ms, proxy.ts: 78ms, generate-params: 0.0ms, application-code: 96ms)
+ GET /admin/collections/posts/3?locale=zh 200 in 1529ms (next.js: 34ms, application-code: 1495ms)
+ GET /admin/collections/posts/3?locale=zh 200 in 1193ms (next.js: 11ms, application-code: 1183ms)
+ GET /admin/collections/posts/3?locale=zh 200 in 724ms (next.js: 81ms, application-code: 644ms)
+✓ Compiled in 116ms
+Generating import map
+No new imports found, skipping writing import map
+key not found: plugin-redirects:fromUrl
+key not found: plugin-redirects:toUrlType
+key not found: plugin-redirects:internalLink
+key not found: plugin-redirects:customUrl
+key not found: plugin-redirects:documentToRedirect
+key not found: plugin-redirects:customUrl
+✓ Compiled in 774ms
+Generating import map
+[12:55:54] [31mERROR[39m: [36mCannot read properties of undefined (reading 'id')[39m
+    err: {
+      "type": "TypeError",
+      "message": "Cannot read properties of undefined (reading 'id')",
+      "stack":
+          TypeError: Cannot read properties of undefined (reading 'id')
+              at buildQuery (file:///E:/code/jsCode/my-sites/standalone-site/node_modules/.pnpm/@payloadcms+drizzle@3.88.0__7134269dae8a50d7d5c87e2b0c89d70f/node_modules/@payloadcms/drizzle/dist/queries/buildQuery.js:5:39)
+              at find (file:///E:/code/jsCode/my-sites/standalone-site/node_modules/.pnpm/@payloadcms+drizzle@3.88.0__7134269dae8a50d7d5c87e2b0c89d70f/node_modules/@payloadcms/drizzle/dist/find/findMany.js:20:53)
+              at Object.findOne (file:///E:/code/jsCode/my-sites/standalone-site/node_modules/.pnpm/@payloadcms+drizzle@3.88.0__7134269dae8a50d7d5c87e2b0c89d70f/node_modules/@payloadcms/drizzle/dist/findOne.js:6:28)
+              at findByIDOperation (file:///E:/code/jsCode/my-sites/standalone-site/node_modules/.pnpm/payload@3.88.0_graphql@16.14.2_typescript@5.7.3/node_modules/payload/dist/collections/operations/findByID.js:105:48)
+              at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+              at async getDocumentData (E:\code\jsCode\my-sites\standalone-site\.next\dev\server\chunks\ssr\0_so_@payloadcms_next_dist_0hai-mc._.js:2422:28)
+              at async renderDocument (E:\code\jsCode\my-sites\standalone-site\.next\dev\server\chunks\ssr\0_so_@payloadcms_next_dist_0hai-mc._.js:3668:66)
+              at async DocumentView (E:\code\jsCode\my-sites\standalone-site\.next\dev\server\chunks\ssr\0_so_@payloadcms_next_dist_0hai-mc._.js:3946:48)
+    }
+ GET /zh/posts 200 in 1358ms (next.js: 117ms, proxy.ts: 77ms, generate-params: 6ms, application-code: 1158ms)
+No new imports found, skipping writing import map
+ GET /zh 200 in 1511ms (next.js: 118ms, proxy.ts: 3ms, generate-params: 5ms, application-code: 1386ms)
+key not found: plugin-redirects:fromUrl
+key not found: plugin-redirects:toUrlType
+key not found: plugin-redirects:internalLink
+key not found: plugin-redirects:customUrl
+key not found: plugin-redirects:documentToRedirect
+key not found: plugin-redirects:customUrl
+ GET /admin/collections/posts/3?locale=zh 200 in 1712ms (next.js: 11ms, application-code: 1701ms)
+ GET /zh/posts 200 in 604ms (next.js: 288ms, proxy.ts: 12ms, generate-params: 0.1ms, application-code: 304ms)
+ GET /zh 200 in 625ms (next.js: 231ms, proxy.ts: 11ms, generate-params: 0.0ms, application-code: 383ms)
+ GET /admin/collections/posts/3?locale=zh 200 in 668ms (next.js: 6ms, application-code: 662ms)
+ GET /zh 200 in 320ms (next.js: 27ms, proxy.ts: 6ms, generate-params: 8ms, application-code: 279ms)
+ GET /api/users/me 200 in 15ms (next.js: 11ms, application-code: 5ms)
+ GET /api/users/me 200 in 6ms (next.js: 1.7ms, application-code: 5ms)
+✓ Compiled in 65ms
+Generating import map
+No new imports found, skipping writing import map
+key not found: plugin-redirects:fromUrl
+key not found: plugin-redirects:toUrlType
+key not found: plugin-redirects:internalLink
+key not found: plugin-redirects:customUrl
+key not found: plugin-redirects:documentToRedirect
+key not found: plugin-redirects:customUrl
+ GET /zh/posts 200 in 345ms (next.js: 84ms, proxy.ts: 4ms, generate-params: 6ms, application-code: 251ms)
+ GET /zh 200 in 353ms (next.js: 14ms, proxy.ts: 4ms, generate-params: 5ms, application-code: 329ms)
+ GET /admin/collections/posts/3?locale=zh 200 in 505ms (next.js: 40ms, application-code: 465ms)
+ GET /zh/search 200 in 161ms (next.js: 93ms, proxy.ts: 2ms, generate-params: 5ms, application-code: 60ms)
+✓ Compiled in 81ms
+Generating import map
+No new imports found, skipping writing import map
+key not found: plugin-redirects:fromUrl
+key not found: plugin-redirects:toUrlType
+key not found: plugin-redirects:internalLink
+key not found: plugin-redirects:customUrl
+key not found: plugin-redirects:documentToRedirect
+key not found: plugin-redirects:customUrl
+ GET /zh/search 200 in 232ms (next.js: 43ms, proxy.ts: 3ms, generate-params: 0.0ms, application-code: 187ms)
+ GET /zh/posts 200 in 234ms (next.js: 32ms, proxy.ts: 21ms, generate-params: 6ms, application-code: 175ms)
+✓ Compiled in 60ms
+Generating import map
+No new imports found, skipping writing import map
+key not found: plugin-redirects:fromUrl
+key not found: plugin-redirects:toUrlType
+key not found: plugin-redirects:internalLink
+key not found: plugin-redirects:customUrl
+key not found: plugin-redirects:documentToRedirect
+key not found: plugin-redirects:customUrl
+ GET /zh/search 200 in 770ms (next.js: 138ms, proxy.ts: 21ms, generate-params: 0.0ms, application-code: 612ms)
+ GET /zh/posts 200 in 754ms (next.js: 299ms, proxy.ts: 10ms, generate-params: 0.0ms, application-code: 445ms)
+ GET /admin/collections/posts/3?locale=zh 200 in 1131ms (next.js: 8ms, application-code: 1123ms)
+ GET /admin/collections/posts/3?locale=zh 200 in 954ms (next.js: 6ms, application-code: 947ms)
+ GET /zh/search?q=%E9%87%87%E8%B4%AD 200 in 262ms (next.js: 3ms, proxy.ts: 2ms, generate-params: 6ms, application-code: 251ms)
+ GET /api/users/me 200 in 12ms (next.js: 9ms, application-code: 4ms)
+ GET /api/users/me 200 in 4ms (next.js: 1.6ms, application-code: 3ms)
+ GET /zh/posts/pet-sourcing-specification-checklist 200 in 211ms (next.js: 92ms, proxy.ts: 2ms, generate-params: 5ms, application-code: 111ms)
+[⣷] Pulling schema from database...
+[2K[1G[⣯] Pulling schema from database...
+[2K[1G[⣟] Pulling schema from database...
+[2K[1G[⡿] Pulling schema from database...
+[2K[1G[✓] Pulling schema from database...
+[12:57:27] [33mWARN[39m: [36mNo email adapter provided. Email will be written to console. More info at https://payloadcms.com/docs/email/overview.[39m
+✓ Compiled in 105ms
+Generating import map
+No new imports found, skipping writing import map
+key not found: plugin-redirects:fromUrl
+key not found: plugin-redirects:toUrlType
+key not found: plugin-redirects:internalLink
+key not found: plugin-redirects:customUrl
+key not found: plugin-redirects:documentToRedirect
+key not found: plugin-redirects:customUrl
+ GET /zh/posts 200 in 397ms (next.js: 68ms, proxy.ts: 4ms, generate-params: 6ms, application-code: 319ms)
+ GET /zh/posts/pet-sourcing-specification-checklist 200 in 408ms (next.js: 9ms, proxy.ts: 3ms, generate-params: 6ms, application-code: 390ms)
+ GET /admin/collections/posts/3?locale=zh 200 in 453ms (next.js: 41ms, application-code: 412ms)
+[⣷] Pulling schema from database...
+[2K[1G[⣯] Pulling schema from database...
+[2K[1G[⣟] Pulling schema from database...
+[2K[1G[⡿] Pulling schema from database...
+[2K[1G[⢿] Pulling schema from database...
+[2K[1G[✓] Pulling schema from database...
+[12:57:31] [33mWARN[39m: [36mNo email adapter provided. Email will be written to console. More info at https://payloadcms.com/docs/email/overview.[39m
+ GET /zh/contact?sourceArticle=pet-sourcing-specification-checklist 200 in 260ms (next.js: 115ms, proxy.ts: 2ms, generate-params: 6ms, application-code: 137ms)
+[12:58:45] [32mINFO[39m: [36mNo emails to send.[39m
+ POST /api/form-submissions 201 in 110ms (next.js: 7ms, application-code: 103ms)
+ GET /zh/products 200 in 405ms (next.js: 222ms, proxy.ts: 5ms, generate-params: 6ms, application-code: 173ms)
+✓ Compiled in 54ms
+Generating import map
+No new imports found, skipping writing import map
+key not found: plugin-redirects:fromUrl
+key not found: plugin-redirects:toUrlType
+key not found: plugin-redirects:internalLink
+key not found: plugin-redirects:customUrl
+key not found: plugin-redirects:documentToRedirect
+key not found: plugin-redirects:customUrl
+ GET /zh/products 200 in 1228ms (next.js: 521ms, proxy.ts: 4ms, generate-params: 7ms, application-code: 697ms)
+ GET /zh/posts 200 in 1226ms (next.js: 713ms, proxy.ts: 3ms, generate-params: 7ms, application-code: 504ms)
+ GET /admin/collections/posts/3?locale=zh 200 in 1364ms (next.js: 144ms, application-code: 1220ms)
+✓ Compiled in 96ms
+Generating import map
+No new imports found, skipping writing import map
+key not found: plugin-redirects:fromUrl
+key not found: plugin-redirects:toUrlType
+key not found: plugin-redirects:internalLink
+key not found: plugin-redirects:customUrl
+key not found: plugin-redirects:documentToRedirect
+key not found: plugin-redirects:customUrl
+ GET /zh/products 200 in 698ms (next.js: 272ms, proxy.ts: 4ms, generate-params: 7ms, application-code: 416ms)
+ GET /zh/posts 200 in 697ms (next.js: 177ms, proxy.ts: 4ms, generate-params: 6ms, application-code: 509ms)
+ GET /admin/collections/posts/3?locale=zh 200 in 697ms (next.js: 9ms, application-code: 688ms)
+ GET /zh/products?category=feeding 200 in 50ms (next.js: 3ms, proxy.ts: 3ms, generate-params: 6ms, application-code: 38ms)
+ GET /en/products?category=feeding 200 in 159ms (next.js: 15ms, proxy.ts: 4ms, generate-params: 7ms, application-code: 134ms)
+ GET /api/users/me 200 in 181ms (next.js: 105ms, application-code: 76ms)
+ GET /api/users/me 200 in 4ms (next.js: 1.6ms, application-code: 3ms)
+[⣷] Pulling schema from database...
+[2K[1G[⣯] Pulling schema from database...
+[2K[1G[⣟] Pulling schema from database...
+[2K[1G[⡿] Pulling schema from database...
+[2K[1G[✓] Pulling schema from database...
+[13:02:29] [33mWARN[39m: [36mNo email adapter provided. Email will be written to console. More info at https://payloadcms.com/docs/email/overview.[39m
+ GET /zh/products/1112 200 in 3.2s (next.js: 216ms, proxy.ts: 5ms, generate-params: 2.8s, application-code: 241ms)
+ GET /api/users/me 200 in 11ms (next.js: 8ms, application-code: 3ms)
+ GET /api/users/me 200 in 4ms (next.js: 1.4ms, application-code: 3ms)
+ GET /zh/contact?product=%E4%B8%8B&productSlug=1112 200 in 236ms (next.js: 94ms, proxy.ts: 2ms, generate-params: 6ms, application-code: 134ms)
+ GET /zh/products?page=1abc 200 in 145ms (next.js: 3ms, proxy.ts: 2ms, generate-params: 6ms, application-code: 134ms)
+ GET /api/users/me 200 in 10ms (next.js: 7ms, application-code: 3ms)
+ GET /api/users/me 200 in 4ms (next.js: 1.5ms, application-code: 3ms)
+ GET /zh/products 200 in 14ms (next.js: 3ms, proxy.ts: 1.9ms, generate-params: 5ms, application-code: 4ms)
+ GET /zh/products 200 in 71ms (next.js: 3ms, proxy.ts: 2ms, generate-params: 0.0ms, application-code: 66ms)
+ GET /zh 200 in 365ms (next.js: 105ms, proxy.ts: 2ms, generate-params: 6ms, application-code: 252ms)
+ GET /api/users/me 200 in 10ms (next.js: 7ms, application-code: 3ms)
+ GET /api/users/me 200 in 4ms (next.js: 1.6ms, application-code: 2ms)
+✓ Compiled in 57ms
+Generating import map
+No new imports found, skipping writing import map
+key not found: plugin-redirects:fromUrl
+key not found: plugin-redirects:toUrlType
+key not found: plugin-redirects:internalLink
+key not found: plugin-redirects:customUrl
+key not found: plugin-redirects:documentToRedirect
+key not found: plugin-redirects:customUrl
+ GET /zh/posts 200 in 730ms (next.js: 208ms, proxy.ts: 4ms, generate-params: 10ms, application-code: 508ms)
+ GET /zh 200 in 741ms (next.js: 114ms, proxy.ts: 4ms, generate-params: 12ms, application-code: 610ms)
+ GET /admin/collections/posts/3?locale=zh 200 in 776ms (next.js: 9ms, application-code: 767ms)
+ GET /zh 200 in 215ms (next.js: 7ms, proxy.ts: 2ms, generate-params: 7ms, application-code: 200ms)
+ GET /api/users/me 200 in 14ms (next.js: 10ms, application-code: 4ms)
+ GET /api/users/me 200 in 7ms (next.js: 2ms, application-code: 5ms)
+ GET /zh/products 200 in 79ms (next.js: 6ms, proxy.ts: 2ms, generate-params: 7ms, application-code: 65ms)
+✓ Compiled in 300ms
+ GET /zh 200 in 199ms (next.js: 7ms, proxy.ts: 2.0ms, generate-params: 6ms, application-code: 184ms)
+ GET /api/users/me 200 in 11ms (next.js: 8ms, application-code: 3ms)
+ GET /api/users/me 200 in 8ms (next.js: 5ms, application-code: 3ms)
+ GET /admin/collections/posts/3?locale=zh 200 in 1005ms (next.js: 21ms, application-code: 984ms)
+ GET /api/payload-preferences/collection-posts-3 200 in 34ms (next.js: 14ms, application-code: 20ms)
+ GET /api/users/me 200 in 38ms (next.js: 20ms, application-code: 17ms)
+ GET /api/payload-preferences/collection-posts 200 in 21ms (next.js: 8ms, application-code: 14ms)
+ GET /api/users/me 200 in 20ms (next.js: 3ms, application-code: 17ms)
+ GET /api/payload-preferences/nav 200 in 20ms (next.js: 2ms, application-code: 17ms)
+ GET /admin/globals/search-settings 200 in 201ms (next.js: 13ms, application-code: 188ms)
+ GET /api/payload-preferences/locale 200 in 33ms (next.js: 13ms, application-code: 21ms)
+ GET /api/payload-preferences/global-search-settings 200 in 24ms (next.js: 4ms, application-code: 20ms)
+ GET /api/payload-preferences/locale 200 in 13ms (next.js: 2ms, application-code: 11ms)
+ POST /admin/globals/search-settings 200 in 115ms (next.js: 12ms, application-code: 103ms)
+  └─ ƒ <inline action>({"args":{"docPermissions":"[Object]","docPreferences":"[Object]","fallbackLocale":false,"...":"8 items not stringified"},"name":"form-state"}) in 92ms src/app/(payload)/layout.tsx
+ POST /api/payload-preferences/global-search-settings 200 in 54ms (next.js: 11ms, application-code: 43ms)
+ POST /api/payload-preferences/global-search-settings 200 in 54ms (next.js: 12ms, application-code: 42ms)
+ POST /admin/globals/search-settings 200 in 63ms (next.js: 17ms, application-code: 45ms)
+  └─ ƒ <inline action>({"args":{"docPermissions":"[Object]","docPreferences":"[Object]","fallbackLocale":false,"...":"8 items not stringified"},"name":"form-state"}) in 30ms src/app/(payload)/layout.tsx
+ GET /admin/globals/search-settings/api 200 in 253ms (next.js: 14ms, application-code: 239ms)
+ GET /api/globals/search-settings?depth=2&draft=false&locale=zh&trash=false 200 in 34ms (next.js: 13ms, application-code: 22ms)
+ GET /api/payload-preferences/locale 200 in 22ms (next.js: 3ms, application-code: 20ms)
+ GET /api/globals/search-settings?depth=2&draft=false&locale=zh&trash=false 200 in 13ms (next.js: 2ms, application-code: 11ms)
+ GET /api/globals/search-settings?depth=2&draft=false&locale=zh&trash=false 200 in 16ms (next.js: 6ms, application-code: 10ms)
+ GET /admin/globals/search-settings 200 in 192ms (next.js: 12ms, application-code: 181ms)
+ GET /api/payload-preferences/locale 200 in 27ms (next.js: 13ms, application-code: 15ms)
+ GET /admin/account 200 in 179ms (next.js: 19ms, application-code: 160ms)
+ GET /api/payload-preferences/locale 200 in 27ms (next.js: 13ms, application-code: 13ms)
+ GET /admin/globals/footer 200 in 194ms (next.js: 14ms, application-code: 179ms)
+ GET /api/payload-preferences/global-footer 200 in 36ms (next.js: 16ms, application-code: 20ms)
+ GET /api/payload-preferences/locale 200 in 27ms (next.js: 2ms, application-code: 24ms)
+ POST /api/posts 200 in 19ms (next.js: 2ms, application-code: 17ms)
+ GET /admin/collections/form-submissions 200 in 159ms (next.js: 4ms, application-code: 155ms)
+ GET /api/payload-preferences/locale 200 in 15ms (next.js: 3ms, application-code: 12ms)
+ GET /api/forms?depth=0&draft=true&limit=250&locale=zh&where%5Bid%5D%5Bin%5D=1& 200 in 34ms (next.js: 3ms, application-code: 31ms)
+ GET /admin/collections/search 200 in 170ms (next.js: 13ms, application-code: 157ms)
+ GET /api/payload-preferences/locale 200 in 23ms (next.js: 12ms, application-code: 11ms)
+ GET /admin/collections/posts 200 in 312ms (next.js: 18ms, application-code: 294ms)
+ GET /api/payload-preferences/locale 200 in 28ms (next.js: 13ms, application-code: 15ms)
+ DELETE /api/posts?limit=0&locale=zh&where%5Band%5D%5B0%5D%5Bid%5D%5Bin%5D%5B0%5D=3&where%5Band%5D%5B0%5D%5Bid%5D%5Bin%5D%5B1%5D=2&where%5Band%5D%5B0%5D%5Bid%5D%5Bin%5D%5B2%5D=1 200 in 129ms (next.js: 13ms, application-code: 117ms)
+ GET /admin/collections/posts?depth=1&limit=10&page=1 200 in 321ms (next.js: 14ms, application-code: 308ms)
+ GET /admin/collections/posts?depth=1&limit=10&page=1 200 in 284ms (next.js: 6ms, application-code: 278ms)
+ GET /api/payload-preferences/locale 200 in 16ms (next.js: 3ms, application-code: 13ms)
+ GET /admin/collections/pages 200 in 181ms (next.js: 13ms, application-code: 169ms)
+ GET /api/payload-preferences/locale 200 in 29ms (next.js: 13ms, application-code: 16ms)
+ GET /admin/collections/pages/1 200 in 257ms (next.js: 16ms, application-code: 241ms)
+ GET /api/payload-preferences/collection-pages-1 200 in 33ms (next.js: 13ms, application-code: 20ms)
+ GET /api/payload-preferences/collection-pages 200 in 26ms (next.js: 3ms, application-code: 22ms)
+ GET /api/payload-preferences/locale 200 in 16ms (next.js: 3ms, application-code: 13ms)
+ GET /admin/collections/users 200 in 211ms (next.js: 17ms, application-code: 193ms)
+ GET /api/payload-preferences/locale 200 in 27ms (next.js: 14ms, application-code: 13ms)
+ GET /admin/collections/users/1 200 in 189ms (next.js: 13ms, application-code: 176ms)
+ GET /api/payload-preferences/collection-users 200 in 29ms (next.js: 12ms, application-code: 17ms)
+ GET /api/payload-preferences/locale 200 in 20ms (next.js: 2ms, application-code: 17ms)
+ POST /api/payload-preferences/collection-users 200 in 40ms (next.js: 2ms, application-code: 37ms)
+ GET /admin/collections/products 200 in 221ms (next.js: 15ms, application-code: 206ms)
+ GET /api/payload-preferences/locale 200 in 24ms (next.js: 13ms, application-code: 11ms)
+ GET /api/categories?depth=0&draft=true&limit=250&locale=zh&where%5Bid%5D%5Bin%5D=1& 200 in 14ms (next.js: 2ms, application-code: 11ms)
+ GET /admin/collections/forms 200 in 193ms (next.js: 13ms, application-code: 180ms)
+ GET /api/payload-preferences/locale 200 in 29ms (next.js: 15ms, application-code: 14ms)
+ GET /admin/collections/products 200 in 181ms (next.js: 14ms, application-code: 168ms)
+ GET /api/payload-preferences/locale 200 in 24ms (next.js: 13ms, application-code: 11ms)
+ GET /api/categories?depth=0&draft=true&limit=250&locale=zh&where%5Bid%5D%5Bin%5D=1& 200 in 13ms (next.js: 2ms, application-code: 11ms)
+ GET /admin/collections/forms 200 in 179ms (next.js: 5ms, application-code: 174ms)
+ GET /api/payload-preferences/locale 200 in 16ms (next.js: 3ms, application-code: 13ms)
+ GET /admin/collections/forms/1 200 in 304ms (next.js: 14ms, application-code: 290ms)
+ GET /api/payload-preferences/collection-forms 200 in 27ms (next.js: 12ms, application-code: 16ms)
+ GET /api/payload-preferences/locale 200 in 13ms (next.js: 2ms, application-code: 10ms)
+ GET /admin/collections/forms 200 in 191ms (next.js: 13ms, application-code: 178ms)
+ GET /api/payload-preferences/locale 200 in 29ms (next.js: 13ms, application-code: 16ms)
+ GET /en/posts 200 in 213ms (next.js: 15ms, proxy.ts: 8ms, generate-params: 9ms, application-code: 181ms)
+ GET /api/users/me 200 in 27ms (next.js: 13ms, application-code: 14ms)
+ GET /api/users/me 200 in 16ms (next.js: 3ms, application-code: 13ms)
+ GET /en/contact 200 in 139ms (next.js: 15ms, proxy.ts: 2ms, generate-params: 11ms, application-code: 110ms)
+ GET /en/products 200 in 123ms (next.js: 14ms, proxy.ts: 2.0ms, generate-params: 9ms, application-code: 98ms)
+ GET /en 200 in 98ms (next.js: 5ms, proxy.ts: 13ms, generate-params: 9ms, application-code: 71ms)
+ GET /en/solutions 200 in 381ms (next.js: 196ms, proxy.ts: 4ms, application-code: 181ms)
+[⣷] Pulling schema from database...
+[2K[1G[⣯] Pulling schema from database...
+[2K[1G[⣟] Pulling schema from database...
+[2K[1G[⡿] Pulling schema from database...
+[2K[1G[✓] Pulling schema from database...
+[13:55:30] [33mWARN[39m: [36mNo email adapter provided. Email will be written to console. More info at https://payloadcms.com/docs/email/overview.[39m
+ GET /en/products 200 in 91ms (next.js: 6ms, proxy.ts: 4ms, generate-params: 9ms, application-code: 73ms)
+ GET /admin/logout-inactivity?redirect=%2Fadmin%2Fcollections%2Fforms 200 in 169ms (next.js: 14ms, application-code: 155ms)
+ GET /admin/login?redirect=%2Fadmin%2Fcollections%2Fforms 200 in 140ms (next.js: 5ms, application-code: 135ms)
+ GET /admin/login?redirect=%2Fadmin%2Fcollections%2Fforms 200 in 71ms (next.js: 7ms, application-code: 64ms)

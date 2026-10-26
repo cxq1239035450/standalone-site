@@ -9,7 +9,7 @@ import type { Locale } from '@/i18n/config'
 import { Link } from '@/i18n/navigation'
 import { Media } from '@/components/Media'
 import { cn } from '@/utilities/ui'
-import useClickableCard from '@/utilities/useClickableCard'
+import Image from 'next/image'
 
 export type CardPostData = Pick<Post, 'slug' | 'categories' | 'meta' | 'publishedAt' | 'title'>
 
@@ -32,7 +32,6 @@ export const Card: React.FC<{
 }> = (props) => {
   const locale = useLocale() as Locale
   const t = useTranslations('posts')
-  const { card, link } = useClickableCard({})
   const { className, doc, relationTo, showCategories, title: titleFromProps } = props
 
   const { slug, categories, meta, publishedAt, title } = doc || {}
@@ -40,7 +39,16 @@ export const Card: React.FC<{
   const hasCategories = categories && Array.isArray(categories) && categories.length > 0
   const titleToUse = getLocalizedValue(titleFromProps || title, locale)
   const descriptionToUse = getLocalizedValue(description, locale).replace(/\s+/g, ' ').trim()
-  const href = `/${relationTo}/${slug}`
+  const href = `/${relationTo || 'posts'}/${slug}`
+  const isPetGuide =
+    ['pet-sourcing-specification-checklist', 'private-label-sampling-checklist'].includes(
+      slug || '',
+    ) ||
+    categories?.some((category) => typeof category === 'object' && category.slug === 'pet-guides')
+  const guideImage =
+    slug === 'private-label-sampling-checklist'
+      ? '/pet-assets/walking.webp'
+      : '/pet-assets/hero-pets.webp'
   const formattedDate = publishedAt
     ? new Intl.DateTimeFormat(locale === 'zh' ? 'zh-CN' : 'en-US', {
         day: 'numeric',
@@ -50,24 +58,29 @@ export const Card: React.FC<{
     : null
 
   return (
-    <article
+    <Link
+      href={href}
       className={cn(
-        'group flex h-full flex-col overflow-hidden rounded-3xl border border-stone-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-emerald-200 hover:shadow-xl hover:shadow-emerald-950/5',
+        'group flex h-full flex-col overflow-hidden rounded-xl border border-stone-200 bg-white transition duration-300 hover:-translate-y-1 hover:border-[#173f35]',
         className,
       )}
-      ref={card.ref}
     >
       <div className="relative aspect-[16/10] w-full overflow-hidden bg-emerald-950">
-        {!metaImage && (
-          <div className="absolute inset-0 flex items-center justify-center bg-[radial-gradient(circle_at_75%_20%,rgba(52,211,153,0.3),transparent_35%),linear-gradient(135deg,#064e3b,#022c22)] text-emerald-100">
-            <div className="absolute -bottom-12 -left-8 h-36 w-36 rounded-full border border-emerald-300/15" />
-            <div className="absolute -bottom-6 -left-2 h-24 w-24 rounded-full border border-emerald-300/15" />
-            <span className="flex h-14 w-14 items-center justify-center rounded-2xl border border-white/15 bg-white/10 backdrop-blur">
-              <Newspaper className="h-7 w-7" />
+        {!metaImage &&
+          (isPetGuide ? (
+            <Image
+              src={guideImage}
+              alt={titleToUse}
+              fill
+              sizes="(max-width: 768px) 100vw, 33vw"
+              className="object-cover transition duration-500 group-hover:scale-105"
+            />
+          ) : (
+            <div className="absolute inset-0 flex items-center justify-center bg-[#dde5da] text-[#173f35]">
+              <Newspaper className="h-8 w-8" />
               <span className="sr-only">{t('noImage')}</span>
-            </span>
-          </div>
-        )}
+            </div>
+          ))}
         {metaImage && typeof metaImage !== 'string' && (
           <Media
             fill
@@ -108,9 +121,7 @@ export const Card: React.FC<{
 
         {titleToUse && (
           <h3 className="text-xl font-semibold leading-snug tracking-tight text-slate-900">
-            <Link className="transition group-hover:text-emerald-700" href={href} ref={link.ref}>
-              {titleToUse}
-            </Link>
+            {titleToUse}
           </h3>
         )}
         {descriptionToUse && (
@@ -121,6 +132,6 @@ export const Card: React.FC<{
           <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
         </span>
       </div>
-    </article>
+    </Link>
   )
 }

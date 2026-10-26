@@ -4,6 +4,9 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+overrides:
+  '@site-insights/contracts': file:vendor/site-insights/site-insights-contracts-0.1.0.tgz
+
 importers:
 
   .:
@@ -56,6 +59,15 @@ importers:
       '@radix-ui/react-slot':
         specifier: ^1.0.2
         version: 1.3.3(@types/react@19.2.14)(react@19.2.6)
+      '@site-insights/browser-sdk':
+        specifier: file:vendor/site-insights/site-insights-browser-sdk-0.1.0.tgz
+        version: file:vendor/site-insights/site-insights-browser-sdk-0.1.0.tgz
+      '@site-insights/contracts':
+        specifier: file:vendor/site-insights/site-insights-contracts-0.1.0.tgz
+        version: file:vendor/site-insights/site-insights-contracts-0.1.0.tgz
+      '@site-insights/payload-plugin':
+        specifier: file:vendor/site-insights/site-insights-payload-plugin-0.1.1.tgz
+        version: file:vendor/site-insights/site-insights-payload-plugin-0.1.1.tgz(payload@3.88.0(graphql@16.14.2)(typescript@5.7.3))
       class-variance-authority:
         specifier: ^0.7.0
         version: 0.7.1
@@ -2042,6 +2054,20 @@ packages:
 
   '@schummar/icu-type-parser@1.21.5':
     resolution: {integrity: sha512-bXHSaW5jRTmke9Vd0h5P7BtWZG9Znqb8gSDxZnxaGSJnGwPLDPfS+3g0BKzeWqzgZPsIVZkM7m2tbo18cm5HBw==}
+
+  '@site-insights/browser-sdk@file:vendor/site-insights/site-insights-browser-sdk-0.1.0.tgz':
+    resolution: {integrity: sha512-iR8Vx/hdHdQDr7TEjJIahSPvnM6gJcN7RRhJXghOqboWLalk6A06Ua3T4rrPCtqVu7YHCulvLgiTURcEhW9eGg==, tarball: file:vendor/site-insights/site-insights-browser-sdk-0.1.0.tgz}
+    version: 0.1.0
+
+  '@site-insights/contracts@file:vendor/site-insights/site-insights-contracts-0.1.0.tgz':
+    resolution: {integrity: sha512-sbuWcNg3rnS437bIlukmn+ZhG3XGLDTGU1Uf62VE76J0XhFumkvR8Er4DrepXElACQD+S6aK4u9XEmNYqTrBEw==, tarball: file:vendor/site-insights/site-insights-contracts-0.1.0.tgz}
+    version: 0.1.0
+
+  '@site-insights/payload-plugin@file:vendor/site-insights/site-insights-payload-plugin-0.1.1.tgz':
+    resolution: {integrity: sha512-sf/JGUwaRztAQLKYxFsvnRCZSQG7akWok1mPSyySkhRjCo1RX1pSWeUo2pqYFgrMsPCvJwbW2ABVjDOS5Gq9Mg==, tarball: file:vendor/site-insights/site-insights-payload-plugin-0.1.1.tgz}
+    version: 0.1.1
+    peerDependencies:
+      payload: ^3.88.0
 
   '@standard-schema/spec@1.1.0':
     resolution: {integrity: sha512-l2aFy5jALhniG5HgqrD6jXLi/rUWrKvqN/qJx6yoJsgKhblVd+iqqU4RCXavm/jPityDo5TCvKMnpjKnOriy0w==}
@@ -6945,6 +6971,17 @@ snapshots:
   '@rtsao/scc@1.1.0': {}
 
   '@schummar/icu-type-parser@1.21.5': {}
+
+  '@site-insights/browser-sdk@file:vendor/site-insights/site-insights-browser-sdk-0.1.0.tgz':
+    dependencies:
+      '@site-insights/contracts': file:vendor/site-insights/site-insights-contracts-0.1.0.tgz
+
+  '@site-insights/contracts@file:vendor/site-insights/site-insights-contracts-0.1.0.tgz': {}
+
+  '@site-insights/payload-plugin@file:vendor/site-insights/site-insights-payload-plugin-0.1.1.tgz(payload@3.88.0(graphql@16.14.2)(typescript@5.7.3))':
+    dependencies:
+      '@site-insights/contracts': file:vendor/site-insights/site-insights-contracts-0.1.0.tgz
+      payload: 3.88.0(graphql@16.14.2)(typescript@5.7.3)
 
   '@standard-schema/spec@1.1.0': {}
 

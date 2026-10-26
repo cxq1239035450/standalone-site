@@ -1,0 +1,173 @@
+.hero {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  gap: 64px;
+  align-items: center;
+  padding-block: 40px 56px;
+}
+.hero h1 {
+  font-size: clamp(36px, 4.5vw, 64px);
+  line-height: 1.25;
+  letter-spacing: -0.045em;
+  font-weight: 550;
+  white-space: pre-line;
+}
+.hero p {
+  margin-top: 28px;
+  max-width: 570px;
+  color: var(--pet-muted);
+  font-size: 17px;
+  line-height: 1.9;
+}
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px 28px;
+  align-items: center;
+  margin-top: 32px;
+}
+.visual {
+  min-width: 0;
+}
+.image {
+  position: relative;
+  aspect-ratio: 1;
+  background: #eeeae3;
+  border-radius: 12px;
+  overflow: hidden;
+}
+.image img {
+  object-fit: contain;
+}
+.visual figcaption {
+  color: var(--pet-muted);
+  font-size: 12px;
+  line-height: 1.7;
+  padding-top: 14px;
+}
+.options {
+  padding-top: 48px;
+}
+.optionGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 32px;
+}
+.optionGrid article {
+  border-top: 1px solid var(--pet-line);
+  padding-top: 26px;
+}
+.optionGrid h3 {
+  font-size: 20px;
+  font-weight: 550;
+  margin-top: 24px;
+}
+.optionGrid p {
+  margin-top: 14px;
+  color: var(--pet-muted);
+  line-height: 1.85;
+  font-size: 15px;
+}
+.steps {
+  margin-top: 44px;
+}
+.outcome {
+  display: flex;
+  gap: 9px;
+  align-items: flex-start;
+  padding-top: 20px;
+  margin-top: 24px;
+  border-top: 1px solid #688075;
+  font-size: 13px;
+  line-height: 1.6;
+  color: #dde5da;
+}
+.outcome svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.checklist {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  border-bottom: 1px solid var(--pet-line);
+  padding-block: 80px;
+  scroll-margin-top: 32px;
+}
+.checklist:last-child {
+  border-bottom: 0;
+}
+.number {
+  color: var(--pet-muted);
+  font-size: 14px;
+}
+.checklist h2 {
+  font-size: clamp(26px, 3vw, 40px);
+  font-weight: 500;
+  letter-spacing: -0.035em;
+  line-height: 1.4;
+  margin-top: 14px;
+}
+.checklist p {
+  color: var(--pet-muted);
+  line-height: 1.9;
+  margin-top: 24px;
+  font-size: 15px;
+}
+.checklist li {
+  display: flex;
+  gap: 14px;
+  border-bottom: 1px solid var(--pet-line);
+  padding: 22px 0;
+  line-height: 1.8;
+  font-size: 15px;
+}
+.checklist li svg {
+  flex-shrink: 0;
+  margin-top: 4px;
+}
+@media (max-width: 1000px) {
+  .hero {
+    gap: 32px;
+  }
+  .optionGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .checklist {
+    gap: 40px;
+  }
+}
+@media (max-width: 767px) {
+  .hero {
+    grid-template-columns: 1fr;
+    padding-top: 28px;
+    gap: 36px;
+  }
+  .hero h1 {
+    font-size: 38px;
+  }
+  .hero p {
+    font-size: 16px;
+    margin-top: 22px;
+  }
+  .actions {
+    margin-top: 26px;
+  }
+  .optionGrid {
+    gap: 28px 20px;
+  }
+  .optionGrid h3 {
+    font-size: 18px;
+  }
+  .optionGrid p {
+    font-size: 14px;
+  }
+  .checklist {
+    grid-template-columns: 1fr;
+    gap: 22px;
+    padding-block: 48px;
+  }
+  .steps {
+    margin-top: 32px;
+  }
+}

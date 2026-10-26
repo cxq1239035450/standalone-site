@@ -1,129 +1,58 @@
-import { getTranslations } from 'next-intl/server'
-import { getCachedGlobal } from '@/utilities/getGlobals'
+import { getLocale, getTranslations } from 'next-intl/server'
+import { ArrowUpRight } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
-import React from 'react'
-import { Facebook, Twitter, Instagram, Linkedin } from 'lucide-react'
+import { getSearchSettings } from '@/utilities/searchSettings'
+import { getCachedGlobal } from '@/utilities/getGlobals'
+import { navigationLinks } from '@/utilities/navigationLinks'
+import { defaultLocale, isLocale } from '@/i18n/config'
 
 export async function Footer() {
-  const footerData = await getCachedGlobal('footer', 1)()
-  const navItems = footerData?.navItems || []
   const t = await getTranslations('footer')
-  const tNav = await getTranslations('navigation')
-
+  const nav = await getTranslations('navigation')
+  const value = await getLocale()
+  const locale = isLocale(value) ? value : defaultLocale
+  const [settings, footer] = await Promise.all([getSearchSettings(locale), getCachedGlobal('footer', 1, locale)()])
+  const brand = settings.siteName || 'PawSupply'
+  const links = footer.useCustomNavigation ? navigationLinks(footer.navItems) : []
   return (
-    <footer className="bg-gray-900 text-white">
-      <div className="container py-16">
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12">
-          {/* Company Info */}
-          <div>
-            <Link href="/" className="inline-block mb-6">
-              <div className="flex items-center gap-2">
-                <div className="w-10 h-10 bg-green-500 rounded-lg flex items-center justify-center">
-                  <span className="text-2xl">🥬</span>
-                </div>
-                <span className="text-xl font-bold">{t('company.name')}</span>
-              </div>
+    <footer className="pet-footer">
+      <div className="pet-container pet-footer-top">
+        <div>
+          <Link className="pet-logo" href="/">
+            {brand}<span aria-hidden="true">.</span>
+          </Link>
+          <p className="pet-footer-description">{t('company.description')}</p>
+        </div>
+        <div>
+          <h2>{t('products')}</h2>
+          {(['feeding', 'walking', 'bedding', 'toys'] as const).map((key) => (
+            <Link key={key} href={`/products?category=${key}`}>
+              {t(`categories.${key}`)}
             </Link>
-            <p className="text-gray-400 mb-4">{t('company.description')}</p>
-            <div className="flex gap-4">
-              <a
-                href="#"
-                className="w-10 h-10 bg-gray-800 hover:bg-green-600 rounded-lg flex items-center justify-center transition-colors"
-              >
-                <Facebook className="w-5 h-5" />
-              </a>
-              <a
-                href="#"
-                className="w-10 h-10 bg-gray-800 hover:bg-green-600 rounded-lg flex items-center justify-center transition-colors"
-              >
-                <Twitter className="w-5 h-5" />
-              </a>
-              <a
-                href="#"
-                className="w-10 h-10 bg-gray-800 hover:bg-green-600 rounded-lg flex items-center justify-center transition-colors"
-              >
-                <Instagram className="w-5 h-5" />
-              </a>
-              <a
-                href="#"
-                className="w-10 h-10 bg-gray-800 hover:bg-green-600 rounded-lg flex items-center justify-center transition-colors"
-              >
-                <Linkedin className="w-5 h-5" />
-              </a>
-            </div>
-          </div>
-
-          {/* Quick Links */}
-          <div>
-            <h3 className="text-lg font-semibold mb-6">{t('products')}</h3>
-            <ul className="space-y-3">
-              {t.raw('productLinks').map((item: string, index: number) => (
-                <li key={item}>
-                  <Link
-                    href={['/products', '/solutions', '/contact', '/posts'][index] || '/'}
-                    className="text-gray-400 hover:text-green-500 transition-colors"
-                  >
-                    {item}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Support */}
-          <div>
-            <h3 className="text-lg font-semibold mb-6">{t('support')}</h3>
-            <ul className="space-y-3">
-              {t.raw('supportLinks').map((item: string) => (
-                <li key={item}>
-                  <Link
-                    href="/contact"
-                    className="text-gray-400 hover:text-green-500 transition-colors"
-                  >
-                    {item}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Contact */}
-          <div>
-            <h3 className="text-lg font-semibold mb-6">{t('contact')}</h3>
-            <ul className="space-y-3 text-gray-400">
-              <li>
-                {t('phone')}：{t('phoneValue')}
-              </li>
-              <li>
-                {t('email')}：{t('emailValue')}
-              </li>
-              <li>
-                {t('address')}：{t('addressValue')}
-              </li>
-              <li>
-                {t('workTime')}：{t('workTimeValue')}
-              </li>
-            </ul>
-          </div>
+          ))}
+        </div>
+        <div>
+          <h2>{t('support')}</h2>
+          {links.length ? links.map(({ href, title, newTab }) => <Link key={href} href={href} target={newTab ? '_blank' : undefined} rel={newTab ? 'noopener noreferrer' : undefined}>{title}</Link>) : <>
+          <Link href="/solutions">{nav('solutions')}</Link>
+          <Link href="/posts">{nav('articles')}</Link>
+          <Link href="/about">{nav('about')}</Link>
+          <Link href="/#faq">{t('faq')}</Link>
+          </>}
+        </div>
+        <div>
+          <h2>{t('contact')}</h2>
+          <p>{t('contactDescription')}</p>
+          {settings.organization?.email && <a href={`mailto:${settings.organization.email}`}>{settings.organization.email}</a>}
+          {settings.organization?.telephone && <a href={`tel:${settings.organization.telephone.replace(/[^+\d]/g, '')}`}>{settings.organization.telephone}</a>}
+          <Link className="pet-footer-contact" href="/contact">
+            {t('contactAction')} <ArrowUpRight size={18} />
+          </Link>
         </div>
       </div>
-
-      {/* Bottom Bar */}
-      <div className="border-t border-gray-800">
-        <div className="container py-6 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-gray-500 text-sm">{t('copyright')}</p>
-          <nav className="flex gap-6 text-sm">
-            {navItems.map(({ link }, i) => (
-              <Link
-                key={i}
-                href={link.url || '#'}
-                className="text-gray-500 hover:text-white transition-colors"
-              >
-                {link.label}
-              </Link>
-            ))}
-          </nav>
-        </div>
+      <div className="pet-container pet-footer-bottom">
+        <p>{t('copyright', { year: new Date().getFullYear(), brand })}</p>
+        <p>{t('businessOnly')}</p>
       </div>
     </footer>
   )

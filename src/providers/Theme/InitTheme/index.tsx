@@ -1,11 +1,11 @@
-import Script from 'next/script'
 import React from 'react'
+import Script from 'next/script'
 
 import { defaultTheme, themeLocalStorageKey } from '../ThemeSelector/types'
 
 export const InitTheme: React.FC = () => {
   return (
-    // eslint-disable-next-line @next/next/no-before-interactive-script-outside-document
+    // Next manages execution across locale layout changes and client navigation.
     <Script
       dangerouslySetInnerHTML={{
         __html: `
@@ -27,7 +27,10 @@ export const InitTheme: React.FC = () => {
     }
 
     var themeToSet = '${defaultTheme}'
-    var preference = window.localStorage.getItem('${themeLocalStorageKey}')
+    var preference = null
+    try {
+      preference = window.localStorage.getItem('${themeLocalStorageKey}')
+    } catch (_) {}
 
     if (themeIsValid(preference)) {
       themeToSet = preference
@@ -44,7 +47,7 @@ export const InitTheme: React.FC = () => {
   `,
       }}
       id="theme-script"
-      strategy="beforeInteractive"
+      strategy="afterInteractive"
     />
   )
 }

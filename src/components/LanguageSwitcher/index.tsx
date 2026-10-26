@@ -20,7 +20,7 @@ export function LanguageSwitcher() {
       segments.splice(1, 0, locale)
     }
 
-    router.replace(segments.join('/') || `/${locale}`)
+    router.replace((segments.join('/') || `/${locale}`) + window.location.search + window.location.hash)
   }
 
   return (

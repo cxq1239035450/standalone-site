@@ -1,3 +1,4 @@
+import { pageMetadata, getSearchSettings, siteOrigin, jsonLd } from '@/utilities/searchSettings'
 import type { Metadata } from 'next/types'
 
 import configPromise from '@payload-config'
@@ -6,12 +7,17 @@ import { draftMode } from 'next/headers'
 import React, { cache } from 'react'
 import { notFound } from 'next/navigation'
 import { isLocale, type Locale } from '@/i18n/config'
-import { Media } from '@/components/Media'
+import { ProductGallery } from '@/components/ProductGallery'
+import type { Media as MediaDocument } from '@/payload-types'
+import styles from '@/components/ProductGallery/products.module.css'
 import RichText from '@/components/RichText'
 import { ProductCard } from '@/components/ProductCard'
 import { getTranslations } from 'next-intl/server'
 import { Link } from '@/i18n/navigation'
-import { BadgeCheck, Package } from 'lucide-react'
+import { BadgeCheck, ArrowUpRight } from 'lucide-react'
+import { productInquiryHref, productUnitLabel } from '@/utilities/productPresentation'
+import { productSpecifications } from '@/utilities/productSpecifications'
+import { productGeography } from '@/utilities/seoPresentation'
 
 type Args = {
   params: Promise<{
@@ -51,10 +57,10 @@ export async function generateStaticParams({ params }: { params: { locale: strin
 }
 
 export default async function ProductDetail({ params: paramsPromise }: Args) {
-  const { isEnabled: draft } = await draftMode()
   const { locale, slug = '' } = await paramsPromise
   if (!isLocale(locale)) notFound()
   const t = await getTranslations({ locale, namespace: 'products' })
+  const home = await getTranslations({ locale, namespace: 'home' })
 
   const decodedSlug = decodeURIComponent(slug)
   const product = await queryProductBySlug({ locale, slug: decodedSlug })
@@ -64,6 +70,38 @@ export default async function ProductDetail({ params: paramsPromise }: Args) {
   const titleValue =
     typeof product.title === 'string' ? product.title : product.title?.[locale] || t('untitled')
 
+  const search = await getSearchSettings(locale)
+  const template =
+    product.industryTemplate && typeof product.industryTemplate === 'object'
+      ? product.industryTemplate
+      : undefined
+  const specifications = productSpecifications(template, product.technicalValues)
+  const geography = productGeography(product.meta, locale)
+  const additionalProperties = [
+    ...specifications.map((specification) => ({
+      '@type': 'PropertyValue',
+      name: specification.label,
+      value: specification.value,
+      unitText: specification.unit,
+    })),
+    ...geography.map((item) => ({ '@type': 'PropertyValue', ...item })),
+  ]
+  const productSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: titleValue,
+    description: product.general?.shortDescription || product.discovery?.summary || undefined,
+    sku: product.pricing?.sku || undefined,
+    url: `${siteOrigin(search.siteUrl)}/${locale}/products/${encodeURIComponent(decodedSlug)}`,
+    material: product.sourcing?.materials || undefined,
+    additionalProperty: additionalProperties.length ? additionalProperties : undefined,
+    image:
+      product.general?.heroImage &&
+      typeof product.general.heroImage === 'object' &&
+      product.general.heroImage.url
+        ? new URL(product.general.heroImage.url, siteOrigin(search.siteUrl)).href
+        : undefined,
+  }
   const { general, organization, pricing } = product
   const { description, gallery, heroImage, shortDescription } = general || {}
   const { category, featured } = organization || {}
@@ -71,11 +109,12 @@ export default async function ProductDetail({ params: paramsPromise }: Args) {
 
   const shortDescValue = typeof shortDescription === 'string' ? shortDescription : ''
 
-  const unitLabels: Record<string, string> =
-    locale === 'zh'
-      ? { kg: 'kg', jin: '斤', box: '箱', piece: '个', bag: '袋', ton: '吨' }
-      : { kg: 'kg', jin: 'jin', box: 'box', piece: 'piece', bag: 'bag', ton: 'ton' }
-  const unitLabel = unit ? unitLabels[unit] || unit : 'kg'
+  const unitLabel = productUnitLabel(unit, locale)
+  const inquiryHref = productInquiryHref(
+    titleValue,
+    typeof category === 'object' ? category?.slug : undefined,
+    decodedSlug,
+  )
 
   const relatedProducts =
     category && typeof category === 'object'
@@ -87,18 +126,22 @@ export default async function ProductDetail({ params: paramsPromise }: Args) {
       : []
 
   return (
-    <article className="bg-stone-50 py-12 sm:py-16">
-      <div className="container">
+    <article className="bg-[#f7f5f0] py-12 sm:py-16">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: jsonLd(productSchema) }}
+      />
+      <div className="pet-container">
         <nav className="mb-8 text-sm text-slate-500">
           <ol className="flex items-center gap-2">
             <li>
-              <Link href="/" className="hover:text-emerald-700">
+              <Link href="/" className="hover:text-[#173f35]">
                 {t('breadcrumb.home')}
               </Link>
             </li>
             <li>/</li>
             <li>
-              <Link href="/products" className="hover:text-emerald-700">
+              <Link href="/products" className="hover:text-[#173f35]">
                 {t('breadcrumb.products')}
               </Link>
             </li>
@@ -107,40 +150,26 @@ export default async function ProductDetail({ params: paramsPromise }: Args) {
           </ol>
         </nav>
 
-        <div className="grid gap-10 rounded-[2rem] border border-stone-200 bg-white p-5 shadow-sm sm:p-8 lg:grid-cols-2 lg:gap-14">
-          <div>
-            {heroImage && typeof heroImage !== 'string' ? (
-              <div className="overflow-hidden rounded-3xl bg-stone-100">
-                <Media resource={heroImage} size="60vw" className="w-full" />
-              </div>
-            ) : (
-              <div className="relative flex aspect-square items-center justify-center overflow-hidden rounded-3xl bg-[radial-gradient(circle_at_75%_25%,rgba(52,211,153,0.22),transparent_35%),linear-gradient(135deg,#ecfdf5,#d1fae5)] text-emerald-700">
-                <span className="flex h-20 w-20 items-center justify-center rounded-3xl border border-emerald-700/10 bg-white/60 shadow-sm">
-                  <Package className="h-10 w-10" />
-                </span>
-              </div>
-            )}
-
-            {gallery && Array.isArray(gallery) && gallery.length > 0 && (
-              <div className="mt-4 grid grid-cols-4 gap-3">
-                {gallery.map((item, index) => (
-                  <div
-                    key={index}
-                    className="aspect-square overflow-hidden rounded-lg bg-stone-100"
-                  >
-                    {item.image && typeof item.image !== 'string' && (
-                      <Media resource={item.image} size="15vw" />
-                    )}
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-
-          <div className="py-2 lg:py-8">
+        <div className={styles.detailGrid}>
+          <ProductGallery
+            title={titleValue}
+            locale={locale}
+            images={[heroImage, ...(gallery || []).map((item) => item.image)]
+              .filter((image): image is MediaDocument =>
+                Boolean(image && typeof image === 'object'),
+              )
+              .filter(
+                (image, index, all) => all.findIndex((item) => item.id === image.id) === index,
+              )}
+          />
+          <div className={styles.detailInfo}>
             {category && typeof category === 'object' && (
               <p className="mb-2 text-sm font-medium uppercase tracking-wider text-emerald-600">
-                {typeof category.title === 'string' ? category.title : ''}
+                {category.slug && ['bedding', 'feeding', 'toys', 'walking'].includes(category.slug)
+                  ? home(`categories.${category.slug}.name`)
+                  : typeof category.title === 'string'
+                    ? category.title
+                    : ''}
               </p>
             )}
 
@@ -152,14 +181,60 @@ export default async function ProductDetail({ params: paramsPromise }: Args) {
               <p className="mt-5 text-lg leading-8 text-slate-600">{shortDescValue}</p>
             )}
 
+            {product.discovery?.summary && (
+              <p className="mt-4 leading-7 text-slate-600">{product.discovery.summary}</p>
+            )}
+            {product.sourcing && (
+              <dl className={styles.facts}>
+                {Object.entries({
+                  minimumOrderQuantity: locale === 'zh' ? 'MOQ / 最小起订量' : 'Minimum order',
+                  materials: locale === 'zh' ? '材质' : 'Materials',
+                  customization: locale === 'zh' ? '可定制项目' : 'Customization',
+                  leadTime: locale === 'zh' ? '参考交期' : 'Lead time',
+                }).map(([key, label]) => {
+                  const value =
+                    product.sourcing?.[key as keyof NonNullable<typeof product.sourcing>]
+                  return value ? (
+                    <div key={key} className="flex justify-between gap-6">
+                      <dt className="text-slate-500">{label}</dt>
+                      <dd>{value}</dd>
+                    </div>
+                  ) : null
+                })}
+              </dl>
+            )}
+            {geography.length > 0 && (
+              <dl className="mt-5 space-y-3 border-t border-stone-200 pt-5 text-sm">
+                {geography.map((item) => (
+                  <div key={item.name} className="flex flex-wrap justify-between gap-x-6 gap-y-1">
+                    <dt className="text-slate-500">{item.name}</dt>
+                    <dd className="break-words text-slate-800">{item.value}</dd>
+                  </div>
+                ))}
+              </dl>
+            )}
             {price !== undefined && price !== null && (
               <div className="mt-6 flex items-baseline gap-2">
-                <span className="text-4xl font-bold text-emerald-700">
+                <span className="text-4xl font-bold text-[#173f35]">
                   ¥{typeof price === 'number' ? price.toFixed(2) : price}
                 </span>
                 <span className="text-lg text-stone-400">/{unitLabel}</span>
               </div>
             )}
+
+            <div className={styles.quoteBox}>
+              {price == null && (
+                <p className="mb-4 !mt-0 text-base font-medium !text-[#173f35]">{t('askPrice')}</p>
+              )}
+              <Link href={inquiryHref} className="pet-button">
+                {t('productInquiry')} <ArrowUpRight size={18} />
+              </Link>
+              <p>
+                {locale === 'zh'
+                  ? '请提供采购数量、收货地区与定制要求。报价、样品及交期以双方确认的方案为准。'
+                  : 'Share your quantity, delivery location and customization needs. Pricing, samples and lead times are confirmed for your project.'}
+              </p>
+            </div>
 
             <div className="mt-10 space-y-5 border-t border-stone-200 pt-8">
               {sku && (
@@ -189,8 +264,46 @@ export default async function ProductDetail({ params: paramsPromise }: Args) {
           </div>
         </div>
 
+        <nav
+          className={styles.sectionNav}
+          aria-label={locale === 'zh' ? '产品详情导航' : 'Product information'}
+        >
+          {specifications.length > 0 && <a href="#product-specifications">{t('specifications')}</a>}
+          {description && <a href="#product-description">{t('details')}</a>}
+          <a href="#procurement-notes">
+            {locale === 'zh' ? '采购准备' : 'Before requesting a quote'}
+          </a>
+        </nav>
+        {specifications.length > 0 && (
+          <section
+            aria-labelledby="product-specifications"
+            className="mt-12 rounded-3xl border border-stone-200 bg-white px-6 py-8 sm:px-10"
+          >
+            <h2 id="product-specifications" className="mb-6 text-2xl font-semibold text-[#173f35]">
+              {template?.sectionTitle || t('specifications')}
+            </h2>
+            <dl className="grid gap-x-10 sm:grid-cols-2">
+              {specifications.map(({ key, label, value, unit }) => (
+                <div
+                  key={key}
+                  className="flex min-w-0 flex-col gap-2 border-t border-stone-100 py-4"
+                >
+                  <dt className="text-sm text-stone-500">{label}</dt>
+                  <dd className="whitespace-pre-wrap break-words font-medium text-[#173f35]">
+                    {value}
+                    {unit ? ` ${unit}` : ''}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          </section>
+        )}
+
         {description && (
-          <section className="mt-16 rounded-[2rem] border border-stone-200 bg-white px-6 py-10 sm:px-10">
+          <section
+            id="product-description"
+            className="mt-12 rounded-xl border border-stone-200 bg-white px-6 py-10 sm:px-10"
+          >
             <h2 className="mb-6 text-3xl font-semibold tracking-tight text-slate-900">
               {t('details')}
             </h2>
@@ -200,6 +313,23 @@ export default async function ProductDetail({ params: paramsPromise }: Args) {
           </section>
         )}
 
+        <section id="procurement-notes" className={styles.procurement}>
+          <h2>
+            {locale === 'zh'
+              ? '把采购需求，说得更具体。'
+              : 'A clearer brief. A better conversation.'}
+          </h2>
+          <div>
+            <p>
+              {locale === 'zh'
+                ? '准备好计划数量、尺寸或容量、材料偏好、销售市场和包装要求。如果需要品牌标识或样品，请一并说明。'
+                : 'Include estimated quantities, sizes or capacities, preferred materials, target market and packaging requirements. Let us know if you need branding or samples.'}
+            </p>
+            <Link href={inquiryHref} className="pet-text-link mt-5">
+              {t('productInquiry')} <ArrowUpRight size={18} />
+            </Link>
+          </div>
+        </section>
         {relatedProducts.length > 0 && (
           <section className="mt-16">
             <h2 className="mb-8 text-3xl font-semibold tracking-tight text-slate-900">
@@ -228,24 +358,17 @@ export async function generateMetadata({ params: paramsPromise }: Args): Promise
     return { title: 'Product Not Found' }
   }
 
-  const title =
-    typeof product.title === 'string' ? product.title : product.title?.[locale] || 'Product'
-
-  const description = product.general?.shortDescription || ''
-  const heroImage = product.general?.heroImage
-
-  return {
-    title: `${title} | FreshConnect`,
-    description,
-    openGraph: {
-      title,
-      description,
-      images:
-        heroImage && typeof heroImage !== 'string'
-          ? [{ url: (heroImage as { url?: string }).url || '' }]
-          : undefined,
-    },
-  }
+  const image = product.meta?.image || product.general?.heroImage
+  return pageMetadata({
+    locale,
+    path: `/products/${encodeURIComponent(decodedSlug)}`,
+    title: product.meta?.title || product.title,
+    description:
+      product.meta?.description || product.general?.shortDescription || product.discovery?.summary,
+    noIndex: Boolean(product.discovery?.noIndex),
+    image: image && typeof image === 'object' ? image.url : undefined,
+    languages: false,
+  })
 }
 
 const queryProductBySlug = cache(async ({ locale, slug }: { locale: Locale; slug: string }) => {

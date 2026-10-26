@@ -2,27 +2,32 @@
   "navigation": {
     "home": "Home",
     "products": "Products",
-    "articles": "Articles",
-    "solutions": "Solutions",
-    "about": "About Us",
-    "contact": "Contact"
+    "articles": "Resources",
+    "solutions": "Customization",
+    "about": "About us",
+    "contact": "Contact",
+    "main": "Main navigation"
   },
   "header": {
-    "brand": "FreshConnect",
+    "brand": "PawSupply",
     "login": "Login",
     "register": "Register",
-    "search": "Search"
+    "search": "Search",
+    "quote": "Request a quote",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "skipToContent": "Skip to main content"
   },
   "language": {
     "switch": "Switch language"
   },
   "posts": {
-    "title": "Articles",
+    "title": "Sourcing resources",
     "eyebrow": "Procurement insights",
-    "description": "Produce market updates, sourcing practices and supply-chain ideas for better business decisions.",
-    "metaTitle": "Articles | FreshConnect",
-    "pageMetaTitle": "Articles page {page} | FreshConnect",
-    "metaDescription": "Explore produce market updates, sourcing practices and supply-chain insights.",
+    "description": "Ideas and practical guidance on pet product selection, materials, private label and sourcing.",
+    "metaTitle": "Sourcing Resources | PawSupply",
+    "pageMetaTitle": "Resources page {page} | PawSupply",
+    "metaDescription": "Practical guidance for pet supplies sourcing and private-label development.",
     "range": "Showing {start}–{end} of {total} articles",
     "empty": "No published articles are available in this language",
     "readMore": "Read article",
@@ -32,187 +37,394 @@
     "publishedAt": "Published",
     "author": "Author",
     "continueReading": "Keep exploring",
-    "relatedPosts": "Related articles"
+    "relatedPosts": "Related articles",
+    "inquiryTitle": "Turn the guide into your sourcing brief",
+    "inquiryDescription": "Share your product ideas, quantities and target market to plan the next step.",
+    "inquiryAction": "Discuss your requirements"
   },
   "marketingPages": {
     "products": {
-      "eyebrow": "Product center",
-      "title": "Reliable supply across essential categories",
-      "description": "Source vegetables, fruits, meat, poultry, eggs and seafood by origin, specification and delivery window.",
-      "action": "Ask about supply"
+      "eyebrow": "Pet essentials",
+      "title": "Everyday products, thoughtfully considered.",
+      "description": "Feeding, walking, bedding and play essentials for your customers and your market.",
+      "action": "Discuss your project"
     },
     "solutions": {
-      "eyebrow": "Industry solutions",
-      "title": "Supply programs for every procurement scenario",
-      "description": "Integrated sourcing, quality control, warehousing and fulfillment for restaurants, retailers, catering and food processors.",
-      "action": "Get a solution"
+      "eyebrow": "Private label",
+      "title": "Private-label pet supplies sourcing from China.",
+      "description": "Work with our China-based team and dozens of long-term partner factories to discuss materials, samples, branding and packaging. Confirm minimums and lead times for your project.",
+      "action": "Discuss your project"
     },
     "about": {
-      "eyebrow": "About FreshConnect",
-      "title": "Connecting quality farms with business demand",
-      "description": "We combine digital procurement with standardized supply-chain services to make produce trading reliable, transparent and efficient.",
-      "action": "Contact us"
+      "eyebrow": "About PawSupply",
+      "title": "Your pet supplies sourcing partner in China.",
+      "description": "PawSupply is based in China and maintains long-term relationships with dozens of partner factories. We bring product selection, sample coordination and private-label requirements together for retailers, distributors and pet brands.",
+      "action": "Discuss your project"
     },
     "contact": {
-      "eyebrow": "Contact us",
-      "title": "Tell us what your business needs",
-      "description": "Share your categories, quantities and delivery city. Our sourcing advisors will match the right supply plan.",
-      "action": "Back to home"
+      "eyebrow": "Get in touch",
+      "title": "Let’s plan your next collection.",
+      "description": "Share your product ideas, quantities and target market.",
+      "action": "Discuss your project"
     }
   },
   "footer": {
     "company": {
-      "name": "FreshConnect",
-      "description": "A professional B2B agricultural wholesale platform connecting suppliers with food service businesses."
+      "name": "PawSupply",
+      "description": "China-based pet supplies sourcing and private label, with dozens of long-term partner factories."
     },
-    "products": "Products & Services",
-    "support": "Support",
-    "contact": "Contact Us",
+    "products": "Our collection",
+    "support": "Explore",
+    "contact": "Let’s work together",
     "productLinks": ["Product Center", "Solutions", "Pricing", "Case Studies"],
     "supportLinks": ["Help Center", "FAQ", "Contact Us", "Feedback"],
     "phone": "Phone",
-    "phoneValue": "400-888-9999",
     "email": "Email",
-    "emailValue": "business@freshconnect.com",
     "address": "Address",
-    "addressValue": "Zhangjiang Hi-Tech Park, Pudong, Shanghai",
     "workTime": "Business Hours",
-    "workTimeValue": "24/7",
-    "copyright": "© 2026 FreshConnect. All rights reserved."
+    "copyright": "© {year} {brand}. All rights reserved.",
+    "categories": {
+      "feeding": "Feeding essentials",
+      "walking": "Walk & travel",
+      "bedding": "Beds & comfort",
+      "toys": "Play & enrichment"
+    },
+    "faq": "Sourcing FAQ",
+    "contactDescription": "Tell us about your product ideas, quantities and target market.",
+    "contactAction": "Start a conversation",
+    "businessOnly": "For retailers, distributors & pet brands"
   },
   "home": {
     "meta": {
-      "title": "FreshConnect | B2B Produce Procurement",
-      "description": "A reliable B2B wholesale platform connecting quality farms with restaurants, retailers and food service businesses."
+      "title": "China Pet Supplies Sourcing & Private Label | PawSupply",
+      "description": "Source pet supplies from China with PawSupply and dozens of long-term partner factories. Explore beds, bowls, toys and walking gear for wholesale and private label."
     },
     "hero": {
-      "eyebrow": "Direct sourcing · Quality control · Cold-chain delivery",
-      "title": "Produce procurement",
-      "highlight": "made reliable and transparent",
-      "description": "Connect with trusted farms and complete sourcing, pricing and cold-chain delivery in one efficient workflow.",
-      "primaryAction": "Browse products",
-      "secondaryAction": "Talk to an advisor"
+      "title": "Pet supplies from China.",
+      "highlight": "Built around your brand.",
+      "description": "Connect your next collection with our network of dozens of long-term partner factories. We help retailers, distributors and pet brands coordinate products, samples and private-label requirements from China.",
+      "primaryAction": "Explore products",
+      "secondaryAction": "Discuss your project",
+      "imageAlt": "Golden retriever with a sage pet bed, ceramic bowls and rope toy",
+      "notes": ["China-based team", "Long-term factory partners", "Multi-port shipping"],
+      "eyebrow": "CHINA-BASED · PET SUPPLIES SOURCING"
     },
-    "dashboard": {
-      "label": "Today's supply board",
-      "title": "Selected farm-direct supply",
-      "status": "Live updates",
-      "deliveryLabel": "Fastest delivery",
-      "deliveryValue": "Next day"
-    },
-    "stats": {
-      "suppliers": { "value": "320+", "label": "Verified suppliers" },
-      "products": { "value": "2,800+", "label": "Reliable SKUs" },
-      "customers": { "value": "1,600+", "label": "Business customers" },
-      "cities": { "value": "42", "label": "Cold-chain cities" }
-    },
+    "audience": ["For pet retailers", "For distributors", "For private-label brands"],
     "categories": {
-      "eyebrow": "Complete assortment",
-      "title": "Fresh supply updated every day",
-      "description": "Source essentials and seasonal specialties by specification, origin and delivery window.",
-      "vegetables": {
-        "name": "Fresh vegetables",
-        "description": "Leafy greens, roots, mushrooms and prepared vegetables.",
-        "count": "860+ products"
+      "title": "Everyday essentials.\nConsidered in every detail.",
+      "description": "From feeding and resting to play and daily walks, build your sourcing shortlist by category.",
+      "viewAll": "Explore the collection",
+      "feeding": {
+        "name": "Feeding essentials",
+        "description": "Bowls, slow feeders & hydration"
       },
-      "fruits": {
-        "name": "Seasonal fruits",
-        "description": "Domestic and imported fruits in selectable grades.",
-        "count": "620+ products"
+      "walking": {
+        "name": "Walk & travel",
+        "description": "Harnesses, leads & outdoor gear"
       },
-      "meat": {
-        "name": "Meat and poultry",
-        "description": "Inspected chilled and frozen products for food service.",
-        "count": "540+ products"
+      "bedding": {
+        "name": "Beds & comfort",
+        "description": "Beds, mats & cozy corners"
       },
-      "seafood": {
-        "name": "Seafood",
-        "description": "Live, chilled and frozen seafood with temperature control.",
-        "count": "780+ products"
+      "toys": {
+        "name": "Play & enrichment",
+        "description": "Rope toys, puzzles & daily play"
       }
     },
-    "advantages": {
-      "eyebrow": "Platform capabilities",
-      "title": "Turn a complex supply chain into reliable delivery",
-      "source": {
-        "title": "Verified sources",
-        "description": "We review origins, credentials and delivery records to maintain a reliable supply pool."
-      },
-      "quality": {
-        "title": "Quality standards",
-        "description": "Category-specific acceptance standards and traceable quality checkpoints."
-      },
-      "coldChain": {
-        "title": "Cold-chain control",
-        "description": "Storage and transport matched to every product's temperature requirements."
-      },
-      "delivery": {
-        "title": "On-time fulfillment",
-        "description": "Smart routing and regional coordination keep arrival times predictable."
-      }
+    "custom": {
+      "title": "Your brand.\nMade thoughtfully.",
+      "description": "Work with our China-based team to coordinate materials, colors, logos and packaging with partner factories. Confirm the details that make the collection yours.",
+      "action": "Explore customization",
+      "steps": [
+        {
+          "title": "Share your brief",
+          "description": "Define your category, target market and quantities in a clear brief for review."
+        },
+        {
+          "title": "Refine the details",
+          "description": "Review materials, samples, branding and packaging to agree on product specifications."
+        },
+        {
+          "title": "Plan your order",
+          "description": "Use agreed specifications to confirm pricing, minimums, acceptance criteria and delivery."
+        }
+      ]
     },
-    "process": {
-      "eyebrow": "Procurement process",
-      "title": "Business purchasing in four steps",
-      "verify": {
-        "title": "Verify business",
-        "description": "Create a purchasing profile with your basic company details."
-      },
-      "select": {
-        "title": "Select and quote",
-        "description": "Filter daily supply by category, grade and origin."
-      },
-      "confirm": {
-        "title": "Confirm order",
-        "description": "Lock price, quantity, payment terms and delivery needs."
-      },
-      "deliver": {
-        "title": "Cold-chain delivery",
-        "description": "Track fulfillment and submit quality feedback after receipt."
-      }
+    "guides": {
+      "title": "Better sourcing starts\nwith the right details.",
+      "description": "Align sample requirements and acceptance criteria before making your next sourcing decision.",
+      "items": [
+        {
+          "title": "A clearer brief. A better sample.",
+          "description": "Pet suitability, dimensions, materials, branding, colors and packaging. Turn your concept into a specification checklist both sides can review.",
+          "action": "Explore the sample checklist"
+        },
+        {
+          "title": "Agree on quality before ordering.",
+          "description": "Define appearance, dimensions, labeling, packaging and destination requirements. Agree on checks, acceptance criteria and supporting documents.",
+          "action": "Review the sourcing checklist"
+        }
+      ]
     },
-    "articles": {
-      "eyebrow": "Insights",
-      "title": "Latest articles",
-      "description": "Market updates, sourcing practices and supply-chain insights for more efficient business procurement.",
-      "viewAll": "View all articles",
-      "empty": "No published articles yet"
+    "brief": {
+      "title": "Build your sourcing brief",
+      "description": "These four details help start a useful discussion.",
+      "action": "Share your requirements",
+      "items": [
+        {
+          "title": "Product & specs",
+          "description": "Style, pet, materials and dimensions"
+        },
+        {
+          "title": "Order quantity",
+          "description": "Units per style and sample needs"
+        },
+        {
+          "title": "Target market",
+          "description": "Sales region and delivery destination"
+        },
+        {
+          "title": "Brand & packaging",
+          "description": "Logo, colors and packaging needs"
+        }
+      ]
+    },
+    "faq": {
+      "title": "Good questions.\nClear answers.",
+      "description": "A little clarity makes the next step easier.",
+      "action": "More questions? Talk to us",
+      "items": [
+        {
+          "question": "Where is PawSupply based, and do you own the factories?",
+          "answer": "PawSupply is based in China and has long-term relationships with dozens of partner factories. We are your sourcing and coordination partner; the factories are cooperation partners, not presented as facilities we own. Production arrangements and requirements are confirmed for each order."
+        },
+        {
+          "question": "What is the minimum order quantity?",
+          "answer": "Minimums vary by product, material and customization. Share your preferred category and estimated quantity; the applicable minimum will be confirmed in your quote."
+        },
+        {
+          "question": "Can I customize branding and packaging?",
+          "answer": "Share your logo, color, material and packaging requirements. Available options, sampling costs and lead times will be confirmed in a written proposal after product review."
+        },
+        {
+          "question": "Can I review samples before a bulk order?",
+          "answer": "Include your sample request in your inquiry. Sample availability, costs and shipping will be confirmed for the selected product. We recommend approving final specifications before a bulk order."
+        },
+        {
+          "question": "What information do you need for a quote?",
+          "answer": "Please include product categories, estimated quantity, target market, delivery location and customization needs. Reference images, materials and target budgets are also helpful."
+        },
+        {
+          "question": "Can you arrange shipments from different ports in China?",
+          "answer": "Yes. We support shipments from the ports of Xiamen, Tianjin and Guangzhou in China, with coordination across multiple logistics channels. The departure port, route, freight costs and timing are confirmed for each shipment based on cargo and destination requirements."
+        }
+      ]
     },
     "products": {
-      "eyebrow": "Featured products",
-      "title": "Recommended products",
-      "description": "Handpicked quality products from trusted suppliers.",
+      "title": "Selected for your collection",
+      "description": "Explore product details and sourcing specifications for your next order.",
       "viewAll": "View all products",
-      "empty": "No featured products yet"
+      "empty": "Ask us for available products and specifications."
     },
     "cta": {
-      "title": "Ready to improve procurement efficiency?",
-      "description": "Tell us what you need and where it should arrive. Our advisors will match the right supply plan.",
-      "action": "Get a sourcing plan"
+      "title": "Your next great collection\nstarts with a conversation.",
+      "description": "Let’s find the right everyday essentials for your business.",
+      "action": "Discuss your project"
     }
   },
   "products": {
-    "title": "All Products",
-    "eyebrow": "Farm-direct supply",
-    "description": "Filter reliable supply by category, origin and specification for everyday food-service procurement.",
-    "metaTitle": "Products | FreshConnect",
-    "metaDescription": "Browse our complete catalog of fresh produce, vegetables, fruits, meat, poultry, eggs and seafood.",
-    "empty": "No products found",
+    "title": "Essentials for every pet day.",
+    "eyebrow": "The pet collection",
+    "description": "Explore feeding, walking, bedding and play. Discover products by category, then discuss specifications, minimums and customization.",
+    "metaTitle": "Wholesale Pet Supplies from China | PawSupply",
+    "metaDescription": "Explore pet beds, bowls, toys and walking gear through our China-based sourcing team and long-term partner factories. Discuss wholesale and private-label requirements.",
+    "empty": "Product details for this collection are being prepared. Tell us what you are looking for.",
     "featuredBadge": "Featured",
     "featuredLabel": "Featured product",
     "untitled": "Untitled product",
     "askPrice": "Ask for price",
     "stock": "Stock",
-    "unlimited": "Available on demand",
+    "unlimited": "Confirm availability with your quote",
     "yes": "Yes",
     "details": "Product details",
     "related": "Related products",
-    "breadcrumb": { "home": "Home", "products": "Products" },
+    "breadcrumb": {
+      "home": "Home",
+      "products": "Products"
+    },
     "filter": {
       "all": "All",
       "featured": "Featured",
       "allCategories": "All Categories",
-      "showing": "Showing {count} products"
+      "showing": "Showing {count} products",
+      "loading": "Updating products…",
+      "reset": "Reset filters",
+      "unknownCategory": "Unknown category",
+      "consult": "Talk to us about specifications and available styles"
+    },
+    "inquire": "Ask about this collection",
+    "categoryOverview": "Explore by everyday moment",
+    "sourcing": "Sourcing details",
+    "minimumOrderQuantity": "Minimum order",
+    "materials": "Materials",
+    "customization": "Customization",
+    "leadTime": "Lead time",
+    "productInquiry": "Request a product quote",
+    "categorySpecs": {
+      "bedding": "Discuss dimensions, fabrics and filling",
+      "feeding": "Discuss capacity, materials and cleaning",
+      "toys": "Discuss sizing, materials and play style",
+      "walking": "Discuss sizing, hardware and lead specifications"
+    },
+    "specifications": "Product specifications"
+  },
+  "contact": {
+    "hero": {
+      "eyebrow": "Pet supplies sourcing",
+      "title": "Let’s build your next collection.",
+      "highlight": "Together.",
+      "description": "Share your categories, quantities and target market with our China-based team. We will coordinate your brief with our network of long-term partner factories."
+    },
+    "sidebar": {
+      "eyebrow": "Contact",
+      "title": "A thoughtful brief helps",
+      "description": "Whether you’re adding a category or building a private label, start with a conversation about what matters.",
+      "phone": "Hotline",
+      "email": "Business Email",
+      "address": "Office Address",
+      "addressValue": "Zhangjiang Hi-Tech Park, Pudong New Area, Shanghai",
+      "workTime": "Service Hours",
+      "workTimeValue": "Monday to Sunday, 8:00 - 22:00",
+      "promiseTitle": "What happens next",
+      "promise1": "Review your product and quantity requirements",
+      "promise2": "Discuss samples, specifications and customization",
+      "promise3": "Agree on a quote and delivery requirements"
+    },
+    "form": {
+      "title": "Online Inquiry",
+      "subtitle": "Fill in the form below and we will get back to you shortly",
+      "formNotConfigured": "The inquiry form is being configured. Please try again later.",
+      "fields": {
+        "companyName": "Company name",
+        "contactName": "Contact person",
+        "email": "Business email",
+        "phone": "Phone number (optional)",
+        "businessType": "Business type",
+        "productCategory": "Product category",
+        "monthlyVolume": "Estimated order quantity",
+        "deliveryCity": "Delivery country / city",
+        "requirements": "Specifications / customization needs (optional)"
+      },
+      "placeholders": {
+        "select": "Please select"
+      },
+      "businessTypeOptions": {
+        "pet-store": "Pet retailer",
+        "ecommerce": "E-commerce retailer",
+        "brand": "Pet brand",
+        "distributor": "Wholesale / distribution",
+        "grooming": "Pet services / grooming",
+        "other": "Other"
+      },
+      "productCategoryOptions": {
+        "feeding": "Feeding essentials",
+        "walking": "Walk & travel",
+        "bedding": "Beds & comfort",
+        "toys": "Play & enrichment",
+        "multiple": "Multiple categories"
+      },
+      "monthlyVolumeOptions": {
+        "under-100": "Under 100 units",
+        "100-500": "100–500 units",
+        "500-2000": "500–2,000 units",
+        "over-2000": "Over 2,000 units",
+        "not-sure": "Not decided yet"
+      },
+      "submit": "Submit inquiry",
+      "submitting": "Submitting...",
+      "success": {
+        "title": "Inquiry submitted!",
+        "message": "We’ve received your sourcing brief and will contact you using the details provided.",
+        "backToProducts": "Continue exploring products"
+      },
+      "error": "Submission failed. Please try again or contact us directly.",
+      "privacy": "By submitting, you agree that we may use your information to provide inquiry services.",
+      "validation": {
+        "required": "This field is required",
+        "email": "Enter a valid email address"
+      },
+      "productContext": "Product of interest",
+      "articleContext": "Sourcing guide"
+    },
+    "process": {
+      "eyebrow": "Inquiry flow",
+      "title": "Four steps for B2B procurement",
+      "step1": {
+        "title": "Submit your needs",
+        "description": "Fill in the inquiry form with the categories and volumes you're looking for."
+      },
+      "step2": {
+        "title": "Source matching",
+        "description": "Our sourcing advisor will match reliable suppliers and a tailored supply plan."
+      },
+      "step3": {
+        "title": "Confirm the quote",
+        "description": "We'll send a detailed quote covering price, specification and delivery details."
+      },
+      "step4": {
+        "title": "Plan delivery",
+        "description": "Confirm packaging, shipping and delivery arrangements for your order."
+      }
     }
+  },
+  "notFound": {
+    "title": "This page is out of reach",
+    "description": "The page may have moved, or your filters may go beyond the available results. Return to the catalog to explore sourcing categories.",
+    "products": "Browse the catalog",
+    "home": "Back to home"
+  },
+  "factoryNetwork": {
+    "eyebrow": "OUR FACTORY PARTNERSHIPS",
+    "title": "Local connections.\nA clearer sourcing process.",
+    "stat": "Long-term partner factories",
+    "note": "We work with partner factories. Capabilities, minimums and lead times are confirmed for each product and order.",
+    "action": "Discuss your sourcing needs",
+    "items": [
+      {
+        "title": "A network for your brief",
+        "description": "Discuss product categories, materials and customization with our China-based team and partner network."
+      },
+      {
+        "title": "Coordinated communication",
+        "description": "Bring product questions, sample feedback and packaging requirements into one sourcing conversation."
+      },
+      {
+        "title": "Order-specific confirmation",
+        "description": "Agree on specifications, quantities, acceptance criteria and delivery terms before placing an order."
+      }
+    ],
+    "count": "Dozens"
+  },
+  "shipping": {
+    "title": "More shipping options.\nA route that fits your order.",
+    "description": "Connect your sourcing plan with multiple logistics channels and shipping options from Xiamen, Tianjin and Guangzhou. Our China-based team coordinates the departure port around your cargo and destination.",
+    "action": "Discuss shipping requirements",
+    "items": [
+      {
+        "title": "Multiple departure ports",
+        "description": "Discuss the departure port based on the production location, cargo readiness and available routes, rather than limiting every order to one port."
+      },
+      {
+        "title": "Coordinated logistics options",
+        "description": "Compare available options around cargo volume, destination and schedule. Confirm the carrier, route and quotation before booking."
+      },
+      {
+        "title": "Clear shipment requirements",
+        "description": "Confirm packaging, cargo dimensions, shipping terms and document requirements alongside the product order."
+      }
+    ],
+    "portsTitle": "Departure ports in China",
+    "portsDescription": "Send your delivery destination, quantities, packaging details and target date. We will discuss a suitable departure port and available logistics options; freight costs, schedules and service scope are confirmed in the quotation.",
+    "ports": ["Port of Xiamen", "Port of Tianjin", "Port of Guangzhou"]
   }
 }

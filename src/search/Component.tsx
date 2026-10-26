@@ -1,41 +1,13 @@
-'use client'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import React, { useState, useEffect } from 'react'
-import { useDebounce } from '@/utilities/useDebounce'
-import { useRouter } from 'next/navigation'
+import { Button } from '@/components/ui/button'
+import type { Locale } from '@/i18n/config'
 
-export const Search: React.FC = () => {
-  const [value, setValue] = useState('')
-  const router = useRouter()
-
-  const debouncedValue = useDebounce(value)
-
-  useEffect(() => {
-    router.push(`/search${debouncedValue ? `?q=${debouncedValue}` : ''}`)
-  }, [debouncedValue, router])
-
-  return (
-    <div>
-      <form
-        onSubmit={(e) => {
-          e.preventDefault()
-        }}
-      >
-        <Label htmlFor="search" className="sr-only">
-          Search
-        </Label>
-        <Input
-          id="search"
-          onChange={(event) => {
-            setValue(event.target.value)
-          }}
-          placeholder="Search"
-        />
-        <button type="submit" className="sr-only">
-          submit
-        </button>
-      </form>
-    </div>
-  )
+export function Search({ query = '', locale = 'zh' }: { query?: string; locale?: Locale }) {
+  const label = locale === 'zh' ? '搜索产品与资讯' : 'Search products and resources'
+  return <form action={`/${locale}/search`} method="get" className="flex gap-3">
+    <Label htmlFor="search" className="sr-only">{label}</Label>
+    <Input id="search" name="q" type="search" defaultValue={query} placeholder={label} maxLength={120} className="bg-white" />
+    <Button type="submit">{locale === 'zh' ? '搜索' : 'Search'}</Button>
+  </form>
 }

@@ -12,6 +12,11 @@ export const Footer: GlobalConfig = {
   },
   fields: [
     {
+      name: 'useCustomNavigation', type: 'checkbox', defaultValue: false,
+      label: adminLabel('使用下方自定义链接', 'Use custom links below'),
+      admin: { description: adminLabel('开启后替换页脚“探索更多”链接。', 'When enabled, replace the footer Explore links.') },
+    },
+    {
       name: 'navItems',
       type: 'array',
       label: adminLabel('导航项目', 'Navigation items'),

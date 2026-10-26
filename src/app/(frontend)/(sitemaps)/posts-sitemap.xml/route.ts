@@ -1,61 +1,6 @@
-import { getServerSideSitemap } from 'next-sitemap'
-import { getPayload } from 'payload'
-import config from '@payload-config'
-import { unstable_cache } from 'next/cache'
-import { localeCodes } from '@/i18n/config'
-
-const getPostsSitemap = unstable_cache(
-  async () => {
-    const payload = await getPayload({ config })
-    const SITE_URL =
-      process.env.NEXT_PUBLIC_SERVER_URL ||
-      process.env.VERCEL_PROJECT_PRODUCTION_URL ||
-      'https://example.com'
-
-    const results = await payload.find({
-      collection: 'posts',
-      overrideAccess: false,
-      draft: false,
-      depth: 0,
-      limit: 1000,
-      pagination: false,
-      locale: 'all',
-      where: {
-        _status: {
-          equals: 'published',
-        },
-      },
-      select: {
-        _status: true,
-        slug: true,
-        updatedAt: true,
-      },
-    })
-
-    const dateFallback = new Date().toISOString()
-
-    const sitemap = results.docs.flatMap((post) => {
-      if (!post?.slug) return []
-      const statuses = post._status as unknown as Record<string, 'draft' | 'published'>
-
-      return localeCodes
-        .filter((locale) => statuses?.[locale] === 'published')
-        .map((locale) => ({
-          loc: `${SITE_URL}/${locale}/posts/${post.slug}`,
-          lastmod: post.updatedAt || dateFallback,
-        }))
-    })
-
-    return sitemap
-  },
-  ['posts-sitemap'],
-  {
-    tags: ['posts-sitemap'],
-  },
-)
-
+import { getSearchSettings, siteOrigin } from '@/utilities/searchSettings'
+export const dynamic = 'force-dynamic'
 export async function GET() {
-  const sitemap = await getPostsSitemap()
-
-  return getServerSideSitemap(sitemap)
+  const settings = await getSearchSettings()
+  return Response.redirect(`${siteOrigin(settings.siteUrl)}/sitemap.xml`, 301)
 }

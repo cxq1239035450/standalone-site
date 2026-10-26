@@ -1,3 +1,4 @@
+import { discoveryFields } from '@/fields/discovery'
 import type { CollectionConfig } from 'payload'
 
 import {
@@ -28,6 +29,7 @@ import {
 } from '@payloadcms/plugin-seo/fields'
 import { slugField } from 'payload'
 import { adminLabel } from '@/i18n/adminLabels'
+import { contentLanguageField } from '@/fields/contentLanguageField'
 
 export const Posts: CollectionConfig<'posts'> = {
   slug: 'posts',
@@ -79,6 +81,8 @@ export const Posts: CollectionConfig<'posts'> = {
     useAsTitle: 'title',
   },
   fields: [
+    contentLanguageField(),
+    discoveryFields,
     {
       name: 'title',
       type: 'text',

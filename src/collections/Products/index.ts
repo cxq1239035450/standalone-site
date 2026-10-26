@@ -1,3 +1,6 @@
+import { discoveryFields } from '@/fields/discovery'
+import { revalidateProduct, revalidateProductDelete } from '@/hooks/revalidateSearch'
+import { captureParameterPublishMode, validateProductParameters } from '@/hooks/industryParameters'
 import type { CollectionConfig } from 'payload'
 
 import {
@@ -13,9 +16,11 @@ import { authenticated } from '../../access/authenticated'
 import { authenticatedOrPublished } from '../../access/authenticatedOrPublished'
 import { slugField } from 'payload'
 import { adminLabel } from '@/i18n/adminLabels'
+import { contentLanguageField } from '@/fields/contentLanguageField'
 
 export const Products: CollectionConfig = {
   slug: 'products',
+  hooks: { beforeOperation: [captureParameterPublishMode], beforeChange: [validateProductParameters], afterChange: [revalidateProduct], afterDelete: [revalidateProductDelete] },
   labels: {
     singular: adminLabel('产品', 'Product'),
     plural: adminLabel('产品', 'Products'),
@@ -43,6 +48,11 @@ export const Products: CollectionConfig = {
     },
   },
   admin: {
+    components: {
+      edit: {
+        PublishButton: '@/components/TranslatePublishButton',
+      },
+    },
     defaultColumns: [
       'title',
       'language',
@@ -56,6 +66,24 @@ export const Products: CollectionConfig = {
     useAsTitle: 'title',
   },
   fields: [
+    contentLanguageField(),
+    discoveryFields,
+    { name: 'industryTemplate', type: 'relationship', relationTo: 'industry-templates', label: '行业参数模板 / Industry template' },
+    { name: 'technicalValues', type: 'json', localized: true, label: '行业参数 / Industry parameters', admin: { components: { Field: '@/components/IndustryParameters' }, description: '各语言独立填写；切换模板保留已有参数值。' } },
+    { name: 'meta', type: 'group', label: 'SEO / GEO 与效果预览', fields: [
+      { name: 'title', type: 'text', localized: true, label: '页面 SEO 标题', admin: { description: '留空使用产品名称；网站品牌名称会自动追加。' } },
+      { name: 'description', type: 'textarea', localized: true, label: '页面描述', admin: { description: '留空依次使用简短描述、事实摘要、全站默认描述。' } },
+      { name: 'targetMarkets', type: 'text', localized: true, label: '目标出口 / 销售市场', admin: { description: '例如：北美、欧盟、日本。只填写真实服务市场，不代表出口认证。' } },
+      { name: 'manufacturingOrigin', type: 'text', localized: true, label: '制造产地 / 产业集群', admin: { description: '例如：中国福建泉州。仅填写可核实的产品产地；会在前台展示。' } },
+      { name: 'searchPreview', type: 'ui', admin: { components: { Field: '@/components/ProductSearchPreview' } } },
+      { name: 'image', type: 'upload', relationTo: 'media', label: '社交分享图片' },
+    ] },
+    { name: 'sourcing', type: 'group', label: 'B2B sourcing', fields: [
+      { name: 'minimumOrderQuantity', type: 'number', min: 1 },
+      { name: 'materials', type: 'text', localized: true },
+      { name: 'customization', type: 'textarea', localized: true },
+      { name: 'leadTime', type: 'text', localized: true },
+    ] },
     {
       name: 'title',
       type: 'text',
@@ -150,7 +178,7 @@ export const Products: CollectionConfig = {
                   name: 'price',
                   type: 'number',
                   label: adminLabel('价格', 'Price'),
-                  required: true,
+                  required: false,
                   admin: {
                     width: '50%',
                     step: 0.01,
@@ -169,7 +197,7 @@ export const Products: CollectionConfig = {
                     { label: '袋', value: 'bag' },
                     { label: '吨', value: 'ton' },
                   ],
-                  defaultValue: 'kg',
+                  defaultValue: 'piece',
                   admin: {
                     width: '50%',
                   },

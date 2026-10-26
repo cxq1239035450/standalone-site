@@ -73,6 +73,7 @@ export interface Config {
     categories: Category;
     users: User;
     products: Product;
+    'industry-templates': IndustryTemplate;
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -96,6 +97,7 @@ export interface Config {
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     products: ProductsSelect<false> | ProductsSelect<true>;
+    'industry-templates': IndustryTemplatesSelect<false> | IndustryTemplatesSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
@@ -114,10 +116,12 @@ export interface Config {
   globals: {
     header: Header;
     footer: Footer;
+    'search-settings': SearchSetting;
   };
   globalsSelect: {
     header: HeaderSelect<false> | HeaderSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
+    'search-settings': SearchSettingsSelect<false> | SearchSettingsSelect<true>;
   };
   locale: 'zh' | 'en';
   widgets: {
@@ -159,6 +163,16 @@ export interface UserAuthOperations {
  */
 export interface Page {
   id: number;
+  discovery?: {
+    /**
+     * 输出 noindex，并从 sitemap 和 llms.txt 中排除。
+     */
+    noIndex?: boolean | null;
+    /**
+     * 回答产品用途、采购适用对象等，会展示在内容页及机器可读摘要中；不要填写无法验证的优势。
+     */
+    summary?: string | null;
+  };
   title: string;
   hero: {
     type: 'none' | 'highImpact' | 'mediumImpact' | 'lowImpact';
@@ -228,6 +242,16 @@ export interface Page {
  */
 export interface Post {
   id: number;
+  discovery?: {
+    /**
+     * 输出 noindex，并从 sitemap 和 llms.txt 中排除。
+     */
+    noIndex?: boolean | null;
+    /**
+     * 回答产品用途、采购适用对象等，会展示在内容页及机器可读摘要中；不要填写无法验证的优势。
+     */
+    summary?: string | null;
+  };
   title: string;
   heroImage?: (number | null) | Media;
   content: {
@@ -781,6 +805,54 @@ export interface Form {
  */
 export interface Product {
   id: number;
+  discovery?: {
+    /**
+     * 输出 noindex，并从 sitemap 和 llms.txt 中排除。
+     */
+    noIndex?: boolean | null;
+    /**
+     * 回答产品用途、采购适用对象等，会展示在内容页及机器可读摘要中；不要填写无法验证的优势。
+     */
+    summary?: string | null;
+  };
+  industryTemplate?: (number | null) | IndustryTemplate;
+  /**
+   * 各语言独立填写；切换模板保留已有参数值。
+   */
+  technicalValues?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  meta?: {
+    /**
+     * 留空使用产品名称；网站品牌名称会自动追加。
+     */
+    title?: string | null;
+    /**
+     * 留空依次使用简短描述、事实摘要、全站默认描述。
+     */
+    description?: string | null;
+    /**
+     * 例如：北美、欧盟、日本。只填写真实服务市场，不代表出口认证。
+     */
+    targetMarkets?: string | null;
+    /**
+     * 例如：中国福建泉州。仅填写可核实的产品产地；会在前台展示。
+     */
+    manufacturingOrigin?: string | null;
+    image?: (number | null) | Media;
+  };
+  sourcing?: {
+    minimumOrderQuantity?: number | null;
+    materials?: string | null;
+    customization?: string | null;
+    leadTime?: string | null;
+  };
   /**
    * Enter product name, then click "Generate" in Slug field
    */
@@ -818,7 +890,7 @@ export interface Product {
     } | null;
   };
   pricing: {
-    price: number;
+    price?: number | null;
     unit: 'kg' | 'jin' | 'box' | 'piece' | 'bag' | 'ton';
     /**
      * Enter -1 for unlimited stock
@@ -849,6 +921,38 @@ export interface Product {
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "industry-templates".
+ */
+export interface IndustryTemplate {
+  id: number;
+  title: string;
+  sectionTitle?: string | null;
+  fields?:
+    | {
+        /**
+         * 小写字母开头，可含数字和下划线；已保存行的标识不可修改。
+         */
+        key: string;
+        label: string;
+        type: 'text' | 'number' | 'select';
+        unit?: string | null;
+        placeholder?: string | null;
+        required?: boolean | null;
+        options?:
+          | {
+              value: string;
+              label: string;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1065,6 +1169,10 @@ export interface PayloadLockedDocument {
         value: number | Product;
       } | null)
     | ({
+        relationTo: 'industry-templates';
+        value: number | IndustryTemplate;
+      } | null)
+    | ({
         relationTo: 'redirects';
         value: number | Redirect;
       } | null)
@@ -1131,6 +1239,12 @@ export interface PayloadMigration {
  * via the `definition` "pages_select".
  */
 export interface PagesSelect<T extends boolean = true> {
+  discovery?:
+    | T
+    | {
+        noIndex?: T;
+        summary?: T;
+      };
   title?: T;
   hero?:
     | T
@@ -1266,6 +1380,12 @@ export interface FormBlockSelect<T extends boolean = true> {
  * via the `definition` "posts_select".
  */
 export interface PostsSelect<T extends boolean = true> {
+  discovery?:
+    | T
+    | {
+        noIndex?: T;
+        summary?: T;
+      };
   title?: T;
   heroImage?: T;
   content?: T;
@@ -1435,6 +1555,31 @@ export interface UsersSelect<T extends boolean = true> {
  * via the `definition` "products_select".
  */
 export interface ProductsSelect<T extends boolean = true> {
+  discovery?:
+    | T
+    | {
+        noIndex?: T;
+        summary?: T;
+      };
+  industryTemplate?: T;
+  technicalValues?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        targetMarkets?: T;
+        manufacturingOrigin?: T;
+        image?: T;
+      };
+  sourcing?:
+    | T
+    | {
+        minimumOrderQuantity?: T;
+        materials?: T;
+        customization?: T;
+        leadTime?: T;
+      };
   title?: T;
   general?:
     | T
@@ -1471,6 +1616,34 @@ export interface ProductsSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "industry-templates_select".
+ */
+export interface IndustryTemplatesSelect<T extends boolean = true> {
+  title?: T;
+  sectionTitle?: T;
+  fields?:
+    | T
+    | {
+        key?: T;
+        label?: T;
+        type?: T;
+        unit?: T;
+        placeholder?: T;
+        required?: T;
+        options?:
+          | T
+          | {
+              value?: T;
+              label?: T;
+              id?: T;
+            };
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1753,6 +1926,10 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
  */
 export interface Header {
   id: number;
+  /**
+   * When off, use the default product, customization and resources navigation.
+   */
+  useCustomNavigation?: boolean | null;
   navItems?:
     | {
         link: {
@@ -1782,6 +1959,10 @@ export interface Header {
  */
 export interface Footer {
   id: number;
+  /**
+   * When enabled, replace the footer Explore links.
+   */
+  useCustomNavigation?: boolean | null;
   navItems?:
     | {
         link: {
@@ -1807,9 +1988,65 @@ export interface Footer {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "search-settings".
+ */
+export interface SearchSetting {
+  id: number;
+  siteName: string;
+  /**
+   * 仅支持根域部署，例如 https://example.com，路径与末尾斜杠会忽略。留空使用 NEXT_PUBLIC_SERVER_URL。用于 canonical、站点地图与结构化数据。
+   */
+  siteUrl?: string | null;
+  /**
+   * 页面未填写独立描述时使用，建议 80–160 字符。
+   */
+  description?: string | null;
+  socialImage?: (number | null) | Media;
+  /**
+   * 关闭后输出 noindex 与 robots 禁止抓取；不替代访问权限。
+   */
+  allowIndexing?: boolean | null;
+  organization?: {
+    legalName?: string | null;
+    email?: string | null;
+    telephone?: string | null;
+    sameAs?:
+      | {
+          url: string;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  geo?: {
+    /**
+     * 实验性机器可读说明，不保证 AI 引用或收录。只发布已公开信息。
+     */
+    enabled?: boolean | null;
+    summary?: string | null;
+    /**
+     * 填写后替换首页默认采购问答，并与可见内容同步生成 FAQ 结构化数据。只填写可核实的采购政策。
+     */
+    faq?:
+      | {
+          question: string;
+          answer: string;
+          id?: string | null;
+        }[]
+      | null;
+    /**
+     * 输出 robots 爬虫偏好。搜索发现与训练抓取分别控制，第三方是否遵守由其决定。
+     */
+    allowAITraining?: boolean | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "header_select".
  */
 export interface HeaderSelect<T extends boolean = true> {
+  useCustomNavigation?: T;
   navItems?:
     | T
     | {
@@ -1833,6 +2070,7 @@ export interface HeaderSelect<T extends boolean = true> {
  * via the `definition` "footer_select".
  */
 export interface FooterSelect<T extends boolean = true> {
+  useCustomNavigation?: T;
   navItems?:
     | T
     | {
@@ -1846,6 +2084,47 @@ export interface FooterSelect<T extends boolean = true> {
               label?: T;
             };
         id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "search-settings_select".
+ */
+export interface SearchSettingsSelect<T extends boolean = true> {
+  siteName?: T;
+  siteUrl?: T;
+  description?: T;
+  socialImage?: T;
+  allowIndexing?: T;
+  organization?:
+    | T
+    | {
+        legalName?: T;
+        email?: T;
+        telephone?: T;
+        sameAs?:
+          | T
+          | {
+              url?: T;
+              id?: T;
+            };
+      };
+  geo?:
+    | T
+    | {
+        enabled?: T;
+        summary?: T;
+        faq?:
+          | T
+          | {
+              question?: T;
+              answer?: T;
+              id?: T;
+            };
+        allowAITraining?: T;
       };
   updatedAt?: T;
   createdAt?: T;
