@@ -1,0 +1,75 @@
+import sanitize from 'sanitize-html'
+
+/** CMS-authored imported HTML is untrusted. Never render scripts, event handlers or arbitrary embeds. */
+export function safeHTML(html: string | null | undefined): string {
+  return sanitize(html || '', {
+    allowedTags: [
+      'p',
+      'div',
+      'section',
+      'article',
+      'span',
+      'h2',
+      'h3',
+      'h4',
+      'h5',
+      'h6',
+      'strong',
+      'b',
+      'em',
+      'i',
+      'ul',
+      'ol',
+      'li',
+      'a',
+      'img',
+      'figure',
+      'figcaption',
+      'table',
+      'thead',
+      'tbody',
+      'tr',
+      'th',
+      'td',
+      'br',
+      'hr',
+      'blockquote',
+      'details',
+      'summary',
+      'iframe',
+    ],
+    allowedAttributes: {
+      a: ['href', 'title'],
+      img: ['src', 'alt', 'width', 'height', 'loading'],
+      th: ['colspan', 'rowspan', 'scope'],
+      td: ['colspan', 'rowspan'],
+      iframe: ['src', 'title', 'allowfullscreen', 'loading'],
+      '*': ['id'],
+    },
+    allowedSchemes: ['http', 'https', 'mailto', 'tel'],
+    allowedIframeHostnames: ['www.youtube.com', 'www.youtube-nocookie.com'],
+    transformTags: {
+      img: (tag, attributes) => ({ tagName: tag, attribs: { ...attributes, loading: 'lazy' } }),
+      a: (tag, attributes) => {
+        let href = attributes.href || ''
+        try {
+          const u = new URL(href)
+          if (['yueliautomation.com', 'www.yueliautomation.com'].includes(u.hostname))
+            href = u.pathname + u.search + u.hash
+        } catch {
+          /* Relative links remain relative. */
+        }
+        return { tagName: tag, attribs: { ...attributes, href } }
+      },
+    },
+  })
+}
+export function plainText(html: string): string {
+  return sanitize(html, { allowedTags: [], allowedAttributes: {} })
+    .replace(/&amp;/g, '&')
+    .replace(/&#8217;/g, '’')
+    .replace(/&#8211;/g, '–')
+    .replace(/&nbsp;/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+}

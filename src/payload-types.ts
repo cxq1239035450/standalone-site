@@ -117,11 +117,13 @@ export interface Config {
     header: Header;
     footer: Footer;
     'search-settings': SearchSetting;
+    'equipment-site': EquipmentSite;
   };
   globalsSelect: {
     header: HeaderSelect<false> | HeaderSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
     'search-settings': SearchSettingsSelect<false> | SearchSettingsSelect<true>;
+    'equipment-site': EquipmentSiteSelect<false> | EquipmentSiteSelect<true>;
   };
   locale: 'zh' | 'en';
   widgets: {
@@ -163,6 +165,29 @@ export interface UserAuthOperations {
  */
 export interface Page {
   id: number;
+  migration?: {
+    sourceId?: number | null;
+    /**
+     * Original public path. Keep this stable to preserve existing links.
+     */
+    sourcePath?: string | null;
+    sourceURL?: string | null;
+    /**
+     * Preserved source content, including specification tables. HTML is sanitized again when displayed.
+     */
+    contentHTML?: string | null;
+    summary?: string | null;
+    attributes?:
+      | {
+          [k: string]: unknown;
+        }
+      | unknown[]
+      | string
+      | number
+      | boolean
+      | null;
+    categories?: (number | Category)[] | null;
+  };
   discovery?: {
     /**
      * 输出 noindex，并从 sitemap 和 llms.txt 中排除。
@@ -238,10 +263,80 @@ export interface Page {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "categories".
+ */
+export interface Category {
+  id: number;
+  migration?: {
+    sourceId?: number | null;
+    /**
+     * Original public path. Keep this stable to preserve existing links.
+     */
+    sourcePath?: string | null;
+    sourceURL?: string | null;
+    /**
+     * Preserved source content, including specification tables. HTML is sanitized again when displayed.
+     */
+    contentHTML?: string | null;
+    summary?: string | null;
+    attributes?:
+      | {
+          [k: string]: unknown;
+        }
+      | unknown[]
+      | string
+      | number
+      | boolean
+      | null;
+    categories?: (number | Category)[] | null;
+  };
+  title: string;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  parent?: (number | null) | Category;
+  breadcrumbs?:
+    | {
+        doc?: (number | null) | Category;
+        url?: string | null;
+        label?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "posts".
  */
 export interface Post {
   id: number;
+  migration?: {
+    sourceId?: number | null;
+    /**
+     * Original public path. Keep this stable to preserve existing links.
+     */
+    sourcePath?: string | null;
+    sourceURL?: string | null;
+    /**
+     * Preserved source content, including specification tables. HTML is sanitized again when displayed.
+     */
+    contentHTML?: string | null;
+    summary?: string | null;
+    attributes?:
+      | {
+          [k: string]: unknown;
+        }
+      | unknown[]
+      | string
+      | number
+      | boolean
+      | null;
+    categories?: (number | Category)[] | null;
+  };
   discovery?: {
     /**
      * 输出 noindex，并从 sitemap 和 llms.txt 中排除。
@@ -413,30 +508,6 @@ export interface FolderInterface {
     totalDocs?: number;
   };
   folderType?: 'media'[] | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "categories".
- */
-export interface Category {
-  id: number;
-  title: string;
-  /**
-   * When enabled, the slug will auto-generate from the title field on save and autosave.
-   */
-  generateSlug?: boolean | null;
-  slug: string;
-  parent?: (number | null) | Category;
-  breadcrumbs?:
-    | {
-        doc?: (number | null) | Category;
-        url?: string | null;
-        label?: string | null;
-        id?: string | null;
-      }[]
-    | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -805,6 +876,29 @@ export interface Form {
  */
 export interface Product {
   id: number;
+  migration?: {
+    sourceId?: number | null;
+    /**
+     * Original public path. Keep this stable to preserve existing links.
+     */
+    sourcePath?: string | null;
+    sourceURL?: string | null;
+    /**
+     * Preserved source content, including specification tables. HTML is sanitized again when displayed.
+     */
+    contentHTML?: string | null;
+    summary?: string | null;
+    attributes?:
+      | {
+          [k: string]: unknown;
+        }
+      | unknown[]
+      | string
+      | number
+      | boolean
+      | null;
+    categories?: (number | Category)[] | null;
+  };
   discovery?: {
     /**
      * 输出 noindex，并从 sitemap 和 llms.txt 中排除。
@@ -1239,6 +1333,17 @@ export interface PayloadMigration {
  * via the `definition` "pages_select".
  */
 export interface PagesSelect<T extends boolean = true> {
+  migration?:
+    | T
+    | {
+        sourceId?: T;
+        sourcePath?: T;
+        sourceURL?: T;
+        contentHTML?: T;
+        summary?: T;
+        attributes?: T;
+        categories?: T;
+      };
   discovery?:
     | T
     | {
@@ -1380,6 +1485,17 @@ export interface FormBlockSelect<T extends boolean = true> {
  * via the `definition` "posts_select".
  */
 export interface PostsSelect<T extends boolean = true> {
+  migration?:
+    | T
+    | {
+        sourceId?: T;
+        sourcePath?: T;
+        sourceURL?: T;
+        contentHTML?: T;
+        summary?: T;
+        attributes?: T;
+        categories?: T;
+      };
   discovery?:
     | T
     | {
@@ -1512,6 +1628,17 @@ export interface MediaSelect<T extends boolean = true> {
  * via the `definition` "categories_select".
  */
 export interface CategoriesSelect<T extends boolean = true> {
+  migration?:
+    | T
+    | {
+        sourceId?: T;
+        sourcePath?: T;
+        sourceURL?: T;
+        contentHTML?: T;
+        summary?: T;
+        attributes?: T;
+        categories?: T;
+      };
   title?: T;
   generateSlug?: T;
   slug?: T;
@@ -1555,6 +1682,17 @@ export interface UsersSelect<T extends boolean = true> {
  * via the `definition` "products_select".
  */
 export interface ProductsSelect<T extends boolean = true> {
+  migration?:
+    | T
+    | {
+        sourceId?: T;
+        sourcePath?: T;
+        sourceURL?: T;
+        contentHTML?: T;
+        summary?: T;
+        attributes?: T;
+        categories?: T;
+      };
   discovery?:
     | T
     | {
@@ -2043,6 +2181,53 @@ export interface SearchSetting {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "equipment-site".
+ */
+export interface EquipmentSite {
+  id: number;
+  name: string;
+  logo?: (number | null) | Media;
+  email: string;
+  telephone: string;
+  address: string;
+  introduction?: string | null;
+  navigation?:
+    | {
+        label: string;
+        href: string;
+        id?: string | null;
+      }[]
+    | null;
+  slides?:
+    | {
+        title: string;
+        description?: string | null;
+        image: number | Media;
+        href: string;
+        label: string;
+        id?: string | null;
+      }[]
+    | null;
+  factoryImages?:
+    | {
+        image: number | Media;
+        caption?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  certificates?:
+    | {
+        image: number | Media;
+        caption?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  inquiryForm?: (number | null) | Form;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "header_select".
  */
 export interface HeaderSelect<T extends boolean = true> {
@@ -2126,6 +2311,53 @@ export interface SearchSettingsSelect<T extends boolean = true> {
             };
         allowAITraining?: T;
       };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "equipment-site_select".
+ */
+export interface EquipmentSiteSelect<T extends boolean = true> {
+  name?: T;
+  logo?: T;
+  email?: T;
+  telephone?: T;
+  address?: T;
+  introduction?: T;
+  navigation?:
+    | T
+    | {
+        label?: T;
+        href?: T;
+        id?: T;
+      };
+  slides?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+        href?: T;
+        label?: T;
+        id?: T;
+      };
+  factoryImages?:
+    | T
+    | {
+        image?: T;
+        caption?: T;
+        id?: T;
+      };
+  certificates?:
+    | T
+    | {
+        image?: T;
+        caption?: T;
+        id?: T;
+      };
+  inquiryForm?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

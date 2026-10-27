@@ -18,16 +18,29 @@ import { siteInsightsPlugin } from '@/integrations/insights/plugin'
 import { validateFormSubmission } from '@/hooks/validateFormSubmission'
 
 const generateTitle: GenerateTitle<Post | Page> = async ({ doc, req }) => {
-  const settings = await req.payload.findGlobal({ slug: 'search-settings', req, overrideAccess: false })
-  return doc?.title ? `${doc.title} | ${settings.siteName || 'PawSupply'}` : settings.siteName || 'PawSupply'
+  const settings = await req.payload.findGlobal({
+    slug: 'search-settings',
+    req,
+    overrideAccess: false,
+  })
+  return doc?.title
+    ? `${doc.title} | ${settings.siteName || 'Yueli Automation'}`
+    : settings.siteName || 'Yueli Automation'
 }
 
-const generateURL: GenerateURL<Post | Page> = async ({ doc, req, locale, collectionSlug }) => {
-  const settings = await req.payload.findGlobal({ slug: 'search-settings', req, overrideAccess: false })
+const generateURL: GenerateURL<Post | Page> = async ({ doc, req, collectionSlug }) => {
+  const settings = await req.payload.findGlobal({
+    slug: 'search-settings',
+    req,
+    overrideAccess: false,
+  })
   const origin = new URL(settings.siteUrl || getServerSideURL()).origin
-  const language = locale === 'en' ? 'en' : 'zh'
-  const prefix = collectionSlug === 'posts' || collectionSlug === 'products' ? `/${collectionSlug}` : ''
-  return `${origin}/${language}${doc?.slug && doc.slug !== 'home' ? `${prefix}/${encodeURIComponent(doc.slug)}` : ''}`
+  const prefix =
+    collectionSlug === 'products' ? '/product' : collectionSlug === 'posts' ? '/blog' : ''
+  const path =
+    doc?.migration?.sourcePath ||
+    (doc?.slug && doc.slug !== 'home' ? `${prefix}/${encodeURIComponent(doc.slug)}` : '/')
+  return `${origin}${path}`
 }
 
 export const plugins: Plugin[] = [

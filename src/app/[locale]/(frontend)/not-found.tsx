@@ -1,20 +1,14 @@
-import { Link } from '@/i18n/navigation'
-import { getTranslations } from 'next-intl/server'
-import { ArrowUpRight } from 'lucide-react'
-
-export default async function NotFound() {
-  const t = await getTranslations('notFound')
+import Link from 'next/link'
+export default function NotFound() {
   return (
-    <main className="pet-site">
-      <section className="pet-container py-24 sm:py-32">
-        <p className="pet-eyebrow">404</p>
-        <h1 className="mt-4 text-4xl font-medium tracking-tight sm:text-5xl">{t('title')}</h1>
-        <p className="mt-6 max-w-xl text-lg leading-8 text-[#5e7169]">{t('description')}</p>
-        <div className="mt-8 flex flex-wrap gap-4">
-          <Link className="pet-button" href="/products">{t('products')} <ArrowUpRight size={18} aria-hidden="true" /></Link>
-          <Link className="pet-button pet-button-outline" href="/">{t('home')}</Link>
-        </div>
-      </section>
-    </main>
+    <section className="yl-wrap yl-section">
+      <div className="yl-empty">
+        <h1>This page is not available.</h1>
+        <p>Browse the equipment catalog or contact Yueli for help finding the right machine.</p>
+        <Link className="yl-button" href="/products/">
+          View Products
+        </Link>
+      </div>
+    </section>
   )
 }

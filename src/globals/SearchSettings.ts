@@ -13,7 +13,7 @@ export const SearchSettings: GlobalConfig = {
   access: { read: () => true, update: authenticated },
   hooks: { afterChange: [revalidateSearchSettings] },
   fields: [
-    { name: 'siteName', type: 'text', defaultValue: 'PawSupply', required: true, label: '品牌名称 / Site name' },
+    { name: 'siteName', type: 'text', defaultValue: 'Yueli Automation', required: true, label: '品牌名称 / Site name' },
     { name: 'siteUrl', type: 'text', validate: url, label: '正式站点 URL', admin: { description: '仅支持根域部署，例如 https://example.com，路径与末尾斜杠会忽略。留空使用 NEXT_PUBLIC_SERVER_URL。用于 canonical、站点地图与结构化数据。' } },
     { name: 'description', type: 'textarea', localized: true, label: '默认搜索描述', admin: { description: '页面未填写独立描述时使用，建议 80–160 字符。' } },
     { name: 'socialImage', type: 'upload', relationTo: 'media', label: '默认社交分享图片' },

@@ -1,4 +1,5 @@
 import { discoveryFields } from '@/fields/discovery'
+import { wordpressMigration } from '@/fields/wordpressMigration'
 import { revalidateProduct, revalidateProductDelete } from '@/hooks/revalidateSearch'
 import { captureParameterPublishMode, validateProductParameters } from '@/hooks/industryParameters'
 import type { CollectionConfig } from 'payload'
@@ -66,6 +67,7 @@ export const Products: CollectionConfig = {
     useAsTitle: 'title',
   },
   fields: [
+    wordpressMigration,
     contentLanguageField(),
     discoveryFields,
     { name: 'industryTemplate', type: 'relationship', relationTo: 'industry-templates', label: '行业参数模板 / Industry template' },

@@ -1,4 +1,5 @@
 import { SearchSettings } from './globals/SearchSettings'
+import { EquipmentSite } from './globals/EquipmentSite'
 import { IndustryTemplates } from './collections/IndustryTemplates'
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import { en } from '@payloadcms/translations/languages/en'
@@ -104,7 +105,7 @@ export default buildConfig({
   }),
   collections: [Pages, Posts, Media, Categories, Users, Products, IndustryTemplates],
   cors: [getServerSideURL()].filter(Boolean),
-  globals: [Header, Footer, SearchSettings],
+  globals: [Header, Footer, SearchSettings, EquipmentSite],
   plugins,
   secret: process.env.PAYLOAD_SECRET,
   sharp,

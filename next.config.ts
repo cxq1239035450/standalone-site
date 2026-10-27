@@ -18,6 +18,7 @@ const nextConfig: NextConfig = {
   },
   images: {
     localPatterns: [
+      { pathname: '/yueli-assets/**' },
       { pathname: '/pet-assets/**' },
       {
         pathname: '/api/media/file/**',

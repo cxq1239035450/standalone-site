@@ -1,5 +1,5 @@
 export const localeConfig = {
-  defaultLocale: 'zh',
+  defaultLocale: 'en',
   locales: [
     {
       code: 'zh',

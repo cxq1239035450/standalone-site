@@ -1,34 +1,34 @@
 import { getSearchSettings, siteOrigin } from '@/utilities/searchSettings'
-import { companyProfile } from '@/content/company'
-
+import { getProducts, getPosts, contentPath } from '@/components/Yueli/data'
 export const dynamic = 'force-dynamic'
 export async function GET() {
-  const settings = await getSearchSettings()
-  if (settings.geo?.enabled === false || settings.allowIndexing === false)
+  const settings = await getSearchSettings('en')
+  if (settings.allowIndexing === false || settings.geo?.enabled === false)
     return new Response('Not found', { status: 404 })
   const origin = siteOrigin(settings.siteUrl)
+  const [products, posts] = await Promise.all([getProducts(), getPosts()])
   const text = [
-    `# ${settings.siteName || 'PawSupply'}`,
+    `# ${settings.siteName || 'Yueli Automation'}`,
     '',
-    `> ${settings.geo?.summary || settings.description || companyProfile.en.summary}`,
+    `> ${settings.geo?.summary || settings.description || ''}`,
     '',
-    '## Sourcing profile',
-    companyProfile.en.summary,
-    companyProfile.zh.summary,
-    'Logistics: PawSupply coordinates multiple logistics channels and supports shipments from the ports of Xiamen, Tianjin and Guangzhou in China. Departure ports, routes, freight costs and schedules are confirmed for each shipment based on cargo and destination requirements.',
-    'Partner factories are independent cooperation partners, not claimed as owned facilities. Product images marked as concepts are sourcing references, not evidence of approved production specifications.',
+    '## Company and contact',
+    ...['/', '/products', '/about-us', '/faq', '/contact-us'].map((p) => `- ${origin}${p}`),
     '',
-    '## Public resources',
-    ...['zh', 'en'].flatMap((locale) => [
-      `- [${locale} homepage](${origin}/${locale})`,
-      `- [${locale} product catalog](${origin}/${locale}/products): Published product details and sourcing specifications.`,
-      `- [${locale} company and factory network](${origin}/${locale}/about)`,
-      `- [${locale} private-label and sample process](${origin}/${locale}/solutions)`,
-      `- [${locale} resources](${origin}/${locale}/posts)`,
-      `- [${locale} inquiries](${origin}/${locale}/contact)`,
-    ]),
+    '## Published equipment',
+    ...products
+      .filter((p) => !p.discovery?.noIndex)
+      .map(
+        (p) =>
+          `- [${p.title}](${new URL(contentPath(p, 'product'), origin).href}): ${p.general?.shortDescription || ''}`,
+      ),
     '',
-    'Use the linked pages as the source of current information. Confirm quotations, minimum order quantities, customization and lead times with the supplier. This file is an experimental discovery aid, not a guarantee of inclusion or citation.',
+    '## Technical resources',
+    ...posts
+      .filter((p) => !p.discovery?.noIndex)
+      .map((p) => `- [${p.title}](${new URL(contentPath(p, 'post'), origin).href})`),
+    '',
+    'Confirm equipment configuration, quotation, lead time and application suitability with the Yueli team. This file summarizes public content and does not guarantee inclusion in AI search.',
     '',
   ].join('\n')
   return new Response(text, { headers: { 'Content-Type': 'text/plain; charset=utf-8' } })

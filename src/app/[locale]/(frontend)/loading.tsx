@@ -1,0 +1,1 @@
+export default function Loading(){return <div className="yl-wrap yl-loading" role="status" aria-label="Loading equipment information"><div className="yl-skeleton"/><div className="yl-skeleton"/><div className="yl-skeleton"/></div>}

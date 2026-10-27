@@ -1,4 +1,5 @@
 import { discoveryFields } from '@/fields/discovery'
+import { wordpressMigration } from '@/fields/wordpressMigration'
 import type { CollectionConfig } from 'payload'
 
 import {
@@ -65,6 +66,7 @@ export const Posts: CollectionConfig<'posts'> = {
     livePreview: {
       url: ({ data, req }) =>
         generatePreviewPath({
+          sourcePath: data?.migration?.sourcePath,
           slug: data?.slug,
           collection: 'posts',
           locale: req.locale,
@@ -73,6 +75,7 @@ export const Posts: CollectionConfig<'posts'> = {
     },
     preview: (data, { req }) =>
       generatePreviewPath({
+        sourcePath: (data?.migration as { sourcePath?: string } | undefined)?.sourcePath,
         slug: data?.slug as string,
         collection: 'posts',
         locale: req.locale,
@@ -81,6 +84,7 @@ export const Posts: CollectionConfig<'posts'> = {
     useAsTitle: 'title',
   },
   fields: [
+    wordpressMigration,
     contentLanguageField(),
     discoveryFields,
     {

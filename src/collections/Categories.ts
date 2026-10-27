@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { wordpressMigration } from '@/fields/wordpressMigration'
 
 import { anyone } from '../access/anyone'
 import { authenticated } from '../access/authenticated'
@@ -21,6 +22,7 @@ export const Categories: CollectionConfig = {
     useAsTitle: 'title',
   },
   fields: [
+    wordpressMigration,
     {
       name: 'title',
       type: 'text',
