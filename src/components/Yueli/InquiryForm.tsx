@@ -4,9 +4,15 @@ import { useState, type FormEvent } from 'react'
 export function EquipmentInquiryForm({
   formID,
   product,
+  project,
+  layout,
+  variant,
 }: {
   formID?: number | null
   product?: string
+  project?: string
+  layout?: 'home'
+  variant?: 'contact'
 }) {
   const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle')
   const [error, setError] = useState('')
@@ -15,6 +21,12 @@ export function EquipmentInquiryForm({
     if (!formID) return
     const form = event.currentTarget
     const data = new FormData(form)
+    const country = String(data.get('destination-country') || '').trim()
+    if (country)
+      data.set(
+        'e-form-message',
+        `${String(data.get('e-form-message') || '').trim()}\nDestination country: ${country}`,
+      )
     const fields = [
       'e-form-first-name',
       'e-form-last-name',
@@ -60,7 +72,7 @@ export function EquipmentInquiryForm({
   if (status === 'success')
     return (
       <div className="yl-form-success" role="status">
-        <h3>Great! We’ve received your information.</h3>
+        <h3>Your project inquiry has been received.</h3>
         <p>Your inquiry has been recorded for follow-up.</p>
         <button
           className="yl-button yl-button-outline"
@@ -81,65 +93,109 @@ export function EquipmentInquiryForm({
       </div>
     )
   return (
-    <form className="yl-inquiry" onSubmit={submit} aria-busy={status === 'sending'}>
+    <form
+      className={`yl-inquiry${layout === 'home' ? ' yl-inquiry-home' : ''}${variant === 'contact' ? ' yl-inquiry-contact' : ''}`}
+      onSubmit={submit}
+      aria-busy={status === 'sending'}
+    >
       <div className="yl-form-row">
         <label>
           Name
           <input
             name="e-form-first-name"
             autoComplete="name"
-            placeholder="Full name"
+            placeholder={layout === 'home' ? 'Name' : 'Full name'}
             required
             maxLength={1000}
           />
         </label>
+        {layout === 'home' && (
+          <label>
+            Email
+            <input
+              name="e-form-email"
+              type="email"
+              autoComplete="email"
+              placeholder="Email"
+              required
+              maxLength={1000}
+            />
+          </label>
+        )}
         <label>
           Company
           <input
             name="e-form-last-name"
             autoComplete="organization"
-            placeholder="Company name"
+            placeholder={layout === 'home' ? 'Company' : 'Company name'}
             required
             maxLength={1000}
           />
         </label>
+        {layout === 'home' && (
+          <label>
+            Destination country
+            <input
+              name="destination-country"
+              autoComplete="country-name"
+              placeholder="Destination country"
+              maxLength={300}
+            />
+          </label>
+        )}
       </div>
-      <label>
-        Email
-        <input
-          name="e-form-email"
-          type="email"
-          autoComplete="email"
-          placeholder="Business email"
-          required
-          maxLength={1000}
-        />
-      </label>
-      <label>
+      {layout !== 'home' && (
+        <label>
+          Email
+          <input
+            name="e-form-email"
+            type="email"
+            autoComplete="email"
+            placeholder="Business email"
+            required
+            maxLength={1000}
+          />
+        </label>
+      )}
+      <label className={layout === 'home' ? 'yl-home-message' : undefined}>
         Project Requirement
         <textarea
           name="e-form-message"
           rows={5}
-          placeholder="Workpiece, process, tolerance, target output and destination country"
-          defaultValue={product ? `Equipment of interest: ${product}\n\n` : ''}
+          placeholder={
+            layout === 'home'
+              ? 'Project requirements'
+              : 'Workpiece, process, tolerance, target output and destination country'
+          }
+          defaultValue={[
+            product ? `Equipment of interest: ${product}` : '',
+            project ? `Project topic: ${project}` : '',
+          ]
+            .filter(Boolean)
+            .join('\n')}
           required
           maxLength={10000}
         />
       </label>
-      <label className="yl-checkbox">
-        <input type="checkbox" name="checkbox_e-form-checkbox" />I confirm this is a business
-        inquiry
-      </label>
+      {layout !== 'home' && (
+        <label className="yl-checkbox">
+          <input type="checkbox" name="checkbox_e-form-checkbox" />I confirm this is a business
+          inquiry
+        </label>
+      )}
       {status === 'error' && (
         <p className="yl-form-error" role="alert">
           {error}
         </p>
       )}
       <button className="yl-button" type="submit" disabled={status === 'sending'}>
-        {status === 'sending' ? 'Saving inquiry…' : 'Submit'}
-        <span aria-hidden="true">↗</span>
+        {status === 'sending'
+          ? 'Saving inquiry…'
+          : layout === 'home'
+            ? 'Send Project Inquiry'
+            : 'Submit'}
       </button>
-      <p className="yl-form-note">Your inquiry is recorded for follow-up.</p>
+      {layout !== 'home' && <p className="yl-form-note">Your inquiry is recorded for follow-up.</p>}
     </form>
   )
 }

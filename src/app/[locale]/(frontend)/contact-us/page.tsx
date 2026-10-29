@@ -10,6 +10,7 @@ export default async function ContactPage({
   return (
     <ContactView
       product={typeof query.product === 'string' ? query.product.slice(0, 300) : undefined}
+      project={typeof query.project === 'string' ? query.project.slice(0, 300) : undefined}
     />
   )
 }

@@ -5,6 +5,12 @@ const eslintConfig = [
   ...nextVitals,
   ...nextTypescript,
   {
+    files: ['src/components/Yueli/**/*.tsx'],
+    // Browser translators replace React-owned text nodes. Public pages intentionally
+    // use document navigation so translated content is never removed by the SPA router.
+    rules: { '@next/next/no-html-link-for-pages': 'off' },
+  },
+  {
     rules: {
       '@typescript-eslint/ban-ts-comment': 'warn',
       '@typescript-eslint/no-empty-object-type': 'warn',

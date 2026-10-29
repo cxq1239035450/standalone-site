@@ -1,19 +1,38 @@
 import { getSearchSettings, siteOrigin } from '@/utilities/searchSettings'
 import { getProducts, getPosts, contentPath } from '@/components/Yueli/data'
+import { getEquipmentContent, resourcePath } from '@/components/Yueli/architecture'
 export const dynamic = 'force-dynamic'
 export async function GET() {
   const settings = await getSearchSettings('en')
   if (settings.allowIndexing === false || settings.geo?.enabled === false)
     return new Response('Not found', { status: 404 })
   const origin = siteOrigin(settings.siteUrl)
-  const [products, posts] = await Promise.all([getProducts(), getPosts()])
+  const [products, posts, resources] = await Promise.all([
+    getProducts(),
+    getPosts(),
+    getEquipmentContent(),
+  ])
   const text = [
     `# ${settings.siteName || 'Yueli Automation'}`,
     '',
     `> ${settings.geo?.summary || settings.description || ''}`,
     '',
     '## Company and contact',
-    ...['/', '/products', '/about-us', '/faq', '/contact-us'].map((p) => `- ${origin}${p}`),
+    ...[
+      '/',
+      '/products',
+      '/solutions',
+      '/manufacturing',
+      '/resources',
+      '/about-us',
+      '/faq',
+      '/contact-us',
+    ].map((p) => `- ${origin}${p}`),
+    '',
+    '## Application solutions and buying guides',
+    ...resources
+      .filter((item) => !item.noIndex)
+      .map((item) => `- [${item.title}](${origin}${resourcePath(item)}): ${item.summary}`),
     '',
     '## Published equipment',
     ...products

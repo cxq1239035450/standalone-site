@@ -3,6 +3,7 @@ import { cache } from 'react'
 import { getPayload } from 'payload'
 import config from '@payload-config'
 import type { Category, EquipmentSite, Media, Page, Post, Product } from '@/payload-types'
+import source from '@/data/yueli.json'
 
 export const getYueli = cache(async () => {
   const payload = await getPayload({ config })
@@ -41,6 +42,7 @@ export const getCategories = cache(async () => {
   return (
     await payload.find({
       collection: 'categories',
+      where: { or: [{ taxonomy: { equals: 'product' } }, { taxonomy: { exists: false } }] },
       locale: 'en',
       depth: 0,
       pagination: false,
@@ -108,13 +110,4 @@ export function categoryBranch(id: number, categories: Category[]): Set<number> 
   return ids
 }
 export const navigation = (site: EquipmentSite) =>
-  site.navigation?.length
-    ? site.navigation
-    : [
-        { label: 'Home', href: '/' },
-        { label: 'Products', href: '/products/' },
-        { label: 'About Us', href: '/about-us/' },
-        { label: 'Blog', href: '/blog/' },
-        { label: 'FAQ', href: '/faq/' },
-        { label: 'Contact', href: '/contact-us/' },
-      ]
+  site.navigation?.length ? site.navigation : source.brand.navigation

@@ -1,0 +1,35 @@
+/* Yueli's existing industrial palette; all selectors are scoped to this addition. */
+.yl-direct-contact { background:#fff; border-bottom:1px solid #e1e7ed; color:#17243a; }
+.yl-contact-inner { max-width:1170px; margin:0 auto; padding:44px 24px 48px; display:grid; grid-template-columns:minmax(240px,1fr) 220px 220px; gap:38px; align-items:start; }
+.yl-contact-intro .yl-contact-eyebrow { margin:0 0 12px; color:#c86308; font-size:12px; font-weight:700; letter-spacing:.11em; }
+.yl-contact-intro h2 { margin:0 0 15px; color:#0b2142; font-size:30px; line-height:1.2; font-weight:700; }
+.yl-contact-intro p { max-width:360px; margin:0 0 18px; font-size:15px; line-height:1.7; }
+.yl-contact-email { color:#0b2142; text-decoration:underline; text-underline-offset:4px; overflow-wrap:anywhere; }
+.yl-contact-network h3 { display:flex; align-items:center; gap:9px; margin:0 0 12px; color:#0b2142; font-size:18px; line-height:1.3; font-weight:700; }
+.yl-contact-icon { width:23px; height:23px; flex:0 0 23px; }
+.yl-contact-qr { display:block; position:relative; width:200px; max-width:100%; aspect-ratio:1; overflow:hidden; background:#fff; }
+.yl-contact-qr img { position:absolute !important; display:block !important; top:-16.666667% !important; left:-7.142857% !important; width:230% !important; max-width:none !important; height:auto !important; margin:0 !important; border:0 !important; border-radius:0 !important; box-shadow:none !important; }
+.yl-contact-qr--whatsapp img { left:-115.47619% !important; }
+/* The shared artwork contains labels below y=470; retain the complete QR above it. */
+.yl-contact-qr img { clip-path:inset(0 0 24% 0); }
+.yl-contact-network > p { margin:10px 0 13px; font-size:13px; line-height:1.5; color:#5d6a7a; }
+.yl-contact-open { display:inline-flex; align-items:center; justify-content:center; gap:8px; min-height:42px; padding:9px 14px; background:#f58220; color:#14233a !important; border:1px solid #f58220; font-size:14px; line-height:1.4; font-weight:600; text-decoration:none !important; }
+.yl-contact-open:hover { background:#e77414; border-color:#e77414; }
+.yl-contact-open--secondary { background:#fff; border-color:#c7d1dd; }
+.yl-contact-open--secondary:hover { background:#eef3f7; border-color:#0b2142; }
+.yl-direct-contact a:focus-visible, .yl-qr-disclosure summary:focus-visible, .yl-qr-panel a:focus-visible { outline:3px solid #f58220; outline-offset:4px; }
+footer .yl-qr-footer-item { display:block !important; width:100%; padding-top:13px !important; }
+.yl-qr-controls { display:flex; align-items:flex-start; flex-wrap:wrap; gap:10px; }
+.yl-qr-disclosure { position:relative; margin:0; }
+.yl-qr-disclosure summary { display:flex; align-items:center; gap:6px; min-height:42px; padding:8px 10px; border:1px solid rgba(255,255,255,.4); border-radius:2px; color:#fff; cursor:pointer; list-style:none; font-size:13px; line-height:1.4; }
+.yl-qr-disclosure summary::-webkit-details-marker { display:none; }
+.yl-qr-disclosure summary .yl-contact-icon { width:20px; height:20px; flex-basis:20px; }
+.yl-qr-disclosure[open] summary { background:#f58220; border-color:#f58220; color:#14233a; }
+.yl-qr-panel { position:absolute; z-index:999; bottom:calc(100% + 10px); left:0; width:240px; padding:16px 19px; color:#17243a; background:#fff; border:1px solid #d6dfe8; box-shadow:0 4px 18px rgba(11,33,66,.15); text-align:center; }
+.yl-qr-disclosure:last-child .yl-qr-panel { left:auto; right:0; }
+.yl-qr-panel strong { display:block; margin:0 0 8px; font-size:16px; color:#0b2142; }
+.yl-qr-panel .yl-contact-qr { width:200px; margin:0 auto; }
+footer .yl-qr-panel p { margin:9px 0 11px !important; color:#5d6a7a !important; font-size:12px !important; line-height:1.5; }
+footer .yl-qr-panel a { display:inline !important; padding:0 !important; color:#173f6d !important; font-size:13px; text-decoration:underline; text-underline-offset:3px; }
+@media (max-width:900px) { .yl-contact-inner { grid-template-columns:1fr 1fr; gap:26px; } .yl-contact-intro { grid-column:1/-1; } .yl-contact-intro p { max-width:620px; } }
+@media (max-width:540px) { .yl-contact-inner { grid-template-columns:1fr; gap:30px; padding:32px 24px; } .yl-contact-intro { grid-column:auto; } .yl-contact-intro h2 { font-size:26px; } .yl-contact-network { border-top:1px solid #e1e7ed; padding-top:22px; } .yl-contact-qr { width:210px; } }

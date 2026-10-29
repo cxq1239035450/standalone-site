@@ -1,52 +1,54 @@
-import Image from 'next/image'
-import Link from 'next/link'
 import type { EquipmentSite } from '@/payload-types'
-import { imageURL, navigation } from './data'
+import { originalNavigation } from './Header'
+
+import { MapPin, Phone, Mail } from 'lucide-react'
 
 export function YueliFooter({ site }: { site: EquipmentSite }) {
   return (
-    <footer className="yl-footer">
+    <footer className="yl-footer yl-original-footer">
       <div className="yl-wrap yl-footer-grid">
-        <div className="yl-footer-brand">
-          {imageURL(site.logo) && (
-            <Image src={imageURL(site.logo)} alt={site.name} width={190} height={54} />
-          )}
-          <p>Industrial equipment built around your workpiece, process and production target.</p>
-          <Link className="yl-text-link" href="/about-us/">
-            About Yueli <span aria-hidden="true">↗</span>
-          </Link>
-        </div>
         <div>
           <h2>Quick Links</h2>
           <nav aria-label="Footer navigation">
-            {navigation(site)
-              .filter((item) => item.href !== '/')
-              .map((item) => (
-                <Link href={item.href} key={item.href}>
-                  {item.label}
-                </Link>
-              ))}
+            {originalNavigation.map((item) => (
+              <a href={item.href} key={item.href}>
+                {item.href === '/contact-us/'
+                  ? 'Contact Us'
+                  : item.href === '/faq/'
+                    ? 'Faq'
+                    : item.label}
+              </a>
+            ))}
           </nav>
         </div>
         <div className="yl-footer-contact">
           <h2>Contact Us</h2>
-          <a href={`mailto:${site.email}`}>{site.email}</a>
-          <a href={`tel:${site.telephone.replace(/\s/g, '')}`}>{site.telephone}</a>
-          <p>{site.address}</p>
+          <p className="yl-contact-line">
+            <MapPin className="yl-footer-icon" size={24} strokeWidth={2.25} aria-hidden="true" />
+            {site.address}
+          </p>
+          <a className="yl-contact-line" href={`tel:${site.telephone.replace(/\s/g, '')}`}>
+            <Phone className="yl-footer-icon" size={24} strokeWidth={2.25} aria-hidden="true" />
+            {site.telephone}
+          </a>
+          <a className="yl-contact-line" href={`mailto:${site.email}`}>
+            <Mail className="yl-footer-icon" size={24} strokeWidth={2.25} aria-hidden="true" />
+            {site.email}
+          </a>
         </div>
         <div>
           <h2>Start Your Project</h2>
-          <p>Share your workpiece, material, key dimensions, required process and target output.</p>
-          <Link href="/contact-us/" className="yl-button">
-            Get Quote <span aria-hidden="true">↗</span>
-          </Link>
+          <p>
+            Looking for a standard machine or a custom automation solution? Send us your workpiece
+            details and production requirements. Our team will respond within 24 hours.
+          </p>
         </div>
       </div>
       <div className="yl-wrap yl-footer-bottom">
+        <span>Automation Equipment &amp; Custom Production Line Solutions</span>
         <span>
-          © {new Date().getFullYear()} {site.name}
+          © {new Date().getFullYear()} Quanzhou Yueli Automation Co., Ltd. All Rights Reserved.
         </span>
-        <span>Quanzhou, Fujian, China</span>
       </div>
     </footer>
   )

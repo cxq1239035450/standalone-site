@@ -1,0 +1,215 @@
+/* Shared product body, matched to the supplied technical-document reference. */
+.yl-replica-detail .yl-product-content {
+  width: min(1320px, calc(100% - 80px));
+}
+.yl-product-content .yl-source-content .yl-detail-layout {
+  --yl-orange: #f58220;
+  --yl-navy: #0b2142;
+  --yl-blue: #174f84;
+  --yl-line: #dce4ec;
+  margin-top: 32px;
+  font-size: 18px;
+  line-height: 1.7;
+}
+.yl-product-content .yl-source-content .yl-detail-layout .yueli-detail-grid {
+  grid-template-columns: 220px minmax(0, 1fr);
+  gap: 40px;
+}
+.yl-product-content .yl-source-content .yl-detail-layout .yueli-detail-nav {
+  position: sticky;
+  top: 24px;
+  padding: 4px 24px 16px 0;
+}
+.yl-product-content .yl-source-content .yl-detail-layout .yueli-detail-nav strong {
+  padding: 4px 0 4px 16px;
+  margin-bottom: 16px;
+  font-size: 18px;
+  line-height: 28px;
+}
+.yl-product-content .yl-source-content .yl-detail-layout .yueli-detail-nav a {
+  padding: 12px 16px;
+  color: #f56621;
+  font-size: 16px;
+  line-height: 24px;
+  text-decoration: none;
+}
+.yl-product-content .yl-source-content .yl-detail-layout .yueli-detail-nav a:hover {
+  background: #f5f7f9;
+  color: #0d3766;
+}
+.yl-product-content .yl-source-content .yl-detail-layout .yueli-detail-nav a:focus-visible,
+.yl-product-content .yl-source-content .yl-detail-layout summary:focus-visible,
+.yl-product-content .yl-source-content .yl-detail-layout .yl-detail-inquiry:focus-visible {
+  outline: 2px solid #174f84;
+  outline-offset: 3px;
+}
+.yl-product-content .yl-source-content .yl-detail-layout .yueli-detail-main {
+  min-width: 0;
+}
+.yl-product-content .yl-source-content .yl-detail-layout .yueli-detail-main > section {
+  margin: 0 0 40px;
+  padding: 0;
+  border: 0;
+  scroll-margin-top: 24px;
+}
+.yl-product-content .yl-source-content .yl-detail-layout h2,
+.yl-product-content .yl-source-content .yl-detail-layout .yl-spec-head h3 {
+  margin: 0 0 16px;
+  color: #0b2142;
+  font-size: 30px;
+  line-height: 1.3;
+  font-weight: 700;
+}
+.yl-product-content .yl-source-content .yl-detail-layout .yueli-detail-main p {
+  color: #35465a;
+  font-size: 18px;
+  line-height: 1.7;
+  margin: 0 0 16px;
+}
+.yl-product-content .yl-source-content .yl-detail-layout .yl-spec-head {
+  padding-left: 20px;
+  margin-bottom: 24px;
+}
+.yl-product-content .yl-source-content .yl-detail-layout .yl-spec-head span {
+  margin-bottom: 8px;
+  font-size: 13px;
+}
+.yl-product-content .yl-source-content .yl-detail-layout .yl-spec-head h2,
+.yl-product-content .yl-source-content .yl-detail-layout .yl-spec-head h3 {
+  margin-bottom: 8px;
+}
+.yl-product-content .yl-source-content .yl-detail-layout .yl-spec-head p {
+  margin: 0;
+  color: #657486;
+  font-size: 16px;
+}
+.yl-product-content .yl-source-content .yl-detail-layout .yl-spec-head p:empty {
+  display: none;
+}
+.yl-product-content .yl-source-content .yl-detail-layout .yl-model {
+  margin-bottom: 16px;
+  border: 1px solid #dce4ec;
+  border-radius: 8px;
+  background: #fff;
+}
+.yl-product-content .yl-source-content .yl-detail-layout .yl-model summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  min-height: 64px;
+  padding: 20px 24px;
+  font-size: 18px;
+  line-height: 24px;
+  background: #f5f7f9;
+}
+.yl-product-content .yl-source-content .yl-detail-layout .yl-model summary::after {
+  float: none;
+  flex: 0 0 20px;
+  text-align: center;
+  font-family: Arial, sans-serif;
+  font-size: 26px;
+  line-height: 24px;
+}
+.yl-product-content .yl-source-content .yl-detail-layout .yl-catalog-table {
+  display: table;
+  margin: 0;
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 16px;
+  line-height: 1.5;
+}
+.yl-product-content .yl-source-content .yl-detail-layout .yl-catalog-table th,
+.yl-product-content .yl-source-content .yl-detail-layout .yl-catalog-table td {
+  padding: 16px 20px;
+  border: 1px solid #c5c9ce;
+  background: #fff;
+  text-align: left;
+  vertical-align: top;
+  overflow-wrap: anywhere;
+}
+.yl-product-content .yl-source-content .yl-detail-layout .yl-catalog-table th {
+  width: 46%;
+  color: #0b2142;
+  font-weight: 700;
+}
+.yl-product-content .yl-source-content .yl-detail-layout .yl-catalog-table td {
+  color: #596b7e;
+}
+.yl-product-content
+  .yl-source-content
+  .yl-detail-layout
+  .yl-catalog-table
+  tbody
+  tr:nth-child(odd)
+  > * {
+  background: #f6f6f6;
+}
+.yl-product-content .yl-source-content .yl-detail-layout .yl-catalog-table thead > tr > * {
+  color: #0b2142;
+  font-weight: 700;
+  background: #edf2f6;
+}
+.yl-product-content .yl-source-content .yl-detail-layout .yl-detail-checklist {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px 24px;
+  margin: 0;
+  padding-left: 20px;
+}
+.yl-product-content .yl-source-content .yl-detail-layout .yl-detail-inquiry {
+  display: inline-flex;
+  margin-top: 24px;
+  padding: 12px 24px;
+  border-radius: 3px;
+  background: #f58220;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  text-decoration: none;
+}
+@media (max-width: 800px) {
+  .yl-replica-detail .yl-product-content {
+    width: calc(100% - 32px);
+  }
+  .yl-product-content .yl-source-content .yl-detail-layout .yueli-detail-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+  }
+  .yl-product-content .yl-source-content .yl-detail-layout .yueli-detail-nav {
+    position: static;
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0 0 16px;
+    border-right: 0;
+    border-bottom: 1px solid #dce4ec;
+    gap: 4px;
+  }
+  .yl-product-content .yl-source-content .yl-detail-layout .yueli-detail-nav strong {
+    width: 100%;
+    margin: 0 0 8px;
+  }
+  .yl-product-content .yl-source-content .yl-detail-layout .yueli-detail-nav a {
+    padding: 8px 12px;
+    font-size: 14px;
+  }
+  .yl-product-content .yl-source-content .yl-detail-layout h2,
+  .yl-product-content .yl-source-content .yl-detail-layout .yl-spec-head h3 {
+    font-size: 24px;
+  }
+  .yl-product-content .yl-source-content .yl-detail-layout .yueli-detail-main p {
+    font-size: 16px;
+  }
+  .yl-product-content .yl-source-content .yl-detail-layout .yl-model summary {
+    padding: 16px;
+    font-size: 16px;
+  }
+  .yl-product-content .yl-source-content .yl-detail-layout .yl-catalog-table th,
+  .yl-product-content .yl-source-content .yl-detail-layout .yl-catalog-table td {
+    padding: 12px;
+    font-size: 14px;
+  }
+  .yl-product-content .yl-source-content .yl-detail-layout .yl-detail-checklist {
+    grid-template-columns: 1fr;
+  }
+}

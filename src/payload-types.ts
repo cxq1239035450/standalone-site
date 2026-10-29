@@ -74,6 +74,8 @@ export interface Config {
     users: User;
     products: Product;
     'industry-templates': IndustryTemplate;
+    'equipment-content': EquipmentContent;
+    'equipment-reviews': EquipmentReview;
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -98,6 +100,8 @@ export interface Config {
     users: UsersSelect<false> | UsersSelect<true>;
     products: ProductsSelect<false> | ProductsSelect<true>;
     'industry-templates': IndustryTemplatesSelect<false> | IndustryTemplatesSelect<true>;
+    'equipment-content': EquipmentContentSelect<false> | EquipmentContentSelect<true>;
+    'equipment-reviews': EquipmentReviewsSelect<false> | EquipmentReviewsSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
@@ -290,13 +294,20 @@ export interface Category {
       | null;
     categories?: (number | Category)[] | null;
   };
+  taxonomy: 'product' | 'post-category' | 'post-tag';
+  description?: string | null;
+  parent?: (number | null) | Category;
+  buyerGuide?: {
+    summary?: string | null;
+    selectionNotes?: string | null;
+    resources?: (number | EquipmentContent)[] | null;
+  };
   title: string;
   /**
    * When enabled, the slug will auto-generate from the title field on save and autosave.
    */
   generateSlug?: boolean | null;
   slug: string;
-  parent?: (number | null) | Category;
   breadcrumbs?:
     | {
         doc?: (number | null) | Category;
@@ -310,9 +321,46 @@ export interface Category {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "posts".
+ * via the `definition` "equipment-content".
  */
-export interface Post {
+export interface EquipmentContent {
+  id: number;
+  kind: 'solution' | 'guide';
+  slug: string;
+  title: string;
+  /**
+   * A direct answer to the buyer’s main question. Also used as the search description.
+   */
+  summary: string;
+  sections: {
+    heading: string;
+    body: string;
+    id?: string | null;
+  }[];
+  questions?:
+    | {
+        question: string;
+        answer: string;
+        id?: string | null;
+      }[]
+    | null;
+  relatedProducts?: (number | Product)[] | null;
+  relatedCategories?: (number | Category)[] | null;
+  relatedContent?: (number | EquipmentContent)[] | null;
+  noIndex?: boolean | null;
+  /**
+   * Internal evidence and review notes. Never rendered on the public website.
+   */
+  editorialNotes?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "products".
+ */
+export interface Product {
   id: number;
   migration?: {
     sourceId?: number | null;
@@ -347,42 +395,104 @@ export interface Post {
      */
     summary?: string | null;
   };
-  title: string;
-  heroImage?: (number | null) | Media;
-  content: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
+  industryTemplate?: (number | null) | IndustryTemplate;
+  /**
+   * 各语言独立填写；切换模板保留已有参数值。
+   */
+  technicalValues?:
+    | {
         [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  };
-  relatedPosts?: (number | Post)[] | null;
-  categories?: (number | Category)[] | null;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
   meta?: {
+    /**
+     * 留空使用产品名称；网站品牌名称会自动追加。
+     */
     title?: string | null;
     /**
-     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     * 留空依次使用简短描述、事实摘要、全站默认描述。
      */
-    image?: (number | null) | Media;
     description?: string | null;
+    /**
+     * 例如：北美、欧盟、日本。只填写真实服务市场，不代表出口认证。
+     */
+    targetMarkets?: string | null;
+    /**
+     * 例如：中国福建泉州。仅填写可核实的产品产地；会在前台展示。
+     */
+    manufacturingOrigin?: string | null;
+    image?: (number | null) | Media;
+  };
+  sourcing?: {
+    minimumOrderQuantity?: number | null;
+    materials?: string | null;
+    customization?: string | null;
+    leadTime?: string | null;
+  };
+  /**
+   * Enter product name, then click "Generate" in Slug field
+   */
+  title: string;
+  general?: {
+    heroImage?: (number | null) | Media;
+    /**
+     * Add multiple images for the product
+     */
+    gallery?:
+      | {
+          image: number | Media;
+          caption?: string | null;
+          id?: string | null;
+        }[]
+      | null;
+    /**
+     * Brief description shown in product listings
+     */
+    shortDescription?: string | null;
+    description?: {
+      root: {
+        type: string;
+        children: {
+          type: any;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    } | null;
+  };
+  pricing: {
+    price?: number | null;
+    unit: 'kg' | 'jin' | 'box' | 'piece' | 'bag' | 'ton';
+    /**
+     * Enter -1 for unlimited stock
+     */
+    stock?: number | null;
+    /**
+     * Stock Keeping Unit code
+     */
+    sku?: string | null;
+  };
+  organization?: {
+    /**
+     * Select the category for this product
+     */
+    category?: (number | null) | Category;
+    /**
+     * Show in featured products section
+     */
+    featured?: boolean | null;
   };
   publishedAt?: string | null;
-  authors?: (number | User)[] | null;
   language?: string | null;
-  populatedAuthors?:
-    | {
-        id?: string | null;
-        name?: string | null;
-      }[]
-    | null;
   /**
    * When enabled, the slug will auto-generate from the title field on save and autosave.
    */
@@ -391,6 +501,38 @@ export interface Post {
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "industry-templates".
+ */
+export interface IndustryTemplate {
+  id: number;
+  title: string;
+  sectionTitle?: string | null;
+  fields?:
+    | {
+        /**
+         * 小写字母开头，可含数字和下划线；已保存行的标识不可修改。
+         */
+        key: string;
+        label: string;
+        type: 'text' | 'number' | 'select';
+        unit?: string | null;
+        placeholder?: string | null;
+        required?: boolean | null;
+        options?:
+          | {
+              value: string;
+              label: string;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -510,6 +652,91 @@ export interface FolderInterface {
   folderType?: 'media'[] | null;
   updatedAt: string;
   createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "posts".
+ */
+export interface Post {
+  id: number;
+  migration?: {
+    sourceId?: number | null;
+    /**
+     * Original public path. Keep this stable to preserve existing links.
+     */
+    sourcePath?: string | null;
+    sourceURL?: string | null;
+    /**
+     * Preserved source content, including specification tables. HTML is sanitized again when displayed.
+     */
+    contentHTML?: string | null;
+    summary?: string | null;
+    attributes?:
+      | {
+          [k: string]: unknown;
+        }
+      | unknown[]
+      | string
+      | number
+      | boolean
+      | null;
+    categories?: (number | Category)[] | null;
+  };
+  discovery?: {
+    /**
+     * 输出 noindex，并从 sitemap 和 llms.txt 中排除。
+     */
+    noIndex?: boolean | null;
+    /**
+     * 回答产品用途、采购适用对象等，会展示在内容页及机器可读摘要中；不要填写无法验证的优势。
+     */
+    summary?: string | null;
+  };
+  title: string;
+  heroImage?: (number | null) | Media;
+  content: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  relatedPosts?: (number | Post)[] | null;
+  categories?: (number | Category)[] | null;
+  tags?: (number | Category)[] | null;
+  meta?: {
+    title?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (number | null) | Media;
+    description?: string | null;
+  };
+  publishedAt?: string | null;
+  authors?: (number | User)[] | null;
+  language?: string | null;
+  populatedAuthors?:
+    | {
+        id?: string | null;
+        name?: string | null;
+      }[]
+    | null;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -871,180 +1098,19 @@ export interface Form {
   createdAt: string;
 }
 /**
+ * Visitor reviews require moderation. Email addresses are only visible in the admin panel.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "products".
+ * via the `definition` "equipment-reviews".
  */
-export interface Product {
+export interface EquipmentReview {
   id: number;
-  migration?: {
-    sourceId?: number | null;
-    /**
-     * Original public path. Keep this stable to preserve existing links.
-     */
-    sourcePath?: string | null;
-    sourceURL?: string | null;
-    /**
-     * Preserved source content, including specification tables. HTML is sanitized again when displayed.
-     */
-    contentHTML?: string | null;
-    summary?: string | null;
-    attributes?:
-      | {
-          [k: string]: unknown;
-        }
-      | unknown[]
-      | string
-      | number
-      | boolean
-      | null;
-    categories?: (number | Category)[] | null;
-  };
-  discovery?: {
-    /**
-     * 输出 noindex，并从 sitemap 和 llms.txt 中排除。
-     */
-    noIndex?: boolean | null;
-    /**
-     * 回答产品用途、采购适用对象等，会展示在内容页及机器可读摘要中；不要填写无法验证的优势。
-     */
-    summary?: string | null;
-  };
-  industryTemplate?: (number | null) | IndustryTemplate;
-  /**
-   * 各语言独立填写；切换模板保留已有参数值。
-   */
-  technicalValues?:
-    | {
-        [k: string]: unknown;
-      }
-    | unknown[]
-    | string
-    | number
-    | boolean
-    | null;
-  meta?: {
-    /**
-     * 留空使用产品名称；网站品牌名称会自动追加。
-     */
-    title?: string | null;
-    /**
-     * 留空依次使用简短描述、事实摘要、全站默认描述。
-     */
-    description?: string | null;
-    /**
-     * 例如：北美、欧盟、日本。只填写真实服务市场，不代表出口认证。
-     */
-    targetMarkets?: string | null;
-    /**
-     * 例如：中国福建泉州。仅填写可核实的产品产地；会在前台展示。
-     */
-    manufacturingOrigin?: string | null;
-    image?: (number | null) | Media;
-  };
-  sourcing?: {
-    minimumOrderQuantity?: number | null;
-    materials?: string | null;
-    customization?: string | null;
-    leadTime?: string | null;
-  };
-  /**
-   * Enter product name, then click "Generate" in Slug field
-   */
-  title: string;
-  general?: {
-    heroImage?: (number | null) | Media;
-    /**
-     * Add multiple images for the product
-     */
-    gallery?:
-      | {
-          image: number | Media;
-          caption?: string | null;
-          id?: string | null;
-        }[]
-      | null;
-    /**
-     * Brief description shown in product listings
-     */
-    shortDescription?: string | null;
-    description?: {
-      root: {
-        type: string;
-        children: {
-          type: any;
-          version: number;
-          [k: string]: unknown;
-        }[];
-        direction: ('ltr' | 'rtl') | null;
-        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-        indent: number;
-        version: number;
-      };
-      [k: string]: unknown;
-    } | null;
-  };
-  pricing: {
-    price?: number | null;
-    unit: 'kg' | 'jin' | 'box' | 'piece' | 'bag' | 'ton';
-    /**
-     * Enter -1 for unlimited stock
-     */
-    stock?: number | null;
-    /**
-     * Stock Keeping Unit code
-     */
-    sku?: string | null;
-  };
-  organization?: {
-    /**
-     * Select the category for this product
-     */
-    category?: (number | null) | Category;
-    /**
-     * Show in featured products section
-     */
-    featured?: boolean | null;
-  };
-  publishedAt?: string | null;
-  language?: string | null;
-  /**
-   * When enabled, the slug will auto-generate from the title field on save and autosave.
-   */
-  generateSlug?: boolean | null;
-  slug: string;
-  updatedAt: string;
-  createdAt: string;
-  _status?: ('draft' | 'published') | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "industry-templates".
- */
-export interface IndustryTemplate {
-  id: number;
-  title: string;
-  sectionTitle?: string | null;
-  fields?:
-    | {
-        /**
-         * 小写字母开头，可含数字和下划线；已保存行的标识不可修改。
-         */
-        key: string;
-        label: string;
-        type: 'text' | 'number' | 'select';
-        unit?: string | null;
-        placeholder?: string | null;
-        required?: boolean | null;
-        options?:
-          | {
-              value: string;
-              label: string;
-              id?: string | null;
-            }[]
-          | null;
-        id?: string | null;
-      }[]
-    | null;
+  product: number | Product;
+  rating: number;
+  comment: string;
+  authorName: string;
+  email: string;
+  status: 'pending' | 'published';
   updatedAt: string;
   createdAt: string;
 }
@@ -1265,6 +1331,14 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'industry-templates';
         value: number | IndustryTemplate;
+      } | null)
+    | ({
+        relationTo: 'equipment-content';
+        value: number | EquipmentContent;
+      } | null)
+    | ({
+        relationTo: 'equipment-reviews';
+        value: number | EquipmentReview;
       } | null)
     | ({
         relationTo: 'redirects';
@@ -1507,6 +1581,7 @@ export interface PostsSelect<T extends boolean = true> {
   content?: T;
   relatedPosts?: T;
   categories?: T;
+  tags?: T;
   meta?:
     | T
     | {
@@ -1639,10 +1714,19 @@ export interface CategoriesSelect<T extends boolean = true> {
         attributes?: T;
         categories?: T;
       };
+  taxonomy?: T;
+  description?: T;
+  parent?: T;
+  buyerGuide?:
+    | T
+    | {
+        summary?: T;
+        selectionNotes?: T;
+        resources?: T;
+      };
   title?: T;
   generateSlug?: T;
   slug?: T;
-  parent?: T;
   breadcrumbs?:
     | T
     | {
@@ -1780,6 +1864,52 @@ export interface IndustryTemplatesSelect<T extends boolean = true> {
             };
         id?: T;
       };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "equipment-content_select".
+ */
+export interface EquipmentContentSelect<T extends boolean = true> {
+  kind?: T;
+  slug?: T;
+  title?: T;
+  summary?: T;
+  sections?:
+    | T
+    | {
+        heading?: T;
+        body?: T;
+        id?: T;
+      };
+  questions?:
+    | T
+    | {
+        question?: T;
+        answer?: T;
+        id?: T;
+      };
+  relatedProducts?: T;
+  relatedCategories?: T;
+  relatedContent?: T;
+  noIndex?: T;
+  editorialNotes?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "equipment-reviews_select".
+ */
+export interface EquipmentReviewsSelect<T extends boolean = true> {
+  product?: T;
+  rating?: T;
+  comment?: T;
+  authorName?: T;
+  email?: T;
+  status?: T;
   updatedAt?: T;
   createdAt?: T;
 }

@@ -178,14 +178,14 @@ async function run() {
           collection: 'categories',
           depth: 0,
           limit: 1,
-          where: { slug: { equals: sample.category } },
+          where: { slug: { equals: sample.category }, taxonomy: { equals: 'product' } },
         })
       ).docs[0]
       if (!category)
         category = await payload.create({
           collection: 'categories',
           context,
-          data: { title: sample.categoryTitle, slug: sample.category },
+          data: { taxonomy: 'product', title: sample.categoryTitle, slug: sample.category },
         })
       const alt = `${sample.zh.title} / ${sample.en.title} — concept reference image`
       let media = (

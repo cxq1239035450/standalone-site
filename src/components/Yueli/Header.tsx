@@ -1,15 +1,23 @@
 import Image from 'next/image'
-import Link from 'next/link'
 import type { EquipmentSite } from '@/payload-types'
-import { imageURL, navigation } from './data'
+import { imageURL } from './data'
+import { SiteNavigation } from './Navigation'
+
+export const originalNavigation = [
+  { label: 'Home', href: '/' },
+  { label: 'Products', href: '/products/' },
+  { label: 'About Us', href: '/about-us/' },
+  { label: 'Blog', href: '/blog/' },
+  { label: 'FAQ', href: '/faq/' },
+  { label: 'Contact', href: '/contact-us/' },
+]
 
 export function YueliHeader({ site }: { site: EquipmentSite }) {
-  const items = navigation(site)
-  const links = items.map((item) => (
-    <Link key={item.href} href={item.href}>
-      {item.label}
-    </Link>
-  ))
+  const items =
+    site.navigation?.length &&
+    !site.navigation.some((item) => /^\/(solutions|resources|manufacturing)/.test(item.href))
+      ? site.navigation
+      : originalNavigation
   return (
     <>
       <a href="#main-content" className="yl-skip">
@@ -17,35 +25,30 @@ export function YueliHeader({ site }: { site: EquipmentSite }) {
       </a>
       <header className="yl-header">
         <div className="yl-wrap yl-header-top">
-          <Link href="/" aria-label="Yueli Automation home" className="yl-brand">
+          <a href="/" aria-label="Yueli Automation home" className="yl-brand">
             {imageURL(site.logo) ? (
               <Image src={imageURL(site.logo)} alt={site.name} width={206} height={58} priority />
             ) : (
               <strong>{site.name}</strong>
             )}
-          </Link>
+          </a>
           <div className="yl-header-assurance">
-            <span>Quality-focused production</span>
-            <span>Engineering support</span>
+            <span>
+              <b>ISO</b> Quality-focused production
+            </span>
+            <span>
+              <b>QC</b> Engineering support
+            </span>
           </div>
-          <Link href="/contact-us/" className="yl-button yl-header-quote">
-            Get Quote <span aria-hidden="true">↗</span>
-          </Link>
-          <details className="yl-mobile-menu">
-            <summary>Menu</summary>
-            <nav aria-label="Mobile navigation">
-              {links}
-              <Link href="/search/">Search equipment</Link>
-            </nav>
-          </details>
+          <a href="/contact-us/" className="yl-button yl-header-quote">
+            <span aria-hidden="true">✉</span> Get Quote
+          </a>
+        </div>
+        <div className="yl-mobile-navigation">
+          <SiteNavigation items={items} mobile />
         </div>
         <div className="yl-navigation">
-          <nav className="yl-wrap" aria-label="Main navigation">
-            {links}
-            <Link href="/search/" className="yl-search-link">
-              Search <span aria-hidden="true">↗</span>
-            </Link>
-          </nav>
+          <SiteNavigation items={items} />
         </div>
       </header>
     </>

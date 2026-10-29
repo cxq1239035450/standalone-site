@@ -1,0 +1,358 @@
+/* Original inner-page layout: catalog and WooCommerce-style product information. */
+.yl-replica-catalog {
+  width: min(1140px, calc(100% - 30px));
+  padding-top: 118px;
+  padding-bottom: 64px;
+  font-family: Inter, Arial, sans-serif;
+}
+.yl-replica-catalog h1 {
+  font:
+    700 36px/1.08 Barlow,
+    Arial,
+    sans-serif;
+  letter-spacing: 0;
+  margin: 0 0 12px;
+}
+.yl-catalog-lead {
+  font-size: 16px;
+  line-height: 1.7;
+  color: #536474;
+  max-width: 760px;
+  line-height: 1.65;
+}
+.yl-category-rail {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 10px;
+  margin: 0 0 54px;
+  padding: 24px 0 6px;
+  overflow-x: auto;
+}
+.yl-category-rail a {
+  padding: 11px 14px;
+  flex: 0 0 auto;
+  background: transparent;
+  border: 1px solid #dce5ed;
+  color: #16385d;
+  font:
+    800 13px/1.5 Barlow,
+    sans-serif;
+  border-radius: 0;
+}
+.yl-category-rail a:hover {
+  background: #16385d;
+  color: #fff;
+}
+.yl-replica-result-count {
+  font-size: 14px;
+  line-height: 21px;
+  margin: 0 0 14px;
+  color: #536474;
+}
+.yl-replica-product-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 48px 3.8%;
+}
+.yl-replica-product {
+  border: 1px solid #f2f2f2;
+  border-radius: 8px;
+  padding: 20px 15px;
+  overflow: hidden;
+  background: #fff;
+  min-width: 0;
+}
+.yl-replica-product-image {
+  height: 180px;
+  margin-bottom: 15px;
+  background: #f7f9fb;
+  overflow: hidden;
+}
+.yl-replica-product-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 5px;
+  display: block;
+}
+.yl-replica-product h2 {
+  font:
+    600 15px/26px Barlow,
+    Arial,
+    sans-serif;
+  letter-spacing: 0;
+  padding: 0;
+  margin: 0 0 15px;
+  color: #333;
+}
+.yl-replica-product:hover h2 {
+  color: #f58220;
+}
+.yl-inquiry-home .yl-form-row {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+.yl-inquiry-home label {
+  font-size: 0;
+  margin: 0;
+}
+.yl-inquiry-home input:not([type='checkbox']),
+.yl-inquiry-home textarea {
+  margin: 0;
+  border: 1px solid #d8e0e8;
+  background: #fff;
+  border-radius: 4px;
+  padding: 14px 16px;
+  font:
+    15px Arial,
+    sans-serif;
+}
+.yl-inquiry-home > label {
+  margin: 16px 0;
+}
+.yl-inquiry-home .yl-button {
+  border-radius: 4px;
+  background: #f58220;
+  color: #fff;
+  font:
+    700 15px Arial,
+    sans-serif;
+  padding: 15px 24px;
+}
+.yc-form .yl-inquiry-contact label {
+  font:
+    600 14px/1.5 Arial,
+    sans-serif;
+  margin-bottom: 16px;
+}
+.yc-form .yl-inquiry-contact input:not([type='checkbox']),
+.yc-form .yl-inquiry-contact textarea {
+  font:
+    14px/1.5 Arial,
+    sans-serif;
+  margin-top: 8px;
+  padding: 12px;
+  border: 1px solid #cfd8e3;
+  border-radius: 3px;
+}
+.yc-form .yl-inquiry-contact .yl-form-row {
+  display: block;
+}
+.yc-form .yl-inquiry-contact .yl-button {
+  border-radius: 3px;
+  background: #f58220;
+  color: #fff;
+  padding: 14px 24px;
+  font-size: 15px;
+}
+.yc-form .yl-inquiry-contact .yl-checkbox {
+  font-size: 13px !important;
+}
+.yl-original-layout p {
+  letter-spacing: normal;
+}
+.yl-original-layout ul {
+  line-height: inherit;
+}
+.yl-replica-detail .yl-product-hero {
+  padding-top: 60px;
+  padding-bottom: 64px;
+  gap: 56px;
+  width: min(1080px, calc(100% - 48px));
+  align-items: start;
+}
+.yl-replica-detail .yl-product-description {
+  padding-top: 0;
+  font-family: Barlow, Arial, sans-serif;
+}
+.yl-replica-detail .yl-product-description h1 {
+  font-size: 50px;
+  line-height: 1.04;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin: 0 0 20px;
+  color: #0e2b5c;
+}
+.yl-replica-detail .yl-gallery-main {
+  aspect-ratio: 1;
+  border: 0;
+}
+.yl-replica-detail .yl-gallery-main img {
+  padding: 0;
+}
+.yl-replica-detail .yl-gallery-thumbnails {
+  gap: 12px;
+  margin-top: 20px;
+}
+.yl-replica-detail .yl-gallery-thumbnails button {
+  width: calc(25% - 9px);
+  padding: 3px;
+}
+.yl-replica-detail .yl-product-summary,
+.yl-original-short-description {
+  font-size: 17px;
+  line-height: 1.65;
+  color: #5d6670;
+}
+.yl-original-short-description p {
+  margin: 0 0 16px;
+}
+.yl-product-category {
+  font-size: 16px;
+  margin: 10px 0 24px;
+  color: #555;
+}
+.yl-product-category a {
+  color: #ef7d3b;
+}
+.yl-configuration-link {
+  font:
+    600 15px/1.5 Barlow,
+    Arial,
+    sans-serif;
+  padding: 12px 20px;
+  background: #f58220;
+  border: 0;
+  border-radius: 3px;
+}
+.yl-replica-detail .yl-product-content {
+  width: min(1080px, calc(100% - 48px));
+  padding-bottom: 70px;
+}
+.yl-replica-article {
+  padding-top: 64px;
+  padding-bottom: 64px;
+  width: min(1180px, calc(100% - 48px));
+}
+.yl-article-heading {
+  margin-bottom: 48px;
+}
+.yl-article-heading h1 {
+  font-size: 50px;
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  max-width: 1050px;
+}
+.yl-article-heading > p {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  color: #718094;
+  font-size: 15px;
+  margin-top: 24px;
+}
+.yl-article-heading a {
+  color: #f58220;
+}
+.yl-article-columns {
+  display: grid;
+  grid-template-columns: minmax(0, 2.2fr) minmax(240px, 1fr);
+  gap: 70px;
+  align-items: start;
+}
+.yl-article-sidebar {
+  font-size: 16px;
+}
+.yl-article-sidebar > section {
+  margin-bottom: 40px;
+}
+.yl-article-sidebar h2 {
+  font-size: 26px;
+  margin: 0 0 24px;
+}
+.yl-article-sidebar > section > a {
+  display: block;
+  margin: 12px 0;
+  color: #536474;
+}
+.yl-article-sidebar > section > a:hover {
+  color: #f58220;
+}
+.yl-article-sidebar .yl-recent-post {
+  display: flex;
+  gap: 16px;
+  line-height: 1.4;
+  font-size: 15px;
+  margin-bottom: 20px;
+}
+.yl-recent-post img {
+  width: 80px;
+  height: 64px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+.yl-article-advice {
+  padding: 28px;
+  background: #f2f7fb;
+}
+.yl-article-advice p {
+  font-size: 15px;
+  color: #536474;
+  line-height: 1.65;
+  margin-bottom: 20px;
+}
+.yl-article-tags {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid #dce5ed;
+  font-size: 14px;
+}
+.yl-article-tags a {
+  color: #f58220;
+}
+@media (max-width: 760px) {
+  .yl-replica-detail .yl-product-hero {
+    grid-template-columns: 1fr;
+    padding-top: 32px;
+    gap: 32px;
+  }
+  .yl-replica-detail .yl-product-description h1,
+  .yl-article-heading h1 {
+    font-size: 36px;
+  }
+  .yl-article-columns {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+  .yl-replica-article {
+    padding-top: 40px;
+  }
+}
+@media (max-width: 900px) {
+  .yl-replica-product-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .yl-replica-catalog {
+    width: calc(100% - 20px);
+    padding-top: 150px;
+  }
+  .yl-replica-catalog .yl-catalog-lead {
+    font-size: 14px;
+  }
+}
+@media (max-width: 480px) {
+  .yl-replica-product-grid {
+    gap: 42px 4%;
+  }
+  .yl-replica-product h2 {
+    font-size: 15px;
+    padding: 0;
+    min-height: 0;
+  }
+  .yl-category-rail {
+    gap: 8px;
+  }
+  .yl-category-rail a {
+    padding: 9px 12px;
+    font-size: 13px;
+  }
+  .yl-inquiry-home .yl-form-row {
+    grid-template-columns: 1fr;
+  }
+  .yl-inquiry-home .yl-form-row label {
+    margin-bottom: 0;
+  }
+}

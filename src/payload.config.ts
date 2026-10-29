@@ -1,5 +1,7 @@
 import { SearchSettings } from './globals/SearchSettings'
 import { EquipmentSite } from './globals/EquipmentSite'
+import { EquipmentContent } from './collections/EquipmentContent'
+import { EquipmentReviews } from './collections/EquipmentReviews'
 import { IndustryTemplates } from './collections/IndustryTemplates'
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import { en } from '@payloadcms/translations/languages/en'
@@ -103,7 +105,7 @@ export default buildConfig({
       connectionString: process.env.DATABASE_URL || '',
     },
   }),
-  collections: [Pages, Posts, Media, Categories, Users, Products, IndustryTemplates],
+  collections: [Pages, Posts, Media, Categories, Users, Products, IndustryTemplates, EquipmentContent, EquipmentReviews],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer, SearchSettings, EquipmentSite],
   plugins,

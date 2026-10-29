@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { getSearchSettings, siteOrigin } from '@/utilities/searchSettings'
-import { imageURL } from './data'
+import { imageURL, getYueli } from './data'
 
 export async function equipmentMetadata(
   title: string,
@@ -18,14 +18,19 @@ export async function equipmentMetadata(
     description ||
     settings.description ||
     'Industrial equipment and automation solutions from Yueli Automation.'
-  const social = image || imageURL(settings.socialImage)
+  const social =
+    image || imageURL(settings.socialImage) || imageURL((await getYueli()).site.slides?.[0]?.image)
   const url = origin + (path === '/' ? '' : path)
   return {
     metadataBase: new URL(origin),
     title: { absolute: fullTitle },
     description: text,
     alternates: { canonical: url },
-    robots: { index: settings.allowIndexing !== false && !noIndex, follow: true },
+    robots: {
+      index: settings.allowIndexing !== false && !noIndex,
+      follow: true,
+      'max-image-preview': 'large',
+    },
     openGraph: {
       title: fullTitle,
       description: text,

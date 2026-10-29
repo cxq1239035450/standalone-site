@@ -67,8 +67,8 @@ function content(sections: string[][]): Post['content'] {
 async function run() {
   const payload = await getPayload({ config })
   try {
-    const found = await payload.find({ collection: 'categories', depth: 0, limit: 1, where: { slug: { equals: 'pet-guides' } } })
-    const category = found.docs[0] ?? await payload.create({ collection: 'categories', data: { title: '宠物采购指南 / Pet buying guides', slug: 'pet-guides' } })
+    const found = await payload.find({ collection: 'categories', depth: 0, limit: 1, where: { slug: { equals: 'pet-guides' }, taxonomy: { equals: 'post-category' } } })
+    const category = found.docs[0] ?? await payload.create({ collection: 'categories', data: { taxonomy: 'post-category', title: '宠物采购指南 / Pet buying guides', slug: 'pet-guides' } })
     for (const guide of guides) {
       const existing = await payload.find({ collection: 'posts', draft: true, depth: 0, limit: 1, where: { slug: { equals: guide.slug } } })
       if (existing.docs.length) {

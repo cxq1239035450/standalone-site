@@ -1,0 +1,365 @@
+{
+  "sourceOrigin": "https://yueliautomation.com",
+  "collectedAt": "2026-10-28T10:14:10.267Z",
+  "categories": [
+    {
+      "id": 17,
+      "slug": "company-news",
+      "path": "/category/company-news",
+      "title": "Company News",
+      "html": "",
+      "count": 1,
+      "parent": 0,
+      "description": ""
+    },
+    {
+      "id": 19,
+      "slug": "customer-success-stories",
+      "path": "/category/customer-success-stories",
+      "title": "Customer Success Stories",
+      "html": "",
+      "count": 1,
+      "parent": 0,
+      "description": ""
+    },
+    {
+      "id": 20,
+      "slug": "industry-trends-insights",
+      "path": "/category/industry-trends-insights",
+      "title": "Industry Trends & Insights",
+      "html": "",
+      "count": 1,
+      "parent": 0,
+      "description": ""
+    },
+    {
+      "id": 18,
+      "slug": "product-releases-updates",
+      "path": "/category/product-releases-updates",
+      "title": "Product Releases & Updates",
+      "html": "",
+      "count": 1,
+      "parent": 0,
+      "description": ""
+    },
+    {
+      "id": 21,
+      "slug": "technical-support-guides",
+      "path": "/category/technical-support-guides",
+      "title": "Technical Support & Guides",
+      "html": "Practical guides for selecting, operating, maintaining, and troubleshooting drilling, tapping, milling, CNC, and industrial automation equipment.",
+      "count": 3,
+      "parent": 0,
+      "description": "Practical guides for selecting, operating, maintaining, and troubleshooting drilling, tapping, milling, CNC, and industrial automation equipment."
+    },
+    {
+      "id": 1,
+      "slug": "uncategorized",
+      "path": "/category/uncategorized",
+      "title": "未分类",
+      "html": "",
+      "count": 0,
+      "parent": 0,
+      "description": ""
+    }
+  ],
+  "tags": [
+    {
+      "id": 30,
+      "slug": "automation-line",
+      "path": "/tag/automation-line",
+      "title": "Automation Line",
+      "html": "",
+      "count": 1,
+      "description": ""
+    },
+    {
+      "id": 35,
+      "slug": "automation-trends",
+      "path": "/tag/automation-trends",
+      "title": "Automation Trends",
+      "html": "",
+      "count": 1,
+      "description": ""
+    },
+    {
+      "id": 31,
+      "slug": "case-study",
+      "path": "/tag/case-study",
+      "title": "Case Study",
+      "html": "",
+      "count": 1,
+      "description": ""
+    },
+    {
+      "id": 40,
+      "slug": "cnc-guide",
+      "path": "/tag/cnc-guide",
+      "title": "CNC Guide",
+      "html": "",
+      "count": 1,
+      "description": ""
+    },
+    {
+      "id": 23,
+      "slug": "cnc-machinery",
+      "path": "/tag/cnc-machinery",
+      "title": "CNC Machinery",
+      "html": "",
+      "count": 1,
+      "description": ""
+    },
+    {
+      "id": 119,
+      "slug": "cnc-machining",
+      "path": "/tag/cnc-machining",
+      "title": "CNC machining",
+      "html": "",
+      "count": 1,
+      "description": ""
+    },
+    {
+      "id": 27,
+      "slug": "cnc-machining-center",
+      "path": "/tag/cnc-machining-center",
+      "title": "CNC Machining Center",
+      "html": "",
+      "count": 1,
+      "description": ""
+    },
+    {
+      "id": 37,
+      "slug": "cnc-technology",
+      "path": "/tag/cnc-technology",
+      "title": "CNC Technology",
+      "html": "",
+      "count": 1,
+      "description": ""
+    },
+    {
+      "id": 118,
+      "slug": "drilling-and-tapping",
+      "path": "/tag/drilling-and-tapping",
+      "title": "drilling and tapping",
+      "html": "",
+      "count": 1,
+      "description": ""
+    },
+    {
+      "id": 39,
+      "slug": "drilling-tapping-machine",
+      "path": "/tag/drilling-tapping-machine",
+      "title": "Drilling Tapping Machine",
+      "html": "",
+      "count": 1,
+      "description": ""
+    },
+    {
+      "id": 24,
+      "slug": "factory-expansion",
+      "path": "/tag/factory-expansion",
+      "title": "Factory Expansion",
+      "html": "",
+      "count": 1,
+      "description": ""
+    },
+    {
+      "id": 25,
+      "slug": "global-supply",
+      "path": "/tag/global-supply",
+      "title": "Global Supply",
+      "html": "",
+      "count": 1,
+      "description": ""
+    },
+    {
+      "id": 36,
+      "slug": "hardware-industry",
+      "path": "/tag/hardware-industry",
+      "title": "Hardware Industry",
+      "html": "",
+      "count": 1,
+      "description": ""
+    },
+    {
+      "id": 120,
+      "slug": "industrial-automation",
+      "path": "/tag/industrial-automation",
+      "title": "industrial automation",
+      "html": "",
+      "count": 1,
+      "description": ""
+    },
+    {
+      "id": 38,
+      "slug": "machine-maintenance",
+      "path": "/tag/machine-maintenance",
+      "title": "Machine Maintenance",
+      "html": "",
+      "count": 1,
+      "description": ""
+    },
+    {
+      "id": 117,
+      "slug": "machine-selection",
+      "path": "/tag/machine-selection",
+      "title": "machine selection",
+      "html": "",
+      "count": 1,
+      "description": ""
+    },
+    {
+      "id": 26,
+      "slug": "new-product",
+      "path": "/tag/new-product",
+      "title": "New Product",
+      "html": "",
+      "count": 1,
+      "description": ""
+    },
+    {
+      "id": 29,
+      "slug": "precision-engineering",
+      "path": "/tag/precision-engineering",
+      "title": "Precision Engineering",
+      "html": "",
+      "count": 1,
+      "description": ""
+    },
+    {
+      "id": 33,
+      "slug": "production-efficiency",
+      "path": "/tag/production-efficiency",
+      "title": "Production Efficiency",
+      "html": "",
+      "count": 1,
+      "description": ""
+    },
+    {
+      "id": 32,
+      "slug": "sanitary-ware",
+      "path": "/tag/sanitary-ware",
+      "title": "Sanitary Ware",
+      "html": "",
+      "count": 1,
+      "description": ""
+    },
+    {
+      "id": 34,
+      "slug": "smart-manufacturing",
+      "path": "/tag/smart-manufacturing",
+      "title": "Smart Manufacturing",
+      "html": "",
+      "count": 1,
+      "description": ""
+    },
+    {
+      "id": 41,
+      "slug": "technical-support",
+      "path": "/tag/technical-support",
+      "title": "Technical Support",
+      "html": "",
+      "count": 1,
+      "description": ""
+    },
+    {
+      "id": 28,
+      "slug": "valve-manufacturing",
+      "path": "/tag/valve-manufacturing",
+      "title": "Valve Manufacturing",
+      "html": "",
+      "count": 1,
+      "description": ""
+    },
+    {
+      "id": 22,
+      "slug": "yueli-automation",
+      "path": "/tag/yueli-automation",
+      "title": "Yueli Automation",
+      "html": "",
+      "count": 1,
+      "description": ""
+    }
+  ],
+  "posts": [
+    {
+      "id": 2475,
+      "categories": [
+        21
+      ],
+      "tags": []
+    },
+    {
+      "id": 2389,
+      "categories": [
+        21
+      ],
+      "tags": [
+        119,
+        118,
+        120,
+        117
+      ]
+    },
+    {
+      "id": 867,
+      "categories": [
+        21
+      ],
+      "tags": [
+        40,
+        39,
+        38,
+        41
+      ]
+    },
+    {
+      "id": 864,
+      "categories": [
+        20
+      ],
+      "tags": [
+        35,
+        37,
+        36,
+        34
+      ]
+    },
+    {
+      "id": 861,
+      "categories": [
+        19
+      ],
+      "tags": [
+        30,
+        31,
+        33,
+        32
+      ]
+    },
+    {
+      "id": 858,
+      "categories": [
+        18
+      ],
+      "tags": [
+        27,
+        26,
+        29,
+        28
+      ]
+    },
+    {
+      "id": 855,
+      "categories": [
+        17
+      ],
+      "tags": [
+        23,
+        24,
+        25,
+        22
+      ]
+    }
+  ]
+}

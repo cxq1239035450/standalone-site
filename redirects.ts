@@ -16,6 +16,18 @@ export const redirects: NextConfig['redirects'] = async () => {
 
   return [
     internetExplorerRedirect,
+    ...[
+      '/wp-sitemap.xml',
+      '/wp-sitemap-posts-post-1.xml',
+      '/wp-sitemap-posts-page-1.xml',
+      '/wp-sitemap-posts-product-1.xml',
+      '/wp-sitemap-taxonomies-category-1.xml',
+      '/wp-sitemap-taxonomies-post_tag-1.xml',
+      '/wp-sitemap-taxonomies-product_cat-1.xml',
+    ].map((source) => ({ source, destination: '/sitemap.xml', permanent: true })),
+    { source: '/home', destination: '/', permanent: true },
+    { source: '/equipment', destination: '/products', permanent: true },
+    { source: '/:locale(en|zh)/home', destination: '/', permanent: true },
     { source: '/posts/:path*', destination: '/blog/:path*', permanent: true },
     { source: '/:locale(en|zh)/posts/:path*', destination: '/blog/:path*', permanent: true },
     { source: '/contact', destination: '/contact-us', permanent: true },

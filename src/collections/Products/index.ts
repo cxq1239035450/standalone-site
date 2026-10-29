@@ -233,6 +233,7 @@ export const Products: CollectionConfig = {
               type: 'relationship',
               label: adminLabel('产品分类', 'Category'),
               relationTo: 'categories',
+              filterOptions: { taxonomy: { equals: 'product' } },
               admin: {
                 description: adminLabel('选择产品所属分类', 'Select the category for this product'),
               },

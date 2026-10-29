@@ -131,6 +131,7 @@ export const seed = async ({
       payload.create({
         collection: 'categories',
         data: {
+          taxonomy: 'post-category',
           title: category,
           slug: category,
         },
