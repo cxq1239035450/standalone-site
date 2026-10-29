@@ -13,6 +13,8 @@ import { ContactWidget } from '@/components/Yueli/ContactWidget'
 import source from '@/data/yueli.json'
 import { getYueli, imageURL } from '@/components/Yueli/data'
 import { getSearchSettings, siteOrigin, jsonLd } from '@/utilities/searchSettings'
+import { GoogleAnalytics } from '@/integrations/google/GoogleAnalytics'
+import { googleMeasurementId, googleSiteVerification } from '@/integrations/google/config'
 import '@/components/Yueli/site.css'
 import '@/components/Yueli/source-fonts.css'
 import '@/components/Yueli/source-pages.css'
@@ -21,14 +23,18 @@ import '@/components/Yueli/source-contact.css'
 import '@/components/Yueli/replica-inner.css'
 import '@/components/Yueli/product-content.css'
 
-export const metadata = {
-  icons: {
-    icon: [
-      { url: '/favicon.ico?v=yueli-2', sizes: '64x64' },
-      { url: '/favicon.svg?v=yueli-2', type: 'image/svg+xml' },
-    ],
-    apple: '/favicon.png?v=yueli-2',
-  },
+export function generateMetadata() {
+  const verification = googleSiteVerification()
+  return {
+    ...(verification ? { verification: { google: verification } } : {}),
+    icons: {
+      icon: [
+        { url: '/favicon.ico?v=yueli-2', sizes: '64x64' },
+        { url: '/favicon.svg?v=yueli-2', type: 'image/svg+xml' },
+      ],
+      apple: '/favicon.png?v=yueli-2',
+    },
+  }
 }
 
 export async function generateStaticParams() {
@@ -84,6 +90,7 @@ export default async function WebsiteLayout({
         : []
     })
   const origin = siteOrigin(settings.siteUrl)
+  const measurementId = googleMeasurementId()
   const organization = {
     '@context': 'https://schema.org',
     '@type': 'Organization',
@@ -151,6 +158,7 @@ export default async function WebsiteLayout({
             />
           </LanguageProvider>
         </NextIntlClientProvider>
+        {measurementId ? <GoogleAnalytics measurementId={measurementId} origin={origin} /> : null}
       </body>
     </html>
   )

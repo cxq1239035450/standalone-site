@@ -24,14 +24,17 @@ vi.mock('@/components/Yueli/postTaxonomy', () => ({
     docs.filter((doc) => doc.categories?.includes(archive.id)),
 }))
 vi.mock('@payload-config', () => ({ default: {} }))
-vi.mock('@/utilities/searchSettings', () => ({ siteOrigin: () => 'https://yueli.example' }))
+vi.mock('@/utilities/searchSettings', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@/utilities/searchSettings')>()
+  return { siteOrigin: actual.siteOrigin }
+})
 import sitemap from '@/app/sitemap'
 
 describe('Published localized sitemap', () => {
   beforeEach(() => {
     vi.clearAllMocks()
     createReader.mockReturnValue({ find, findGlobal: settings })
-    settings.mockResolvedValue({ allowIndexing: true })
+    settings.mockResolvedValue({ allowIndexing: true, siteUrl: 'https://yueli.example' })
     rawFind.mockImplementation(async ({ collection }) => ({
       docs: collection === 'languages' ? [{ code: 'en' }, { code: 'zh' }, { code: 'ja' }] : [],
     }))
@@ -146,5 +149,16 @@ describe('Published localized sitemap', () => {
     expect(await sitemap()).toEqual([])
     expect(find).not.toHaveBeenCalled()
     expect(rawFind).not.toHaveBeenCalled()
+  })
+
+  it('publishes only the configured production host, including translated URLs', async () => {
+    settings.mockResolvedValue({ allowIndexing: true, siteUrl: 'https://yueliautomation.com/' })
+    find.mockImplementation(async ({ collection }) => ({
+      docs: collection === 'pages' ? [{ _status: 'published', slug: 'home', title: 'Home' }] : [],
+    }))
+    const urls = (await sitemap()).map(({ url }) => url)
+    expect(urls).toContain('https://yueliautomation.com/')
+    expect(urls).toContain('https://yueliautomation.com/zh')
+    expect(urls.every((url) => new URL(url).origin === 'https://yueliautomation.com')).toBe(true)
   })
 })

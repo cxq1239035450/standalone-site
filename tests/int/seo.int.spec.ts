@@ -15,9 +15,15 @@ vi.mock('@/i18n/content', () => ({
 }))
 vi.mock('@payload-config', () => ({ default: {} }))
 vi.mock('@/utilities/getURL', () => ({ getServerSideURL: () => 'http://localhost:3000' }))
+vi.mock('next-intl/server', () => ({ getLocale: async () => 'en' }))
+vi.mock('@/components/Yueli/data', () => ({
+  getYueli: async () => ({ site: {} }),
+  imageURL: () => undefined,
+}))
 
 import { jsonLd, pageMetadata, siteOrigin } from '@/utilities/searchSettings'
 import robots from '@/app/robots'
+import { equipmentMetadata } from '@/components/Yueli/metadata'
 
 describe('Public search metadata', () => {
   beforeEach(() => {
@@ -77,6 +83,24 @@ describe('Public search metadata', () => {
     expect(result.rules).toContainEqual(
       expect.objectContaining({ userAgent: '*', allow: expect.arrayContaining(['/']) }),
     )
+  })
+
+  it('uses the configured production host for Yueli canonical, Open Graph and robots sitemap', async () => {
+    findGlobal.mockResolvedValue({
+      siteName: 'Yueli Automation',
+      siteUrl: 'https://yueliautomation.com/',
+      allowIndexing: true,
+    })
+    const home = await equipmentMetadata('Yueli Automation')
+    const product = await equipmentMetadata('Machining center', '/product/machining-center')
+    expect(String(home.metadataBase)).toBe('https://yueliautomation.com/')
+    expect(home.alternates?.canonical).toBe('https://yueliautomation.com')
+    expect(product.alternates?.canonical).toBe(
+      'https://yueliautomation.com/product/machining-center',
+    )
+    expect(product.openGraph).toMatchObject({ url: product.alternates?.canonical })
+    expect((await robots()).sitemap).toBe('https://yueliautomation.com/sitemap.xml')
+    expect(JSON.stringify([home, product, await robots()])).not.toContain('localhost')
   })
 
   it('prevents a CMS value from terminating a JSON-LD script', () => {
