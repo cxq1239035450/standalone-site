@@ -51,6 +51,7 @@ const adminEn = {
 }
 
 export default buildConfig({
+  serverURL: getServerSideURL(),
   // Admin UI language (menus, buttons, validation messages, etc.).
   // This is separate from `localization`, which controls localized content fields.
   i18n: {
@@ -70,6 +71,10 @@ export default buildConfig({
     localizeStatus: true,
   },
   admin: {
+    meta: {
+      // Private admin pages do not need a generated social preview image.
+      defaultOGImageType: 'off',
+    },
     components: {
       // Keep the dashboard on Payload's translated core UI. The template's demo
       // welcome components contain hard-coded English copy.
