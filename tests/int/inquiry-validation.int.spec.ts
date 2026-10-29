@@ -1,3 +1,4 @@
+vi.mock('@/i18n/content', () => ({ createContentReader: (payload: unknown) => payload }))
 import { describe, expect, it, vi } from 'vitest'
 import { validateFormSubmission, validateSubmissionFields } from '@/hooks/validateFormSubmission'
 import { contactForm } from '@/endpoints/seed/contact-form'

@@ -69,10 +69,6 @@ export default function TranslatePublishButton() {
     uploadStatus !== 'uploading',
   )
 
-  useEffect(() => {
-    setTargetLocale(availableTargets[0]?.code ?? '')
-  }, [availableTargets])
-
   const copyAndContinue = useCallback(
     async (pending: PendingTranslation) => {
       if (!id || copyingRef.current) return

@@ -1,4 +1,6 @@
 'use client'
+import { useTranslations as useInterfaceCopy } from 'next-intl'
+
 
 import { ArrowUpRight, Package } from 'lucide-react'
 import { useTranslations } from 'next-intl'
@@ -8,7 +10,7 @@ import type { Product } from '@/payload-types'
 import { Link } from '@/i18n/navigation'
 import { Media } from '@/components/Media'
 import { cn } from '@/utilities/ui'
-import { productUnitLabel, productInquiryHref } from '@/utilities/productPresentation'
+import { productInquiryHref } from '@/utilities/productPresentation'
 
 interface ProductCardProps {
   product: Partial<Product>
@@ -26,8 +28,11 @@ function getLocalizedValue(value: unknown, locale: string): string {
 }
 
 export const ProductCard: React.FC<ProductCardProps> = ({ product, locale, className }) => {
+  const interfaceCopy = useInterfaceCopy('interface')
+
   const t = useTranslations('products')
   const home = useTranslations('home')
+  const units = useTranslations('units')
   const { general, organization, pricing, slug, title } = product
   const { heroImage, shortDescription } = general || {}
   const { category, featured } = organization || {}
@@ -36,7 +41,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, locale, class
   const titleValue = getLocalizedValue(title, locale)
   const descriptionValue = getLocalizedValue(shortDescription, locale)
   const slugValue = typeof slug === 'string' ? slug : getLocalizedValue(slug, locale)
-  const unitLabel = productUnitLabel(unit, locale)
+  const unitLabel = units(unit || 'piece')
   const href = `/products/${slugValue}`
 
   return (
@@ -92,7 +97,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, locale, class
 
         {product.sourcing?.materials && (
           <p className="mt-3 line-clamp-2 text-xs leading-5 text-[#5e7169]">
-            {locale === 'zh' ? '材质' : 'Material'} · {product.sourcing.materials}
+            {interfaceCopy('components_ProductCard_index_tsx_1')} · {product.sourcing.materials}
           </p>
         )}
         <div className="mt-auto pt-5">
@@ -107,7 +112,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, locale, class
               href={href}
               className="inline-flex items-center gap-1 text-sm font-medium text-[#173f35]"
             >
-              {locale === 'zh' ? '查看详情' : 'View details'} <ArrowUpRight size={16} />
+              {interfaceCopy('components_ProductCard_index_tsx_2')} <ArrowUpRight size={16} />
             </Link>
             <Link
               href={productInquiryHref(

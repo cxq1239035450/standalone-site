@@ -3,7 +3,7 @@
 import { useFormModified, useFormProcessing, useLocale, useTranslation } from '@payloadcms/ui'
 import { Languages, LockKeyhole } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import React, { useEffect, useState } from 'react'
+import React, { useTransition } from 'react'
 
 import { localeConfig } from '@/i18n/config'
 
@@ -17,17 +17,13 @@ export default function ContentLanguageControl() {
   const processing = useFormProcessing()
   const { code: currentLocale } = useLocale()
   const { i18n } = useTranslation()
-  const [isSwitching, setIsSwitching] = useState(false)
+  const [isSwitching, startTransition] = useTransition()
   const isEnglishAdmin = i18n.language === 'en'
   const activeLocale =
     localeConfig.locales.find(({ code }) => code === currentLocale) ??
     localeConfig.locales.find(({ code }) => code === localeConfig.defaultLocale) ??
     localeConfig.locales[0]
   const switchingDisabled = modified || processing || isSwitching
-
-  useEffect(() => {
-    setIsSwitching(false)
-  }, [currentLocale])
 
   const switchLocale = (nextLocale: string) => {
     if (switchingDisabled || nextLocale === currentLocale) return
@@ -36,10 +32,9 @@ export default function ContentLanguageControl() {
     const supportedLocale = localeConfig.locales.some(({ code }) => code === nextLocale)
     if (!supportedLocale) return
 
-    setIsSwitching(true)
     const url = new URL(window.location.href)
     url.searchParams.set('locale', nextLocale)
-    router.replace(`${url.pathname}${url.search}${url.hash}`, { scroll: false })
+    startTransition(() => router.replace(`${url.pathname}${url.search}${url.hash}`, { scroll: false }))
   }
 
   return (

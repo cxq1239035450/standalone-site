@@ -12,10 +12,13 @@ type Settings = {
   siteUrl?: string
   description?: string
   allowIndexing?: boolean
+  languageCode?: string
+  productSlug?: string
+  productNoIndex?: boolean
 }
 
 export default function ProductSearchPreview() {
-  const { code: locale = 'zh' } = useLocale()
+  const { code: legacyLocale = 'zh' } = useLocale()
   const { i18n } = useTranslation()
   const english = i18n.language === 'en'
   const values = useFormFields(([fields]) => ({
@@ -28,14 +31,18 @@ export default function ProductSearchPreview() {
     targetMarkets: fields['meta.targetMarkets']?.value,
     manufacturingOrigin: fields['meta.manufacturingOrigin']?.value,
     noIndex: fields['discovery.noIndex']?.value,
+    language: fields.language?.value,
+    subject: fields.subject?.value,
   }))
   const [mode, setMode] = useState<'desktop' | 'mobile'>('desktop')
   const [retry, setRetry] = useState(0)
   const [remote, setRemote] = useState<{ locale: string; settings?: Settings; failed?: boolean }>()
+  const requestKey = values.language ? `${values.language}:${values.subject}` : legacyLocale
   useEffect(() => {
     const controller = new AbortController()
     let active = true
-    fetch(`/api/globals/search-settings?locale=${encodeURIComponent(locale)}&depth=0`, {
+    const url = values.language ? `/api/translations/preview-settings?language=${values.language}&subject=${values.subject}` : `/api/globals/search-settings?locale=${encodeURIComponent(legacyLocale)}&depth=0`
+    fetch(url, {
       credentials: 'same-origin',
       signal: controller.signal,
       cache: 'no-store',
@@ -43,18 +50,19 @@ export default function ProductSearchPreview() {
       .then(async (response) => {
         if (!response.ok) throw new Error('Settings unavailable')
         const settings: Settings = await response.json()
-        if (active) setRemote({ locale, settings })
+        if (active) setRemote({ locale: requestKey, settings })
       })
       .catch(() => {
-        if (active && !controller.signal.aborted) setRemote({ locale, failed: true })
+        if (active && !controller.signal.aborted) setRemote({ locale: requestKey, failed: true })
       })
     return () => {
       active = false
       controller.abort()
     }
-  }, [locale, retry])
-  const settings = remote?.locale === locale ? remote.settings : undefined
-  const failed = remote?.locale === locale && remote.failed
+  }, [legacyLocale, requestKey, values.language, values.subject, retry])
+  const settings = remote?.locale === requestKey ? remote.settings : undefined
+  const failed = remote?.locale === requestKey && remote.failed
+  const locale = settings?.languageCode || legacyLocale
   const string = (value: unknown) => (typeof value === 'string' ? value : '')
   const siteName = settings?.siteName || 'PawSupply'
   let origin = getServerSideURL()
@@ -69,9 +77,9 @@ export default function ProductSearchPreview() {
     settings?.description,
     locale,
   )
-  const slug = string(values.slug)
+  const slug = settings?.productSlug || string(values.slug)
   const url = slug ? productSearchURL(origin, locale, slug) : `${origin}/${locale}/products/…`
-  const noIndex = values.noIndex === true || settings?.allowIndexing === false
+  const noIndex = values.noIndex === true || settings?.productNoIndex === true || settings?.allowIndexing === false
   const targetMarkets = string(values.targetMarkets).trim()
   const manufacturingOrigin = string(values.manufacturingOrigin).trim()
 

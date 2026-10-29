@@ -78,6 +78,18 @@ export interface Config {
     forms: Form;
     'form-submissions': FormSubmission;
     search: Search;
+    languages: Language;
+    'site-copy': SiteCopy;
+    'pages-translations': PagesTranslation;
+    'posts-translations': PostsTranslation;
+    'media-translations': MediaTranslation;
+    'categories-translations': CategoriesTranslation;
+    'products-translations': ProductsTranslation;
+    'industry-templates-translations': IndustryTemplatesTranslation;
+    'forms-translations': FormsTranslation;
+    'header-translations': HeaderTranslation;
+    'footer-translations': FooterTranslation;
+    'search-settings-translations': SearchSettingsTranslation;
     'payload-kv': PayloadKv;
     'payload-jobs': PayloadJob;
     'payload-folders': FolderInterface;
@@ -102,6 +114,18 @@ export interface Config {
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
     search: SearchSelect<false> | SearchSelect<true>;
+    languages: LanguagesSelect<false> | LanguagesSelect<true>;
+    'site-copy': SiteCopySelect<false> | SiteCopySelect<true>;
+    'pages-translations': PagesTranslationsSelect<false> | PagesTranslationsSelect<true>;
+    'posts-translations': PostsTranslationsSelect<false> | PostsTranslationsSelect<true>;
+    'media-translations': MediaTranslationsSelect<false> | MediaTranslationsSelect<true>;
+    'categories-translations': CategoriesTranslationsSelect<false> | CategoriesTranslationsSelect<true>;
+    'products-translations': ProductsTranslationsSelect<false> | ProductsTranslationsSelect<true>;
+    'industry-templates-translations': IndustryTemplatesTranslationsSelect<false> | IndustryTemplatesTranslationsSelect<true>;
+    'forms-translations': FormsTranslationsSelect<false> | FormsTranslationsSelect<true>;
+    'header-translations': HeaderTranslationsSelect<false> | HeaderTranslationsSelect<true>;
+    'footer-translations': FooterTranslationsSelect<false> | FooterTranslationsSelect<true>;
+    'search-settings-translations': SearchSettingsTranslationsSelect<false> | SearchSettingsTranslationsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-jobs': PayloadJobsSelect<false> | PayloadJobsSelect<true>;
     'payload-folders': PayloadFoldersSelect<false> | PayloadFoldersSelect<true>;
@@ -117,11 +141,13 @@ export interface Config {
     header: Header;
     footer: Footer;
     'search-settings': SearchSetting;
+    'language-settings': LanguageSetting;
   };
   globalsSelect: {
     header: HeaderSelect<false> | HeaderSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
     'search-settings': SearchSettingsSelect<false> | SearchSettingsSelect<true>;
+    'language-settings': LanguageSettingsSelect<false> | LanguageSettingsSelect<true>;
   };
   locale: 'zh' | 'en';
   widgets: {
@@ -158,6 +184,8 @@ export interface UserAuthOperations {
   };
 }
 /**
+ * 共享资料在此维护；语言内容请使用下方翻译管理。旧语言字段和历史版本保留作为迁移归档。
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "pages".
  */
@@ -173,9 +201,9 @@ export interface Page {
      */
     summary?: string | null;
   };
-  title: string;
-  hero: {
-    type: 'none' | 'highImpact' | 'mediumImpact' | 'lowImpact';
+  title?: string | null;
+  hero?: {
+    type?: ('none' | 'highImpact' | 'mediumImpact' | 'lowImpact') | null;
     richText?: {
       root: {
         type: string;
@@ -217,7 +245,7 @@ export interface Page {
       | null;
     media?: (number | null) | Media;
   };
-  layout: (CallToActionBlock | ContentBlock | MediaBlock | ArchiveBlock | FormBlock)[];
+  layout?: (CallToActionBlock | ContentBlock | MediaBlock | ArchiveBlock | FormBlock)[] | null;
   meta?: {
     title?: string | null;
     /**
@@ -237,6 +265,8 @@ export interface Page {
   _status?: ('draft' | 'published') | null;
 }
 /**
+ * 共享资料在此维护；语言内容请使用下方翻译管理。旧语言字段和历史版本保留作为迁移归档。
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "posts".
  */
@@ -252,9 +282,9 @@ export interface Post {
      */
     summary?: string | null;
   };
-  title: string;
+  title?: string | null;
   heroImage?: (number | null) | Media;
-  content: {
+  content?: {
     root: {
       type: string;
       children: {
@@ -268,7 +298,7 @@ export interface Post {
       version: number;
     };
     [k: string]: unknown;
-  };
+  } | null;
   relatedPosts?: (number | Post)[] | null;
   categories?: (number | Category)[] | null;
   meta?: {
@@ -281,7 +311,6 @@ export interface Post {
   };
   publishedAt?: string | null;
   authors?: (number | User)[] | null;
-  language?: string | null;
   populatedAuthors?:
     | {
         id?: string | null;
@@ -298,6 +327,8 @@ export interface Post {
   _status?: ('draft' | 'published') | null;
 }
 /**
+ * 共享资料在此维护；语言内容请使用下方翻译管理。旧语言字段和历史版本保留作为迁移归档。
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "media".
  */
@@ -417,12 +448,14 @@ export interface FolderInterface {
   createdAt: string;
 }
 /**
+ * 共享资料在此维护；语言内容请使用下方翻译管理。旧语言字段和历史版本保留作为迁移归档。
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "categories".
  */
 export interface Category {
   id: number;
-  title: string;
+  title?: string | null;
   /**
    * When enabled, the slug will auto-generate from the title field on save and autosave.
    */
@@ -635,12 +668,14 @@ export interface FormBlock {
   blockType: 'formBlock';
 }
 /**
+ * 共享资料在此维护；语言内容请使用下方翻译管理。旧语言字段和历史版本保留作为迁移归档。
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "forms".
  */
 export interface Form {
   id: number;
-  title: string;
+  title?: string | null;
   fields?:
     | (
         | {
@@ -800,6 +835,8 @@ export interface Form {
   createdAt: string;
 }
 /**
+ * 共享资料在此维护；语言内容请使用下方翻译管理。旧语言字段和历史版本保留作为迁移归档。
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "products".
  */
@@ -856,7 +893,7 @@ export interface Product {
   /**
    * Enter product name, then click "Generate" in Slug field
    */
-  title: string;
+  title?: string | null;
   general?: {
     heroImage?: (number | null) | Media;
     /**
@@ -912,7 +949,6 @@ export interface Product {
     featured?: boolean | null;
   };
   publishedAt?: string | null;
-  language?: string | null;
   /**
    * When enabled, the slug will auto-generate from the title field on save and autosave.
    */
@@ -923,6 +959,8 @@ export interface Product {
   _status?: ('draft' | 'published') | null;
 }
 /**
+ * 共享资料在此维护；语言内容请使用下方翻译管理。旧语言字段和历史版本保留作为迁移归档。
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "industry-templates".
  */
@@ -994,6 +1032,7 @@ export interface FormSubmission {
         id?: string | null;
       }[]
     | null;
+  contentLocale?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -1027,6 +1066,615 @@ export interface Search {
     | null;
   updatedAt: string;
   createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "languages".
+ */
+export interface Language {
+  id: number;
+  /**
+   * 例如 zh、en、ja、pt-BR。保存后不可更改。
+   */
+  code: string;
+  label: string;
+  /**
+   * 留空使用语言代码，例如中文可填写 zh-CN。
+   */
+  htmlLang?: string | null;
+  direction: 'ltr' | 'rtl';
+  sortOrder?: number | null;
+  /**
+   * 准备状态可编辑翻译。发布前台文案、页头、页脚和搜索配置后才能启用。
+   */
+  enabled?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-copy".
+ */
+export interface SiteCopy {
+  id: number;
+  language: number | Language;
+  messages:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * 每条记录是一种语言的独立版本。保存草稿不会改变已发布内容。共享数据请在原内容中编辑。
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "pages-translations".
+ */
+export interface PagesTranslation {
+  id: number;
+  subject: number | Page;
+  language: number | Language;
+  discovery?: {
+    /**
+     * 回答产品用途、采购适用对象等，会展示在内容页及机器可读摘要中；不要填写无法验证的优势。
+     */
+    summary?: string | null;
+  };
+  title: string;
+  hero: {
+    type: 'none' | 'highImpact' | 'mediumImpact' | 'lowImpact';
+    richText?: {
+      root: {
+        type: string;
+        children: {
+          type: any;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    } | null;
+    links?:
+      | {
+          link: {
+            type?: ('reference' | 'custom') | null;
+            newTab?: boolean | null;
+            reference?:
+              | ({
+                  relationTo: 'pages';
+                  value: number | Page;
+                } | null)
+              | ({
+                  relationTo: 'posts';
+                  value: number | Post;
+                } | null);
+            url?: string | null;
+            label: string;
+            /**
+             * Choose how the link should be rendered.
+             */
+            appearance?: ('default' | 'outline') | null;
+          };
+          id?: string | null;
+        }[]
+      | null;
+    media?: (number | null) | Media;
+  };
+  layout: (CallToActionBlock | ContentBlock | MediaBlock | ArchiveBlock | FormBlock)[];
+  meta?: {
+    title?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (number | null) | Media;
+    description?: string | null;
+  };
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * 每条记录是一种语言的独立版本。保存草稿不会改变已发布内容。共享数据请在原内容中编辑。
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "posts-translations".
+ */
+export interface PostsTranslation {
+  id: number;
+  subject: number | Post;
+  language: number | Language;
+  discovery?: {
+    /**
+     * 回答产品用途、采购适用对象等，会展示在内容页及机器可读摘要中；不要填写无法验证的优势。
+     */
+    summary?: string | null;
+  };
+  title: string;
+  content: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  meta?: {
+    title?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (number | null) | Media;
+    description?: string | null;
+  };
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * 每条记录是一种语言的独立版本。保存草稿不会改变已发布内容。共享数据请在原内容中编辑。
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "media-translations".
+ */
+export interface MediaTranslation {
+  id: number;
+  subject: number | Media;
+  language: number | Language;
+  alt?: string | null;
+  caption?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * 每条记录是一种语言的独立版本。保存草稿不会改变已发布内容。共享数据请在原内容中编辑。
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "categories-translations".
+ */
+export interface CategoriesTranslation {
+  id: number;
+  subject: number | Category;
+  language: number | Language;
+  title: string;
+  breadcrumbs?:
+    | {
+        doc?: (number | null) | Category;
+        url?: string | null;
+        label?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * 每条记录是一种语言的独立版本。保存草稿不会改变已发布内容。共享数据请在原内容中编辑。
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "products-translations".
+ */
+export interface ProductsTranslation {
+  id: number;
+  subject: number | Product;
+  language: number | Language;
+  discovery?: {
+    /**
+     * 回答产品用途、采购适用对象等，会展示在内容页及机器可读摘要中；不要填写无法验证的优势。
+     */
+    summary?: string | null;
+  };
+  /**
+   * 各语言独立填写；切换模板保留已有参数值。
+   */
+  technicalValues?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  meta?: {
+    /**
+     * 留空使用产品名称；网站品牌名称会自动追加。
+     */
+    title?: string | null;
+    /**
+     * 留空依次使用简短描述、事实摘要、全站默认描述。
+     */
+    description?: string | null;
+    /**
+     * 例如：北美、欧盟、日本。只填写真实服务市场，不代表出口认证。
+     */
+    targetMarkets?: string | null;
+    /**
+     * 例如：中国福建泉州。仅填写可核实的产品产地；会在前台展示。
+     */
+    manufacturingOrigin?: string | null;
+  };
+  sourcing?: {
+    materials?: string | null;
+    customization?: string | null;
+    leadTime?: string | null;
+  };
+  /**
+   * Enter product name, then click "Generate" in Slug field
+   */
+  title: string;
+  general?: {
+    /**
+     * Add multiple images for the product
+     */
+    gallery?:
+      | {
+          image: number | Media;
+          caption?: string | null;
+          id?: string | null;
+        }[]
+      | null;
+    /**
+     * Brief description shown in product listings
+     */
+    shortDescription?: string | null;
+    description?: {
+      root: {
+        type: string;
+        children: {
+          type: any;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    } | null;
+  };
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * 每条记录是一种语言的独立版本。保存草稿不会改变已发布内容。共享数据请在原内容中编辑。
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "industry-templates-translations".
+ */
+export interface IndustryTemplatesTranslation {
+  id: number;
+  subject: number | IndustryTemplate;
+  language: number | Language;
+  sectionTitle?: string | null;
+  fields?:
+    | {
+        /**
+         * 小写字母开头，可含数字和下划线；已保存行的标识不可修改。
+         */
+        key: string;
+        label: string;
+        type: 'text' | 'number' | 'select';
+        unit?: string | null;
+        placeholder?: string | null;
+        required?: boolean | null;
+        options?:
+          | {
+              value: string;
+              label: string;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * 每条记录是一种语言的独立版本。保存草稿不会改变已发布内容。共享数据请在原内容中编辑。
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "forms-translations".
+ */
+export interface FormsTranslation {
+  id: number;
+  subject: number | Form;
+  language: number | Language;
+  title: string;
+  fields?:
+    | (
+        | {
+            name: string;
+            label?: string | null;
+            width?: number | null;
+            required?: boolean | null;
+            defaultValue?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'checkbox';
+          }
+        | {
+            name: string;
+            label?: string | null;
+            width?: number | null;
+            required?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'country';
+          }
+        | {
+            name: string;
+            label?: string | null;
+            width?: number | null;
+            required?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'email';
+          }
+        | {
+            message?: {
+              root: {
+                type: string;
+                children: {
+                  type: any;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'message';
+          }
+        | {
+            name: string;
+            label?: string | null;
+            width?: number | null;
+            defaultValue?: number | null;
+            required?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'number';
+          }
+        | {
+            name: string;
+            label?: string | null;
+            width?: number | null;
+            defaultValue?: string | null;
+            placeholder?: string | null;
+            options?:
+              | {
+                  label: string;
+                  value: string;
+                  id?: string | null;
+                }[]
+              | null;
+            required?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'select';
+          }
+        | {
+            name: string;
+            label?: string | null;
+            width?: number | null;
+            required?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'state';
+          }
+        | {
+            name: string;
+            label?: string | null;
+            width?: number | null;
+            defaultValue?: string | null;
+            required?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'text';
+          }
+        | {
+            name: string;
+            label?: string | null;
+            width?: number | null;
+            defaultValue?: string | null;
+            required?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'textarea';
+          }
+      )[]
+    | null;
+  submitButtonLabel?: string | null;
+  confirmationMessage?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  emails?:
+    | {
+        emailTo?: string | null;
+        cc?: string | null;
+        bcc?: string | null;
+        replyTo?: string | null;
+        emailFrom?: string | null;
+        subject: string;
+        message?: {
+          root: {
+            type: string;
+            children: {
+              type: any;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        } | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * 每条记录是一种语言的独立版本。保存草稿不会改变已发布内容。共享数据请在原内容中编辑。
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "header-translations".
+ */
+export interface HeaderTranslation {
+  id: number;
+  subject: string;
+  language: number | Language;
+  navItems?:
+    | {
+        link: {
+          type?: ('reference' | 'custom') | null;
+          newTab?: boolean | null;
+          reference?:
+            | ({
+                relationTo: 'pages';
+                value: number | Page;
+              } | null)
+            | ({
+                relationTo: 'posts';
+                value: number | Post;
+              } | null);
+          url?: string | null;
+          label: string;
+        };
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * 每条记录是一种语言的独立版本。保存草稿不会改变已发布内容。共享数据请在原内容中编辑。
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "footer-translations".
+ */
+export interface FooterTranslation {
+  id: number;
+  subject: string;
+  language: number | Language;
+  navItems?:
+    | {
+        link: {
+          type?: ('reference' | 'custom') | null;
+          newTab?: boolean | null;
+          reference?:
+            | ({
+                relationTo: 'pages';
+                value: number | Page;
+              } | null)
+            | ({
+                relationTo: 'posts';
+                value: number | Post;
+              } | null);
+          url?: string | null;
+          label: string;
+        };
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * 每条记录是一种语言的独立版本。保存草稿不会改变已发布内容。共享数据请在原内容中编辑。
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "search-settings-translations".
+ */
+export interface SearchSettingsTranslation {
+  id: number;
+  subject: string;
+  language: number | Language;
+  siteName: string;
+  /**
+   * 页面未填写独立描述时使用，建议 80–160 字符。
+   */
+  description?: string | null;
+  organization?: {
+    legalName?: string | null;
+  };
+  geo?: {
+    summary?: string | null;
+    /**
+     * 填写后替换首页默认采购问答，并与可见内容同步生成 FAQ 结构化数据。只填写可核实的采购政策。
+     */
+    faq?:
+      | {
+          question: string;
+          answer: string;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1187,6 +1835,54 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'search';
         value: number | Search;
+      } | null)
+    | ({
+        relationTo: 'languages';
+        value: number | Language;
+      } | null)
+    | ({
+        relationTo: 'site-copy';
+        value: number | SiteCopy;
+      } | null)
+    | ({
+        relationTo: 'pages-translations';
+        value: number | PagesTranslation;
+      } | null)
+    | ({
+        relationTo: 'posts-translations';
+        value: number | PostsTranslation;
+      } | null)
+    | ({
+        relationTo: 'media-translations';
+        value: number | MediaTranslation;
+      } | null)
+    | ({
+        relationTo: 'categories-translations';
+        value: number | CategoriesTranslation;
+      } | null)
+    | ({
+        relationTo: 'products-translations';
+        value: number | ProductsTranslation;
+      } | null)
+    | ({
+        relationTo: 'industry-templates-translations';
+        value: number | IndustryTemplatesTranslation;
+      } | null)
+    | ({
+        relationTo: 'forms-translations';
+        value: number | FormsTranslation;
+      } | null)
+    | ({
+        relationTo: 'header-translations';
+        value: number | HeaderTranslation;
+      } | null)
+    | ({
+        relationTo: 'footer-translations';
+        value: number | FooterTranslation;
+      } | null)
+    | ({
+        relationTo: 'search-settings-translations';
+        value: number | SearchSettingsTranslation;
       } | null)
     | ({
         relationTo: 'payload-folders';
@@ -1400,7 +2096,6 @@ export interface PostsSelect<T extends boolean = true> {
       };
   publishedAt?: T;
   authors?: T;
-  language?: T;
   populatedAuthors?:
     | T
     | {
@@ -1610,7 +2305,6 @@ export interface ProductsSelect<T extends boolean = true> {
         featured?: T;
       };
   publishedAt?: T;
-  language?: T;
   generateSlug?: T;
   slug?: T;
   updatedAt?: T;
@@ -1807,6 +2501,7 @@ export interface FormSubmissionsSelect<T extends boolean = true> {
         value?: T;
         id?: T;
       };
+  contentLocale?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -1836,6 +2531,430 @@ export interface SearchSelect<T extends boolean = true> {
       };
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "languages_select".
+ */
+export interface LanguagesSelect<T extends boolean = true> {
+  code?: T;
+  label?: T;
+  htmlLang?: T;
+  direction?: T;
+  sortOrder?: T;
+  enabled?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-copy_select".
+ */
+export interface SiteCopySelect<T extends boolean = true> {
+  language?: T;
+  messages?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "pages-translations_select".
+ */
+export interface PagesTranslationsSelect<T extends boolean = true> {
+  subject?: T;
+  language?: T;
+  discovery?:
+    | T
+    | {
+        summary?: T;
+      };
+  title?: T;
+  hero?:
+    | T
+    | {
+        type?: T;
+        richText?: T;
+        links?:
+          | T
+          | {
+              link?:
+                | T
+                | {
+                    type?: T;
+                    newTab?: T;
+                    reference?: T;
+                    url?: T;
+                    label?: T;
+                    appearance?: T;
+                  };
+              id?: T;
+            };
+        media?: T;
+      };
+  layout?:
+    | T
+    | {
+        cta?: T | CallToActionBlockSelect<T>;
+        content?: T | ContentBlockSelect<T>;
+        mediaBlock?: T | MediaBlockSelect<T>;
+        archive?: T | ArchiveBlockSelect<T>;
+        formBlock?: T | FormBlockSelect<T>;
+      };
+  meta?:
+    | T
+    | {
+        title?: T;
+        image?: T;
+        description?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "posts-translations_select".
+ */
+export interface PostsTranslationsSelect<T extends boolean = true> {
+  subject?: T;
+  language?: T;
+  discovery?:
+    | T
+    | {
+        summary?: T;
+      };
+  title?: T;
+  content?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        image?: T;
+        description?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "media-translations_select".
+ */
+export interface MediaTranslationsSelect<T extends boolean = true> {
+  subject?: T;
+  language?: T;
+  alt?: T;
+  caption?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "categories-translations_select".
+ */
+export interface CategoriesTranslationsSelect<T extends boolean = true> {
+  subject?: T;
+  language?: T;
+  title?: T;
+  breadcrumbs?:
+    | T
+    | {
+        doc?: T;
+        url?: T;
+        label?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "products-translations_select".
+ */
+export interface ProductsTranslationsSelect<T extends boolean = true> {
+  subject?: T;
+  language?: T;
+  discovery?:
+    | T
+    | {
+        summary?: T;
+      };
+  technicalValues?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        targetMarkets?: T;
+        manufacturingOrigin?: T;
+      };
+  sourcing?:
+    | T
+    | {
+        materials?: T;
+        customization?: T;
+        leadTime?: T;
+      };
+  title?: T;
+  general?:
+    | T
+    | {
+        gallery?:
+          | T
+          | {
+              image?: T;
+              caption?: T;
+              id?: T;
+            };
+        shortDescription?: T;
+        description?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "industry-templates-translations_select".
+ */
+export interface IndustryTemplatesTranslationsSelect<T extends boolean = true> {
+  subject?: T;
+  language?: T;
+  sectionTitle?: T;
+  fields?:
+    | T
+    | {
+        key?: T;
+        label?: T;
+        type?: T;
+        unit?: T;
+        placeholder?: T;
+        required?: T;
+        options?:
+          | T
+          | {
+              value?: T;
+              label?: T;
+              id?: T;
+            };
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "forms-translations_select".
+ */
+export interface FormsTranslationsSelect<T extends boolean = true> {
+  subject?: T;
+  language?: T;
+  title?: T;
+  fields?:
+    | T
+    | {
+        checkbox?:
+          | T
+          | {
+              name?: T;
+              label?: T;
+              width?: T;
+              required?: T;
+              defaultValue?: T;
+              id?: T;
+              blockName?: T;
+            };
+        country?:
+          | T
+          | {
+              name?: T;
+              label?: T;
+              width?: T;
+              required?: T;
+              id?: T;
+              blockName?: T;
+            };
+        email?:
+          | T
+          | {
+              name?: T;
+              label?: T;
+              width?: T;
+              required?: T;
+              id?: T;
+              blockName?: T;
+            };
+        message?:
+          | T
+          | {
+              message?: T;
+              id?: T;
+              blockName?: T;
+            };
+        number?:
+          | T
+          | {
+              name?: T;
+              label?: T;
+              width?: T;
+              defaultValue?: T;
+              required?: T;
+              id?: T;
+              blockName?: T;
+            };
+        select?:
+          | T
+          | {
+              name?: T;
+              label?: T;
+              width?: T;
+              defaultValue?: T;
+              placeholder?: T;
+              options?:
+                | T
+                | {
+                    label?: T;
+                    value?: T;
+                    id?: T;
+                  };
+              required?: T;
+              id?: T;
+              blockName?: T;
+            };
+        state?:
+          | T
+          | {
+              name?: T;
+              label?: T;
+              width?: T;
+              required?: T;
+              id?: T;
+              blockName?: T;
+            };
+        text?:
+          | T
+          | {
+              name?: T;
+              label?: T;
+              width?: T;
+              defaultValue?: T;
+              required?: T;
+              id?: T;
+              blockName?: T;
+            };
+        textarea?:
+          | T
+          | {
+              name?: T;
+              label?: T;
+              width?: T;
+              defaultValue?: T;
+              required?: T;
+              id?: T;
+              blockName?: T;
+            };
+      };
+  submitButtonLabel?: T;
+  confirmationMessage?: T;
+  emails?:
+    | T
+    | {
+        emailTo?: T;
+        cc?: T;
+        bcc?: T;
+        replyTo?: T;
+        emailFrom?: T;
+        subject?: T;
+        message?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "header-translations_select".
+ */
+export interface HeaderTranslationsSelect<T extends boolean = true> {
+  subject?: T;
+  language?: T;
+  navItems?:
+    | T
+    | {
+        link?:
+          | T
+          | {
+              type?: T;
+              newTab?: T;
+              reference?: T;
+              url?: T;
+              label?: T;
+            };
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "footer-translations_select".
+ */
+export interface FooterTranslationsSelect<T extends boolean = true> {
+  subject?: T;
+  language?: T;
+  navItems?:
+    | T
+    | {
+        link?:
+          | T
+          | {
+              type?: T;
+              newTab?: T;
+              reference?: T;
+              url?: T;
+              label?: T;
+            };
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "search-settings-translations_select".
+ */
+export interface SearchSettingsTranslationsSelect<T extends boolean = true> {
+  subject?: T;
+  language?: T;
+  siteName?: T;
+  description?: T;
+  organization?:
+    | T
+    | {
+        legalName?: T;
+      };
+  geo?:
+    | T
+    | {
+        summary?: T;
+        faq?:
+          | T
+          | {
+              question?: T;
+              answer?: T;
+              id?: T;
+            };
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1921,6 +3040,8 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   createdAt?: T;
 }
 /**
+ * 共享资料在此维护；语言内容请使用下方翻译管理。旧语言字段和历史版本保留作为迁移归档。
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "header".
  */
@@ -1954,6 +3075,8 @@ export interface Header {
   createdAt?: string | null;
 }
 /**
+ * 共享资料在此维护；语言内容请使用下方翻译管理。旧语言字段和历史版本保留作为迁移归档。
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "footer".
  */
@@ -1987,12 +3110,14 @@ export interface Footer {
   createdAt?: string | null;
 }
 /**
+ * 共享资料在此维护；语言内容请使用下方翻译管理。旧语言字段和历史版本保留作为迁移归档。
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "search-settings".
  */
 export interface SearchSetting {
   id: number;
-  siteName: string;
+  siteName?: string | null;
   /**
    * 仅支持根域部署，例如 https://example.com，路径与末尾斜杠会忽略。留空使用 NEXT_PUBLIC_SERVER_URL。用于 canonical、站点地图与结构化数据。
    */
@@ -2038,6 +3163,16 @@ export interface SearchSetting {
      */
     allowAITraining?: boolean | null;
   };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "language-settings".
+ */
+export interface LanguageSetting {
+  id: number;
+  defaultLanguage: number | Language;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -2132,6 +3267,16 @@ export interface SearchSettingsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "language-settings_select".
+ */
+export interface LanguageSettingsSelect<T extends boolean = true> {
+  defaultLanguage?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "collections_widget".
  */
 export interface CollectionsWidget {
@@ -2160,6 +3305,50 @@ export interface TaskSchedulePublish {
       | ({
           relationTo: 'products';
           value: number | Product;
+        } | null)
+      | ({
+          relationTo: 'site-copy';
+          value: number | SiteCopy;
+        } | null)
+      | ({
+          relationTo: 'pages-translations';
+          value: number | PagesTranslation;
+        } | null)
+      | ({
+          relationTo: 'posts-translations';
+          value: number | PostsTranslation;
+        } | null)
+      | ({
+          relationTo: 'media-translations';
+          value: number | MediaTranslation;
+        } | null)
+      | ({
+          relationTo: 'categories-translations';
+          value: number | CategoriesTranslation;
+        } | null)
+      | ({
+          relationTo: 'products-translations';
+          value: number | ProductsTranslation;
+        } | null)
+      | ({
+          relationTo: 'industry-templates-translations';
+          value: number | IndustryTemplatesTranslation;
+        } | null)
+      | ({
+          relationTo: 'forms-translations';
+          value: number | FormsTranslation;
+        } | null)
+      | ({
+          relationTo: 'header-translations';
+          value: number | HeaderTranslation;
+        } | null)
+      | ({
+          relationTo: 'footer-translations';
+          value: number | FooterTranslation;
+        } | null)
+      | ({
+          relationTo: 'search-settings-translations';
+          value: number | SearchSettingsTranslation;
         } | null);
     global?: string | null;
     user?: (number | null) | User;

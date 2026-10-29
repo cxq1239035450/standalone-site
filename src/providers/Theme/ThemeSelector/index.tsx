@@ -7,31 +7,27 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import React, { useState } from 'react'
+import React from 'react'
 
 import type { Theme } from './types'
 
 import { useTheme } from '..'
 import { themeLocalStorageKey } from './types'
+import { useBrowserPreference } from '@/utilities/browserPreference'
+import { themeIsValid } from '../types'
 
 export const ThemeSelector: React.FC = () => {
   const { setTheme } = useTheme()
-  const [value, setValue] = useState('')
+  const preference = useBrowserPreference(themeLocalStorageKey)
+  const value = preference && themeIsValid(preference) ? preference : 'auto'
 
-  const onThemeChange = (themeToSet: Theme & 'auto') => {
+  const onThemeChange = (themeToSet: Theme | 'auto') => {
     if (themeToSet === 'auto') {
       setTheme(null)
-      setValue('auto')
     } else {
       setTheme(themeToSet)
-      setValue(themeToSet)
     }
   }
-
-  React.useEffect(() => {
-    const preference = window.localStorage.getItem(themeLocalStorageKey)
-    setValue(preference ?? 'auto')
-  }, [])
 
   return (
     <Select onValueChange={onThemeChange} value={value}>

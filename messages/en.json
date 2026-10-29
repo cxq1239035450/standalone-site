@@ -76,8 +76,18 @@
     "products": "Our collection",
     "support": "Explore",
     "contact": "Let’s work together",
-    "productLinks": ["Product Center", "Solutions", "Pricing", "Case Studies"],
-    "supportLinks": ["Help Center", "FAQ", "Contact Us", "Feedback"],
+    "productLinks": [
+      "Product Center",
+      "Solutions",
+      "Pricing",
+      "Case Studies"
+    ],
+    "supportLinks": [
+      "Help Center",
+      "FAQ",
+      "Contact Us",
+      "Feedback"
+    ],
     "phone": "Phone",
     "email": "Email",
     "address": "Address",
@@ -106,10 +116,18 @@
       "primaryAction": "Explore products",
       "secondaryAction": "Discuss your project",
       "imageAlt": "Golden retriever with a sage pet bed, ceramic bowls and rope toy",
-      "notes": ["China-based team", "Long-term factory partners", "Multi-port shipping"],
+      "notes": [
+        "China-based team",
+        "Long-term factory partners",
+        "Multi-port shipping"
+      ],
       "eyebrow": "CHINA-BASED · PET SUPPLIES SOURCING"
     },
-    "audience": ["For pet retailers", "For distributors", "For private-label brands"],
+    "audience": [
+      "For pet retailers",
+      "For distributors",
+      "For private-label brands"
+    ],
     "categories": {
       "title": "Everyday essentials.\nConsidered in every detail.",
       "description": "From feeding and resting to play and daily walks, build your sourcing shortlist by category.",
@@ -425,6 +443,78 @@
     ],
     "portsTitle": "Departure ports in China",
     "portsDescription": "Send your delivery destination, quantities, packaging details and target date. We will discuss a suitable departure port and available logistics options; freight costs, schedules and service scope are confirmed in the quotation.",
-    "ports": ["Port of Xiamen", "Port of Tianjin", "Port of Guangzhou"]
+    "ports": [
+      "Port of Xiamen",
+      "Port of Tianjin",
+      "Port of Guangzhou"
+    ]
+  },
+  "interface": {
+    "components_ProductGallery_index_tsx_1": "Product gallery",
+    "components_ProductGallery_index_tsx_2": "Enlarge product image",
+    "components_ProductGallery_index_tsx_3": "Product photography coming soon",
+    "components_ProductGallery_index_tsx_4": "carousel",
+    "components_ProductGallery_index_tsx_5": "slide",
+    "components_ProductGallery_index_tsx_6": "Previous image",
+    "components_ProductGallery_index_tsx_7": "Next image",
+    "components_ProductGallery_index_tsx_8": "View image {v0}",
+    "components_ProductCard_index_tsx_1": "Material",
+    "components_ProductCard_index_tsx_2": "View details",
+    "search_Component_tsx_1": "Search products and resources",
+    "search_Component_tsx_2": "Search",
+    "app__locale___frontend__products_page_client_tsx_1": "Search products, materials or SKU",
+    "app__locale___frontend__products_page_client_tsx_2": "Search products",
+    "app__locale___frontend__products_page_client_tsx_3": "Sort products",
+    "app__locale___frontend__products_page_client_tsx_4": "Newest first",
+    "app__locale___frontend__products_page_client_tsx_5": "Product name",
+    "app__locale___frontend__products_page_client_tsx_6": "Find products",
+    "app__locale___frontend__products_page_tsx_1": "No products match “{v0}”. Try another term or clear your search.",
+    "app__locale___frontend__products_page_tsx_2": "Clear search",
+    "app__locale___frontend__products__slug__page_tsx_1": "Minimum order",
+    "app__locale___frontend__products__slug__page_tsx_2": "Materials",
+    "app__locale___frontend__products__slug__page_tsx_3": "Customization",
+    "app__locale___frontend__products__slug__page_tsx_4": "Lead time",
+    "app__locale___frontend__products__slug__page_tsx_5": "Share your quantity, delivery location and customization needs. Pricing, samples and lead times are confirmed for your project.",
+    "app__locale___frontend__products__slug__page_tsx_6": "Product information",
+    "app__locale___frontend__products__slug__page_tsx_7": "Before requesting a quote",
+    "app__locale___frontend__products__slug__page_tsx_8": "A clearer brief. A better conversation.",
+    "app__locale___frontend__products__slug__page_tsx_9": "Include estimated quantities, sizes or capacities, preferred materials, target market and packaging requirements. Let us know if you need branding or samples.",
+    "app__locale___frontend__search_page_tsx_1": "Find products and sourcing resources",
+    "app__locale___frontend__search_page_tsx_2": "Enter a product name, material or sourcing keyword.",
+    "app__locale___frontend__search_page_tsx_3": "No matching results. Try a different keyword.",
+    "app__locale___frontend__search_page_tsx_4": "Products",
+    "app__locale___frontend__search_page_tsx_5": "Sourcing resources",
+    "app__locale___frontend__search_page_tsx_6": "Search"
+  },
+  "units": {
+    "kg": "kg",
+    "jin": "jin",
+    "box": "box",
+    "piece": "unit",
+    "bag": "bag",
+    "ton": "ton",
+    "set": "set"
+  },
+  "geography": {
+    "origin": "Manufacturing origin",
+    "markets": "Target markets"
+  },
+  "lightbox": {
+    "close": "Close",
+    "previous": "Previous",
+    "next": "Next",
+    "zoomIn": "Zoom in",
+    "zoomOut": "Zoom out",
+    "showThumbnails": "Show thumbnails",
+    "hideThumbnails": "Hide thumbnails"
+  },
+  "privacy": {
+    "title": "Analytics privacy",
+    "description": "Allow anonymous analytics? We count page views and inquiry actions, never form contents. You can withdraw at any time.",
+    "decline": "Decline / withdraw",
+    "allow": "Allow analytics"
+  },
+  "company": {
+    "summary": "PawSupply is a China-based pet supplies sourcing and private-label partner with long-term relationships with dozens of factories. We coordinate product selection, samples and order requirements for retailers, distributors and pet brands."
   }
 }

@@ -1,7 +1,7 @@
 import { ArrowRight, ArrowUpRight, ClipboardCheck, PackageCheck, Palette, Plus } from 'lucide-react'
 import Image from 'next/image'
 import { getTranslations, getLocale } from 'next-intl/server'
-import { getPayload } from 'payload'
+import { getPayload } from '@/i18n/content'
 import configPromise from '@payload-config'
 import { ProductCard } from '@/components/ProductCard'
 import { Link } from '@/i18n/navigation'

@@ -4,7 +4,7 @@ import type { Metadata } from 'next'
 
 import { ContactPageContent } from '@/components/ContactPage'
 import { getTranslations } from 'next-intl/server'
-import { getPayload } from 'payload'
+import { getPayload } from '@/i18n/content'
 import config from '@payload-config'
 import { notFound } from 'next/navigation'
 

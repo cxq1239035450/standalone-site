@@ -76,8 +76,18 @@
     "products": "产品系列",
     "support": "探索更多",
     "contact": "一起创造新可能",
-    "productLinks": ["产品中心", "解决方案", "价格方案", "客户案例"],
-    "supportLinks": ["帮助中心", "常见问题", "联系我们", "意见反馈"],
+    "productLinks": [
+      "产品中心",
+      "解决方案",
+      "价格方案",
+      "客户案例"
+    ],
+    "supportLinks": [
+      "帮助中心",
+      "常见问题",
+      "联系我们",
+      "意见反馈"
+    ],
     "phone": "电话",
     "email": "邮箱",
     "address": "地址",
@@ -106,10 +116,18 @@
       "primaryAction": "探索产品系列",
       "secondaryAction": "聊聊您的采购计划",
       "imageAlt": "温暖家居中的金毛犬、鼠尾草绿宠物窝与陶瓷食盆",
-      "notes": ["中国采购团队", "数十家合作工厂", "多港口发运"],
+      "notes": [
+        "中国采购团队",
+        "数十家合作工厂",
+        "多港口发运"
+      ],
       "eyebrow": "立足中国 · 宠物用品采购与定制"
     },
-    "audience": ["宠物用品零售商", "批发与分销商", "独立宠物品牌"],
+    "audience": [
+      "宠物用品零售商",
+      "批发与分销商",
+      "独立宠物品牌"
+    ],
     "categories": {
       "title": "为每一种日常，选好每一件。",
       "description": "从喂养、休息到互动与出行，按品类建立更清晰的采购清单。",
@@ -425,6 +443,78 @@
     ],
     "portsTitle": "支持发运的中国港口",
     "portsDescription": "请提供收货目的地、数量、包装信息与期望时间。我们将沟通适合的发货港口和可用物流方案，运费、船期及服务范围以具体报价确认为准。",
-    "ports": ["厦门港", "天津港", "广州港"]
+    "ports": [
+      "厦门港",
+      "天津港",
+      "广州港"
+    ]
+  },
+  "interface": {
+    "components_ProductGallery_index_tsx_1": "产品图库",
+    "components_ProductGallery_index_tsx_2": "放大查看产品图片",
+    "components_ProductGallery_index_tsx_3": "产品图片待补充",
+    "components_ProductGallery_index_tsx_4": "轮播图",
+    "components_ProductGallery_index_tsx_5": "幻灯片",
+    "components_ProductGallery_index_tsx_6": "上一张图片",
+    "components_ProductGallery_index_tsx_7": "下一张图片",
+    "components_ProductGallery_index_tsx_8": "查看第 {v0} 张图片",
+    "components_ProductCard_index_tsx_1": "材质",
+    "components_ProductCard_index_tsx_2": "查看详情",
+    "search_Component_tsx_1": "搜索产品与资讯",
+    "search_Component_tsx_2": "搜索",
+    "app__locale___frontend__products_page_client_tsx_1": "搜索产品名称、材质或 SKU",
+    "app__locale___frontend__products_page_client_tsx_2": "搜索产品",
+    "app__locale___frontend__products_page_client_tsx_3": "产品排序",
+    "app__locale___frontend__products_page_client_tsx_4": "最新发布",
+    "app__locale___frontend__products_page_client_tsx_5": "按产品名称",
+    "app__locale___frontend__products_page_client_tsx_6": "查找产品",
+    "app__locale___frontend__products_page_tsx_1": "未找到与“{v0}”匹配的产品，请更换关键词或清除搜索。",
+    "app__locale___frontend__products_page_tsx_2": "清除搜索",
+    "app__locale___frontend__products__slug__page_tsx_1": "MOQ / 最小起订量",
+    "app__locale___frontend__products__slug__page_tsx_2": "材质",
+    "app__locale___frontend__products__slug__page_tsx_3": "可定制项目",
+    "app__locale___frontend__products__slug__page_tsx_4": "参考交期",
+    "app__locale___frontend__products__slug__page_tsx_5": "请提供采购数量、收货地区与定制要求。报价、样品及交期以双方确认的方案为准。",
+    "app__locale___frontend__products__slug__page_tsx_6": "产品详情导航",
+    "app__locale___frontend__products__slug__page_tsx_7": "采购准备",
+    "app__locale___frontend__products__slug__page_tsx_8": "把采购需求，说得更具体。",
+    "app__locale___frontend__products__slug__page_tsx_9": "准备好计划数量、尺寸或容量、材料偏好、销售市场和包装要求。如果需要品牌标识或样品，请一并说明。",
+    "app__locale___frontend__search_page_tsx_1": "搜索产品与采购资讯",
+    "app__locale___frontend__search_page_tsx_2": "输入产品名称、材质或采购关键词。",
+    "app__locale___frontend__search_page_tsx_3": "暂未找到结果，请换个关键词试试。",
+    "app__locale___frontend__search_page_tsx_4": "产品",
+    "app__locale___frontend__search_page_tsx_5": "采购资讯",
+    "app__locale___frontend__search_page_tsx_6": "搜索"
+  },
+  "units": {
+    "kg": "千克",
+    "jin": "斤",
+    "box": "箱",
+    "piece": "件",
+    "bag": "袋",
+    "ton": "吨",
+    "set": "套"
+  },
+  "geography": {
+    "origin": "制造产地",
+    "markets": "目标市场"
+  },
+  "lightbox": {
+    "close": "关闭大图",
+    "previous": "上一张图片",
+    "next": "下一张图片",
+    "zoomIn": "放大",
+    "zoomOut": "缩小",
+    "showThumbnails": "显示缩略图",
+    "hideThumbnails": "隐藏缩略图"
+  },
+  "privacy": {
+    "title": "统计隐私设置",
+    "description": "是否允许匿名访问统计？仅统计页面和询盘行为，不读取表单内容。你可以随时撤回同意。",
+    "decline": "拒绝 / 撤回",
+    "allow": "允许统计"
+  },
+  "company": {
+    "summary": "PawSupply 是来自中国的宠物用品采购与品牌定制合作伙伴，与数十家工厂保持长期合作，为零售商、分销商及宠物品牌协调选品、样品与订单需求。"
   }
 }

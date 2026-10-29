@@ -1,6 +1,7 @@
+vi.mock('@/i18n/service', () => ({ getLanguageRegistry: async () => ({ defaultLocale: 'zh', languages: [{ id: 1, code: 'zh', htmlLang: 'zh-CN' }, { id: 2, code: 'en', htmlLang: 'en-US' }] }) }))
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 const { find, settings } = vi.hoisted(() => ({ find: vi.fn(), settings: vi.fn() }))
-vi.mock('payload', () => ({ getPayload: async () => ({ find }) }))
+vi.mock('@/i18n/content', () => ({ getPayload: async () => ({ find }) }))
 vi.mock('@payload-config', () => ({ default: {} }))
 vi.mock('@/utilities/searchSettings', () => ({ getSearchSettings: settings, siteOrigin: () => 'https://pets.example' }))
 import sitemap from '@/app/sitemap'

@@ -100,6 +100,7 @@ export const plugins: Plugin[] = [
       },
     },
     formSubmissionOverrides: {
+      fields: ({ defaultFields }) => [...defaultFields, { name: 'contentLocale', type: 'text', label: '提交语言' }],
       hooks: { beforeValidate: [validateFormSubmission] },
       labels: {
         singular: adminLabel('表单提交', 'Form submission'),

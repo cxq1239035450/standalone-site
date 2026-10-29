@@ -1,3 +1,4 @@
+const base = process.env.PLAYWRIGHT_BASE_URL || 'http://localhost:3000'
 import { test, expect } from '@playwright/test'
 
 test.describe('Pet supplies storefront', () => {
@@ -5,7 +6,7 @@ test.describe('Pet supplies storefront', () => {
     test(`${locale} homepage has search metadata and procurement navigation`, async ({ page }) => {
       const errors: string[] = []
       page.on('pageerror', (error) => errors.push(error.message))
-      await page.goto(`http://localhost:3000/${locale}`)
+      await page.goto(`${base}/${locale}`)
       await expect(page).toHaveTitle(/PawSupply/i)
       await expect(page.locator('h1')).toHaveCount(1)
       await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', new RegExp(`/${locale}$`))
@@ -21,7 +22,7 @@ test.describe('Pet supplies storefront', () => {
 
   test('mobile homepage fits its viewport', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 })
-    await page.goto('http://localhost:3000/zh')
+    await page.goto(`${base}/zh`)
     await expect(page.locator('h1')).toBeVisible()
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390)
   })

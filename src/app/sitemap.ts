@@ -1,7 +1,7 @@
 import type { MetadataRoute } from 'next'
-import { getPayload } from 'payload'
+import { getPayload } from '@/i18n/content'
 import config from '@payload-config'
-import { localeCodes } from '@/i18n/config'
+import { getLanguageRegistry } from '@/i18n/service'
 import { getSearchSettings, siteOrigin } from '@/utilities/searchSettings'
 
 export const dynamic = 'force-dynamic'
@@ -11,7 +11,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const origin = siteOrigin(settings.siteUrl)
   const payload = await getPayload({ config })
   const entries: MetadataRoute.Sitemap = []
-  for (const locale of localeCodes) {
+  for (const { code: locale } of (await getLanguageRegistry()).languages) {
     for (const path of ['', '/products', '/posts', '/contact']) entries.push({ url: `${origin}/${locale}${path}` })
     for (const collection of ['pages', 'posts', 'products'] as const) {
       const result = await payload.find({ collection, locale, fallbackLocale: false, depth: 0, draft: false, overrideAccess: false, pagination: false,

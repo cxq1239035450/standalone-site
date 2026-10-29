@@ -11,6 +11,50 @@
 .containedImage {
   object-fit: contain;
 }
+.viewport {
+  overflow: hidden;
+  height: 100%;
+}
+.track {
+  display: flex;
+  height: 100%;
+  touch-action: pan-y pinch-zoom;
+}
+.slide {
+  flex: 0 0 100%;
+  min-width: 0;
+  position: relative;
+}
+.imageButton {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  cursor: zoom-in;
+}
+.imageButton img {
+  pointer-events: none;
+  user-select: none;
+}
+.gallery .imageButton:focus-visible {
+  outline-offset: -5px;
+}
+.expandButton {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  color: var(--pet-forest, #173f35);
+  background: #f7f5f0;
+  cursor: zoom-in;
+}
+.expandButton:hover {
+  background: #dde5da;
+}
 .imageControls {
   position: absolute;
   bottom: 16px;
@@ -24,6 +68,10 @@
   font-size: 13px;
 }
 .imageControls button {
+  display: grid;
+  place-items: center;
+  min-width: 44px;
+  min-height: 44px;
   padding: 8px;
   border-radius: 4px;
   cursor: pointer;

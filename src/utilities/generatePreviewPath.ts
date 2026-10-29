@@ -4,6 +4,7 @@ import { defaultLocale, isLocale } from '@/i18n/config'
 
 const collectionPrefixMap: Partial<Record<CollectionSlug, string>> = {
   posts: '/posts',
+  products: '/products',
   pages: '',
 }
 

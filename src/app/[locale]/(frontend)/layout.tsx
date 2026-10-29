@@ -17,13 +17,11 @@ import { draftMode } from 'next/headers'
 
 import './globals.css'
 
-import { getHtmlLang, isLocale, localeCodes } from '@/i18n/config'
+import { getLanguageRegistry } from '@/i18n/service'
+import { LanguageProvider } from '@/i18n/LanguageProvider'
 import { SiteInsights } from '@/integrations/insights/Client'
-import { companyProfile } from '@/content/company'
 
-export function generateStaticParams() {
-  return localeCodes.map((locale) => ({ locale }))
-}
+export const dynamic = 'force-dynamic'
 
 export default async function RootLayout({
   children,
@@ -34,7 +32,9 @@ export default async function RootLayout({
 }) {
   const { locale } = await params
 
-  if (!isLocale(locale)) notFound()
+  const registry = await getLanguageRegistry(true)
+  const language = registry.languages.find(item => item.code === locale)
+  if (!language) notFound()
 
   setRequestLocale(locale)
 
@@ -48,7 +48,7 @@ export default async function RootLayout({
     '@id': `${origin}/#organization`,
     name: search.siteName || 'PawSupply',
     url: origin,
-    description: companyProfile[locale].summary,
+    description: search.geo?.summary || search.description || undefined,
     address: { '@type': 'PostalAddress', addressCountry: 'CN' },
     ...(search.organization?.legalName ? { legalName: search.organization.legalName } : {}),
     ...(search.organization?.email ? { email: search.organization.email } : {}),
@@ -59,7 +59,8 @@ export default async function RootLayout({
   return (
     <html
       className={cn(GeistSans.variable, GeistMono.variable)}
-      lang={getHtmlLang(locale)}
+      lang={language.htmlLang || locale}
+      dir={language.direction || 'ltr'}
       suppressHydrationWarning
     >
       <head>
@@ -73,6 +74,7 @@ export default async function RootLayout({
           dangerouslySetInnerHTML={{ __html: jsonLd(organization) }}
         />
         <NextIntlClientProvider messages={messages}>
+          <LanguageProvider languages={registry.languages}>
           <Providers>
             <AdminBar
               adminBarProps={{
@@ -87,6 +89,7 @@ export default async function RootLayout({
             <Footer />
             <SiteInsights preview={isEnabled} />
           </Providers>
+          </LanguageProvider>
         </NextIntlClientProvider>
       </body>
     </html>

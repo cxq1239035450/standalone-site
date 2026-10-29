@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 import { RelatedPosts } from '@/blocks/RelatedPosts/Component'
 import { PayloadRedirects } from '@/components/PayloadRedirects'
 import configPromise from '@payload-config'
-import { getPayload } from 'payload'
+import { getPayload } from '@/i18n/content'
 import { draftMode } from 'next/headers'
 import React, { cache } from 'react'
 import RichText from '@/components/RichText'
@@ -19,31 +19,6 @@ import { notFound } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
 import { Link } from '@/i18n/navigation'
 import { ArrowUpRight } from 'lucide-react'
-
-export async function generateStaticParams({ params }: { params: { locale: string } }) {
-  const { locale } = params
-  if (!isLocale(locale)) return []
-  const payload = await getPayload({ config: configPromise })
-  const posts = await payload.find({
-    collection: 'posts',
-    draft: false,
-    fallbackLocale: false,
-    limit: 1000,
-    locale,
-    overrideAccess: false,
-    pagination: false,
-    select: {
-      slug: true,
-    },
-  })
-
-  const generatedParams = posts.docs.map(({ slug }) => {
-    const slugValue = typeof slug === 'string' ? slug : slug?.[locale] || ''
-    return { slug: slugValue }
-  })
-
-  return generatedParams
-}
 
 type Args = {
   params: Promise<{
@@ -80,7 +55,7 @@ export default async function Post({ params: paramsPromise }: Args) {
           {post.discovery?.summary && <p className="mb-8 border-l-2 border-[#173f35] pl-5 text-lg leading-8 text-[#5e7169]">{post.discovery.summary}</p>}
           <RichText
             className="prose-lg max-w-none prose-headings:tracking-tight prose-headings:text-slate-900 prose-a:text-emerald-700 prose-p:leading-8 prose-p:text-slate-600"
-            data={post.content}
+            data={post.content!}
             enableGutter={false}
           />
         </div>

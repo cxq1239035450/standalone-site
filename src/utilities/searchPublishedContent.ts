@@ -1,7 +1,7 @@
-import type { Payload, Where } from 'payload'
+import type { Where } from 'payload'
 import type { Locale } from '@/i18n/config'
 
-export async function searchPublishedContent(payload: Payload, locale: Locale, query: string) {
+export async function searchPublishedContent(payload: Pick<ReturnType<typeof import('@/i18n/content').createContentReader>, 'find'>, locale: Locale, query: string) {
   if (!query.trim()) return { products: [], posts: [] }
   const term = query.trim().slice(0, 120)
   const where = (fields: string[]): Where => ({ and: [

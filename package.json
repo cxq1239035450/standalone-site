@@ -18,12 +18,11 @@
     "start": "cross-env NODE_OPTIONS=--no-deprecation next start",
     "test": "pnpm run test:int && pnpm run test:e2e",
     "test:e2e": "cross-env NODE_OPTIONS=\"--no-deprecation --import=tsx/esm\" playwright test --config=playwright.config.ts",
-    "test:int": "cross-env NODE_OPTIONS=--no-deprecation vitest run --config ./vitest.config.mts"
+    "test:int": "cross-env NODE_OPTIONS=--no-deprecation vitest run --config ./vitest.config.mts",
+    "migrate:languages": "cross-env NODE_OPTIONS=--no-deprecation tsx src/scripts/migrate-languages.ts",
+    "test:languages": "vitest run --config vitest.config.mts tests/int/dynamic-languages.int.spec.ts tests/int/language-schema.int.spec.ts tests/int/language-payload.int.spec.ts"
   },
   "dependencies": {
-    "@site-insights/browser-sdk": "file:vendor/site-insights/site-insights-browser-sdk-0.1.0.tgz",
-    "@site-insights/contracts": "file:vendor/site-insights/site-insights-contracts-0.1.0.tgz",
-    "@site-insights/payload-plugin": "file:vendor/site-insights/site-insights-payload-plugin-0.1.1.tgz",
     "@payloadcms/admin-bar": "3.88.0",
     "@payloadcms/db-postgres": "3.88.0",
     "@payloadcms/live-preview-react": "3.88.0",
@@ -37,13 +36,18 @@
     "@payloadcms/translations": "3.88.0",
     "@payloadcms/ui": "3.88.0",
     "@radix-ui/react-checkbox": "^1.0.4",
+    "@radix-ui/react-dialog": "^1.3.1",
     "@radix-ui/react-label": "^2.0.2",
     "@radix-ui/react-select": "^2.0.0",
     "@radix-ui/react-slot": "^1.0.2",
+    "@site-insights/browser-sdk": "file:vendor/site-insights/site-insights-browser-sdk-0.1.0.tgz",
+    "@site-insights/contracts": "file:vendor/site-insights/site-insights-contracts-0.1.0.tgz",
+    "@site-insights/payload-plugin": "file:vendor/site-insights/site-insights-payload-plugin-0.1.1.tgz",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "cross-env": "^7.0.3",
     "dotenv": "16.4.7",
+    "embla-carousel-react": "^8.6.0",
     "geist": "^1.3.0",
     "graphql": "^16.8.2",
     "lucide-react": "0.563.0",
@@ -56,9 +60,11 @@
     "react-dom": "19.2.6",
     "react-hook-form": "7.71.1",
     "sharp": "0.34.2",
-    "tailwind-merge": "^3.4.0"
+    "tailwind-merge": "^3.4.0",
+    "yet-another-react-lightbox": "^3.32.2"
   },
   "devDependencies": {
+    "@electric-sql/pglite": "^0.5.13",
     "@eslint/eslintrc": "^3.2.0",
     "@playwright/test": "1.58.2",
     "@tailwindcss/postcss": "^4.1.18",

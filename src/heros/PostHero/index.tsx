@@ -15,7 +15,7 @@ export const PostHero: React.FC<{
   const { categories, populatedAuthors, publishedAt, title } = post
   const authors = populatedAuthors ? formatAuthors(populatedAuthors) : ''
   const formattedDate = publishedAt
-    ? new Intl.DateTimeFormat(locale === 'zh' ? 'zh-CN' : 'en-US', {
+    ? new Intl.DateTimeFormat(locale, {
         day: 'numeric',
         month: locale === 'zh' ? 'long' : 'long',
         year: 'numeric',

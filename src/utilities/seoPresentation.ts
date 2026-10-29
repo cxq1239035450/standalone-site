@@ -18,22 +18,23 @@ export function searchDescription(
   fallback: string | null | undefined,
   locale: string,
 ) {
-  return description || fallback || companyProfile[locale === 'en' ? 'en' : 'zh'].description
+  return description || fallback || (locale === 'zh' || locale === 'en' ? companyProfile[locale].description : '')
 }
 
 export function productSearchURL(origin: string, locale: string, slug: string) {
-  return `${new URL(origin).origin}/${locale === 'en' ? 'en' : 'zh'}/products/${encodeURIComponent(slug)}`
+  return `${new URL(origin).origin}/${locale}/products/${encodeURIComponent(slug)}`
 }
 
 export function productGeography(
   meta: { targetMarkets?: string | null; manufacturingOrigin?: string | null } | null | undefined,
   locale: string,
+  labels?: { origin: string; markets: string },
 ) {
   return [
     {
-      name: locale === 'zh' ? '制造产地' : 'Manufacturing origin',
+      name: labels?.origin || (locale === 'zh' ? '制造产地' : 'Manufacturing origin'),
       value: meta?.manufacturingOrigin?.trim(),
     },
-    { name: locale === 'zh' ? '目标市场' : 'Target markets', value: meta?.targetMarkets?.trim() },
+    { name: labels?.markets || (locale === 'zh' ? '目标市场' : 'Target markets'), value: meta?.targetMarkets?.trim() },
   ].filter((item): item is { name: string; value: string } => Boolean(item.value))
 }

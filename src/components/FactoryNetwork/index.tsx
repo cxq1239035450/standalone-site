@@ -1,12 +1,12 @@
 import { ArrowUpRight, Factory, MessagesSquare, ClipboardCheck } from 'lucide-react'
-import { getLocale, getTranslations } from 'next-intl/server'
+import { getTranslations } from 'next-intl/server'
 import { Link } from '@/i18n/navigation'
-import { companyProfile } from '@/content/company'
+
 import styles from './index.module.css'
 
 export async function FactoryNetwork() {
   const t = await getTranslations('factoryNetwork')
-  const locale = (await getLocale()) === 'en' ? 'en' : 'zh'
+  const company = await getTranslations('company')
   const items = t.raw('items') as Array<{ title: string; description: string }>
   const icons = [Factory, MessagesSquare, ClipboardCheck]
   return (
@@ -18,7 +18,7 @@ export async function FactoryNetwork() {
         <div className={styles.intro}>
           <span className={styles.eyebrow}>{t('eyebrow')}</span>
           <h2 id="factory-network-title">{t('title')}</h2>
-          <p>{companyProfile[locale].summary}</p>
+          <p>{company('summary')}</p>
           <Link className="pet-text-link" href="/contact">
             {t('action')} <ArrowUpRight size={19} aria-hidden="true" />
           </Link>

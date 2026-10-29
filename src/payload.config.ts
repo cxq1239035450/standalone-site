@@ -20,6 +20,8 @@ import { plugins } from './plugins'
 import { defaultLexical } from '@/fields/defaultLexical'
 import { getServerSideURL } from './utilities/getURL'
 import { defaultLocale, localeConfig } from './i18n/config'
+import { dynamicContentPlugin } from './i18n/contentPlugin'
+import { translationEndpoints } from './i18n/endpoints'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -98,6 +100,7 @@ export default buildConfig({
   // This config helps us configure global or default features that the other editors can inherit
   editor: defaultLexical,
   db: postgresAdapter({
+    push: false,
     pool: {
       connectionString: process.env.DATABASE_URL || '',
     },
@@ -105,7 +108,8 @@ export default buildConfig({
   collections: [Pages, Posts, Media, Categories, Users, Products, IndustryTemplates],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer, SearchSettings],
-  plugins,
+  plugins: [...plugins, dynamicContentPlugin],
+  endpoints: translationEndpoints,
   secret: process.env.PAYLOAD_SECRET,
   sharp,
   typescript: {

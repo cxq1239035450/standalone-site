@@ -1,5 +1,7 @@
 'use client'
-import { useLocale, useTranslations } from 'next-intl'
+import { useTranslations as useInterfaceCopy } from 'next-intl'
+
+import { useTranslations } from 'next-intl'
 import { useSearchParams, useRouter, usePathname } from 'next/navigation'
 import { useCallback, useTransition } from 'react'
 import { Loader2, Search } from 'lucide-react'
@@ -16,8 +18,9 @@ export default function ProductsFilterClient({
   totalDocs,
   activeCategory,
 }: ProductsFilterClientProps) {
+  const interfaceCopy = useInterfaceCopy('interface')
+
   const t = useTranslations('products')
-  const zh = useLocale() === 'zh'
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -66,21 +69,21 @@ export default function ProductsFilterClient({
             type="search"
             maxLength={150}
             defaultValue={searchParams.get('q') || ''}
-            placeholder={zh ? '搜索产品名称、材质或 SKU' : 'Search products, materials or SKU'}
-            aria-label={zh ? '搜索产品' : 'Search products'}
+            placeholder={interfaceCopy('app__locale___frontend__products_page_client_tsx_1')}
+            aria-label={interfaceCopy('app__locale___frontend__products_page_client_tsx_2')}
           />
         </div>
         <select
           key={searchParams.get('sort') || ''}
           name="sort"
           defaultValue={searchParams.get('sort') === 'title' ? 'title' : ''}
-          aria-label={zh ? '产品排序' : 'Sort products'}
+          aria-label={interfaceCopy('app__locale___frontend__products_page_client_tsx_3')}
         >
-          <option value="">{zh ? '最新发布' : 'Newest first'}</option>
-          <option value="title">{zh ? '按产品名称' : 'Product name'}</option>
+          <option value="">{interfaceCopy('app__locale___frontend__products_page_client_tsx_4')}</option>
+          <option value="title">{interfaceCopy('app__locale___frontend__products_page_client_tsx_5')}</option>
         </select>
         <button type="submit" className="pet-button" disabled={pending}>
-          {zh ? '查找产品' : 'Find products'}
+          {interfaceCopy('app__locale___frontend__products_page_client_tsx_6')}
         </button>
       </form>
       <div className="flex flex-col gap-4 rounded-2xl border border-stone-200 bg-white p-4 shadow-sm sm:flex-row sm:items-center sm:justify-between">

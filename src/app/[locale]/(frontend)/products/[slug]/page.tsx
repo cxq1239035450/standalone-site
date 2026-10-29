@@ -1,8 +1,9 @@
+import { getTranslations as loadInterfaceCopy } from 'next-intl/server'
 import { pageMetadata, getSearchSettings, siteOrigin, jsonLd } from '@/utilities/searchSettings'
 import type { Metadata } from 'next/types'
 
 import configPromise from '@payload-config'
-import { getPayload } from 'payload'
+import { getPayload } from '@/i18n/content'
 import { draftMode } from 'next/headers'
 import React, { cache } from 'react'
 import { notFound } from 'next/navigation'
@@ -15,7 +16,7 @@ import { ProductCard } from '@/components/ProductCard'
 import { getTranslations } from 'next-intl/server'
 import { Link } from '@/i18n/navigation'
 import { BadgeCheck, ArrowUpRight } from 'lucide-react'
-import { productInquiryHref, productUnitLabel } from '@/utilities/productPresentation'
+import { productInquiryHref } from '@/utilities/productPresentation'
 import { productSpecifications } from '@/utilities/productSpecifications'
 import { productGeography } from '@/utilities/seoPresentation'
 
@@ -26,37 +27,9 @@ type Args = {
   }>
 }
 
-export async function generateStaticParams({ params }: { params: { locale: string } }) {
-  const { locale } = params
-  if (!isLocale(locale)) return []
-  const payload = await getPayload({ config: configPromise })
-  const products = await payload.find({
-    collection: 'products',
-    draft: false,
-    fallbackLocale: false,
-    limit: 1000,
-    locale,
-    overrideAccess: false,
-    pagination: false,
-    where: {
-      title: {
-        exists: true,
-      },
-    },
-    select: {
-      slug: true,
-    },
-  })
-
-  const generatedParams = products.docs.map(({ slug }) => {
-    const slugValue = typeof slug === 'string' ? slug : slug?.[locale] || ''
-    return { slug: slugValue }
-  })
-
-  return generatedParams
-}
-
 export default async function ProductDetail({ params: paramsPromise }: Args) {
+  const interfaceCopy = await loadInterfaceCopy('interface')
+
   const { locale, slug = '' } = await paramsPromise
   if (!isLocale(locale)) notFound()
   const t = await getTranslations({ locale, namespace: 'products' })
@@ -76,7 +49,8 @@ export default async function ProductDetail({ params: paramsPromise }: Args) {
       ? product.industryTemplate
       : undefined
   const specifications = productSpecifications(template, product.technicalValues)
-  const geography = productGeography(product.meta, locale)
+  const geoCopy = await getTranslations('geography')
+  const geography = productGeography(product.meta, locale, { origin: geoCopy('origin'), markets: geoCopy('markets') })
   const additionalProperties = [
     ...specifications.map((specification) => ({
       '@type': 'PropertyValue',
@@ -109,7 +83,8 @@ export default async function ProductDetail({ params: paramsPromise }: Args) {
 
   const shortDescValue = typeof shortDescription === 'string' ? shortDescription : ''
 
-  const unitLabel = productUnitLabel(unit, locale)
+  const units = await getTranslations('units')
+  const unitLabel = units(unit || 'piece')
   const inquiryHref = productInquiryHref(
     titleValue,
     typeof category === 'object' ? category?.slug : undefined,
@@ -187,10 +162,10 @@ export default async function ProductDetail({ params: paramsPromise }: Args) {
             {product.sourcing && (
               <dl className={styles.facts}>
                 {Object.entries({
-                  minimumOrderQuantity: locale === 'zh' ? 'MOQ / 最小起订量' : 'Minimum order',
-                  materials: locale === 'zh' ? '材质' : 'Materials',
-                  customization: locale === 'zh' ? '可定制项目' : 'Customization',
-                  leadTime: locale === 'zh' ? '参考交期' : 'Lead time',
+                  minimumOrderQuantity: interfaceCopy('app__locale___frontend__products__slug__page_tsx_1'),
+                  materials: interfaceCopy('app__locale___frontend__products__slug__page_tsx_2'),
+                  customization: interfaceCopy('app__locale___frontend__products__slug__page_tsx_3'),
+                  leadTime: interfaceCopy('app__locale___frontend__products__slug__page_tsx_4'),
                 }).map(([key, label]) => {
                   const value =
                     product.sourcing?.[key as keyof NonNullable<typeof product.sourcing>]
@@ -230,9 +205,7 @@ export default async function ProductDetail({ params: paramsPromise }: Args) {
                 {t('productInquiry')} <ArrowUpRight size={18} />
               </Link>
               <p>
-                {locale === 'zh'
-                  ? '请提供采购数量、收货地区与定制要求。报价、样品及交期以双方确认的方案为准。'
-                  : 'Share your quantity, delivery location and customization needs. Pricing, samples and lead times are confirmed for your project.'}
+                {interfaceCopy('app__locale___frontend__products__slug__page_tsx_5')}
               </p>
             </div>
 
@@ -266,12 +239,12 @@ export default async function ProductDetail({ params: paramsPromise }: Args) {
 
         <nav
           className={styles.sectionNav}
-          aria-label={locale === 'zh' ? '产品详情导航' : 'Product information'}
+          aria-label={interfaceCopy('app__locale___frontend__products__slug__page_tsx_6')}
         >
           {specifications.length > 0 && <a href="#product-specifications">{t('specifications')}</a>}
           {description && <a href="#product-description">{t('details')}</a>}
           <a href="#procurement-notes">
-            {locale === 'zh' ? '采购准备' : 'Before requesting a quote'}
+            {interfaceCopy('app__locale___frontend__products__slug__page_tsx_7')}
           </a>
         </nav>
         {specifications.length > 0 && (
@@ -315,15 +288,11 @@ export default async function ProductDetail({ params: paramsPromise }: Args) {
 
         <section id="procurement-notes" className={styles.procurement}>
           <h2>
-            {locale === 'zh'
-              ? '把采购需求，说得更具体。'
-              : 'A clearer brief. A better conversation.'}
+            {interfaceCopy('app__locale___frontend__products__slug__page_tsx_8')}
           </h2>
           <div>
             <p>
-              {locale === 'zh'
-                ? '准备好计划数量、尺寸或容量、材料偏好、销售市场和包装要求。如果需要品牌标识或样品，请一并说明。'
-                : 'Include estimated quantities, sizes or capacities, preferred materials, target market and packaging requirements. Let us know if you need branding or samples.'}
+              {interfaceCopy('app__locale___frontend__products__slug__page_tsx_9')}
             </p>
             <Link href={inquiryHref} className="pet-text-link mt-5">
               {t('productInquiry')} <ArrowUpRight size={18} />

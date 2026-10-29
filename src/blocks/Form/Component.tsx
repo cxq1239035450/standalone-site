@@ -1,4 +1,5 @@
 'use client'
+import { useLocale } from 'next-intl'
 import type { FormFieldBlock, Form as FormType } from '@payloadcms/plugin-form-builder/types'
 
 import { useRouter } from 'next/navigation'
@@ -24,6 +25,7 @@ export const FormBlock: React.FC<
     id?: string
   } & FormBlockType
 > = (props) => {
+  const contentLocale = useLocale()
   const {
     enableIntro,
     form: formFromProps,
@@ -66,6 +68,7 @@ export const FormBlock: React.FC<
           const req = await fetch(`${getClientSideURL()}/api/form-submissions`, {
             body: JSON.stringify({
               form: formID,
+          contentLocale,
               submissionData: dataToSend,
             }),
             headers: {
@@ -111,7 +114,7 @@ export const FormBlock: React.FC<
 
       void submitForm()
     },
-    [router, formID, redirect, confirmationType],
+    [router, formID, redirect, confirmationType, contentLocale],
   )
 
   return (

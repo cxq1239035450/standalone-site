@@ -1,0 +1,83 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  background: rgb(23 63 53 / 35%);
+  animation: appear 180ms ease-out;
+}
+.panel {
+  position: fixed;
+  inset: 0 0 0 auto;
+  z-index: 81;
+  width: min(88vw, 380px);
+  height: 100dvh;
+  overflow-y: auto;
+  padding: max(24px, env(safe-area-inset-top)) 24px 32px;
+  background: var(--pet-cream, #f7f5f0);
+  color: var(--pet-forest, #173f35);
+  box-shadow: -12px 0 48px rgb(23 63 53 / 12%);
+  animation: enter 220ms ease-out;
+}
+.heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.title {
+  font-size: 20px;
+  font-weight: 600;
+}
+.close {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--pet-line);
+  border-radius: 8px;
+}
+.links {
+  display: flex;
+  flex-direction: column;
+}
+.links a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 56px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--pet-line);
+  font-size: 17px;
+}
+.links a:hover {
+  color: var(--pet-muted);
+}
+.close:focus-visible,
+.links a:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 4px;
+}
+@keyframes appear {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes enter {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .overlay,
+  .panel {
+    animation: none;
+  }
+}

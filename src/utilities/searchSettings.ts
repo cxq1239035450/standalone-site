@@ -1,12 +1,13 @@
 import { cache } from 'react'
-import { getPayload } from 'payload'
+import { getPayload } from '@/i18n/content'
 import config from '@payload-config'
 import type { Metadata } from 'next'
 import type { Locale } from '@/i18n/config'
 import { getServerSideURL } from './getURL'
 import { searchDescription, searchTitle } from './seoPresentation'
+import { getLanguageRegistry } from '@/i18n/service'
 
-export const getSearchSettings = cache(async (locale: Locale = 'zh') => {
+export const getSearchSettings = cache(async (locale?: Locale) => {
   const payload = await getPayload({ config })
   return payload.findGlobal({ slug: 'search-settings', locale, depth: 1, overrideAccess: false })
 })
@@ -42,6 +43,17 @@ export async function pageMetadata({
   const fullTitle = searchTitle(title, name)
   const text = searchDescription(description, settings.description, locale)
   const canonical = `${origin}/${locale}${path}`
+  const registry = await getLanguageRegistry()
+  let alternateLanguages = registry.languages
+  const match = /^\/(products|posts)\/([^/]+)$/.exec(path)
+  if (match) {
+    const payload = await getPayload({ config })
+    const available = await Promise.all(registry.languages.map(async language => {
+      const result = await payload.find({ collection: match[1] as 'products' | 'posts', locale: language.code, depth: 0, limit: 1, where: { slug: { equals: decodeURIComponent(match[2]) } } })
+      return result.docs.length ? language : null
+    }))
+    alternateLanguages = available.filter((item): item is typeof registry.languages[number] => Boolean(item))
+  }
   const media = settings.socialImage
   const imageURL =
     image ||
@@ -56,9 +68,8 @@ export async function pageMetadata({
       ...(languages
         ? {
             languages: {
-              'zh-CN': `${origin}/zh${path}`,
-              'en-US': `${origin}/en${path}`,
-              'x-default': `${origin}/zh${path}`,
+              ...Object.fromEntries(alternateLanguages.map(language => [language.htmlLang || language.code, `${origin}/${language.code}${path}`])),
+              ...(alternateLanguages.some(language => language.code === registry.defaultLocale) ? { 'x-default': `${origin}/${registry.defaultLocale}${path}` } : {}),
             },
           }
         : {}),
@@ -69,7 +80,7 @@ export async function pageMetadata({
       description: text,
       url: canonical,
       siteName: name,
-      locale: locale === 'zh' ? 'zh_CN' : 'en_US',
+      locale: (registry.languages.find(language => language.code === locale)?.htmlLang || locale).replaceAll('-', '_'),
       type: 'website',
       ...(imageURL ? { images: [{ url: new URL(imageURL, origin).href }] } : {}),
     },

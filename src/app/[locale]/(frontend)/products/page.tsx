@@ -1,8 +1,9 @@
+import { getTranslations as loadInterfaceCopy } from 'next-intl/server'
 import { pageMetadata } from '@/utilities/searchSettings'
 import type { Metadata } from 'next/types'
 
 import configPromise from '@payload-config'
-import { getPayload } from 'payload'
+import { getPayload } from '@/i18n/content'
 import React from 'react'
 import PageClient from './page.client'
 import { getTranslations } from 'next-intl/server'
@@ -31,6 +32,8 @@ type Args = {
 }
 
 export default async function Page({ params, searchParams }: Args) {
+  const interfaceCopy = await loadInterfaceCopy('interface')
+
   const { locale } = await params
   if (!isLocale(locale)) notFound()
 
@@ -225,9 +228,7 @@ export default async function Page({ params, searchParams }: Args) {
           <div className="pet-container">
             <div className="rounded-3xl border border-dashed border-stone-300 bg-stone-50 px-6 py-14 text-center text-slate-500">
               {query
-                ? locale === 'zh'
-                  ? `未找到与“${query}”匹配的产品，请更换关键词或清除搜索。`
-                  : `No products match “${query}”. Try another term or clear your search.`
+                ? interfaceCopy('app__locale___frontend__products_page_tsx_1', {v0: query})
                 : t('empty')}
               {query && (
                 <div className="mt-4">
@@ -239,7 +240,7 @@ export default async function Page({ params, searchParams }: Args) {
                         : '/products'
                     }
                   >
-                    {locale === 'zh' ? '清除搜索' : 'Clear search'}
+                    {interfaceCopy('app__locale___frontend__products_page_tsx_2')}
                   </Link>
                 </div>
               )}

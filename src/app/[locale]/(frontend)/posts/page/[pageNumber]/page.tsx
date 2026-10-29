@@ -5,7 +5,7 @@ import { CollectionArchive } from '@/components/CollectionArchive'
 import { PageRange } from '@/components/PageRange'
 import { Pagination } from '@/components/Pagination'
 import configPromise from '@payload-config'
-import { getPayload } from 'payload'
+import { getPayload } from '@/i18n/content'
 import React from 'react'
 import PageClient from './page.client'
 import { notFound } from 'next/navigation'
@@ -101,30 +101,4 @@ export async function generateMetadata({ params: paramsPromise }: Args): Promise
     title: t('pageMetaTitle', { page: pageNumber || '' }),
     description: t('metaDescription'),
   })
-}
-
-export async function generateStaticParams({ params }: { params: { locale: string } }) {
-  if (!isLocale(params.locale)) return []
-  const payload = await getPayload({ config: configPromise })
-  const { totalDocs } = await payload.count({
-    collection: 'posts',
-    locale: params.locale,
-    overrideAccess: false,
-    where: {
-      'categories.slug': { equals: 'pet-guides' },
-      title: {
-        exists: true,
-      },
-    },
-  })
-
-  const totalPages = Math.ceil(totalDocs / 12)
-
-  const pages: { pageNumber: string }[] = []
-
-  for (let i = 1; i <= totalPages; i++) {
-    pages.push({ pageNumber: String(i) })
-  }
-
-  return pages
 }
