@@ -16,6 +16,8 @@ describe('Additive multilingual PostgreSQL schema', () => {
       const migration = await sqlFrom('20261028_143927_dynamic_languages')
       await db.exec(migration)
       await db.exec(migration)
+      const yueliMigration = await sqlFrom('20261030_001800_yueli_translation_fields')
+      await db.exec(yueliMigration)
       expect((await db.query('SELECT title FROM posts WHERE id = 901')).rows).toEqual([
         { title: 'Original title' },
       ])
@@ -28,6 +30,19 @@ describe('Additive multilingual PostgreSQL schema', () => {
       )
       expect((await db.query('SELECT title FROM tr_posts')).rows).toEqual([
         { title: '日本語の記事' },
+      ])
+      await db.exec(
+        `UPDATE tr_posts SET migration_content_h_t_m_l = '<p>Original Yueli article</p>', migration_attributes = '{"model":"TA-12"}'`,
+      )
+      await db.exec(yueliMigration)
+      expect(
+        (await db.query('SELECT migration_content_h_t_m_l, migration_attributes FROM tr_posts'))
+          .rows,
+      ).toEqual([
+        {
+          migration_content_h_t_m_l: '<p>Original Yueli article</p>',
+          migration_attributes: { model: 'TA-12' },
+        },
       ])
       await expect(
         db.exec(

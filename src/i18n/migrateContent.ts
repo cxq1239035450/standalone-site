@@ -209,17 +209,27 @@ export async function migrateLanguageContent(
           const hasDraft = hasTranslation(draftCopy)
           const requiredTitle = ['products', 'posts', 'pages', 'categories'].includes(source)
           const complete =
+            (source !== 'search-settings' || hasTranslation(publishedCopy.siteName)) &&
             (!requiredTitle || Boolean(publishedCopy.title)) &&
             (source !== 'posts' || hasTranslation(publishedCopy.content)) &&
             (source !== 'pages' || hasTranslation(publishedCopy.layout))
-          const validNavigation = !['header', 'footer'].includes(source) ||
-            !Array.isArray(publishedCopy.navItems) || publishedCopy.navItems.every((item) => {
+          const validNavigation =
+            !['header', 'footer'].includes(source) ||
+            !Array.isArray(publishedCopy.navItems) ||
+            publishedCopy.navItems.every((item) => {
               const link = item.link as Document | undefined
               return link?.label && (link.type === 'custom' ? link.url : link.reference)
             })
-          if (!validNavigation) report.push({ source, subject: subject.id, locale, action: 'invalid-legacy-navigation-preserved-as-draft' })
+          if (!validNavigation)
+            report.push({
+              source,
+              subject: subject.id,
+              locale,
+              action: 'invalid-legacy-navigation-preserved-as-draft',
+            })
           const canPublish =
-            validNavigation && complete &&
+            validNavigation &&
+            complete &&
             (hasPublished || (global && locale === 'zh')) &&
             (!requiredTitle || Boolean(publishedCopy.title)) &&
             (global ||
@@ -286,8 +296,16 @@ export async function migrateLanguageContent(
       const locale = typeof input.locale === 'string' ? input.locale : 'zh'
       const targetID = translatedIDs.get(`${source}:${subject}:${locale}`)
       if (!targetID) {
-        report.push({ source: 'payload-jobs', subject: job.id, locale, action: 'manual-review-unmapped-schedule' })
-        if (apply) throw new Error(`Scheduled publication ${job.id} has no matching ${locale} translation. Review the dry-run report before applying.`)
+        report.push({
+          source: 'payload-jobs',
+          subject: job.id,
+          locale,
+          action: 'manual-review-unmapped-schedule',
+        })
+        if (apply)
+          throw new Error(
+            `Scheduled publication ${job.id} has no matching ${locale} translation. Review the dry-run report before applying.`,
+          )
         continue
       }
       report.push({

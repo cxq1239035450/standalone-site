@@ -179,7 +179,19 @@ it('runs Japanese draft/publish/withdraw and shared inventory through the real P
         _status: 'published',
       },
     })
+    await payload.updateGlobal({
+      slug: 'search-settings',
+      req,
+      locale: 'en',
+      data: { siteName: 'Legacy brand', description: 'Existing English search description' },
+    })
     const report = await migrateLanguageContent(payload, true)
+    expect(
+      report.some(
+        (item) =>
+          item.source === 'search-settings' && item.locale === 'en' && item.action === 'draft',
+      ),
+    ).toBe(true)
     expect(
       report.some(
         (item) =>
