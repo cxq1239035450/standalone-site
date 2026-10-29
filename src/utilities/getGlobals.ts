@@ -1,7 +1,8 @@
 import type { Config } from '@/payload-types'
 
 import configPromise from '@payload-config'
-import { type DataFromGlobalSlug, getPayload } from 'payload'
+import { type DataFromGlobalSlug } from 'payload'
+import { getPayload } from '@/i18n/content'
 import { unstable_cache } from 'next/cache'
 import { defaultLocale, type Locale } from '@/i18n/config'
 
@@ -26,5 +27,5 @@ async function getGlobal<T extends Global>(slug: T, depth: number, locale: Local
  */
 export const getCachedGlobal = <T extends Global>(slug: T, depth = 0, locale: Locale = defaultLocale) =>
   unstable_cache(async () => getGlobal<T>(slug, depth, locale), [slug, String(depth), locale], {
-    tags: [`global_${slug}`],
+    tags: [`global_${slug}`, 'languages'],
   })

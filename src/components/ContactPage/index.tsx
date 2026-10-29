@@ -3,7 +3,7 @@ import { getLocale, getTranslations } from 'next-intl/server'
 import { getSearchSettings } from '@/utilities/searchSettings'
 import { isLocale, defaultLocale } from '@/i18n/config'
 import configPromise from '@payload-config'
-import { getPayload } from 'payload'
+import { getPayload } from '@/i18n/content'
 import { B2BInquiryForm } from '@/components/B2BInquiryForm'
 import { contactForm as contactFormData } from '@/endpoints/seed/contact-form'
 import { Link } from '@/i18n/navigation'
@@ -29,10 +29,11 @@ export async function ContactPageContent({
   if (!resolvedFormID) {
     const existing = await payload.find({
       collection: 'forms',
+      locale,
       depth: 0,
       limit: 1,
       overrideAccess: false,
-      where: { title: { equals: contactFormData.title } },
+      where: { 'shared.title': { equals: contactFormData.title } },
     })
     resolvedFormID = existing.docs[0]?.id
   }

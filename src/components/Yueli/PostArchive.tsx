@@ -84,7 +84,7 @@ export async function PostArchive({
                   <a href={contentPath(post, 'post')} className="yl-post-image">
                     <Image
                       src={imageURL(post.heroImage)}
-                      alt={post.title}
+                      alt={post.title || post.slug || 'Yueli'}
                       fill
                       sizes="(max-width: 760px) 92vw, 32vw"
                     />
@@ -99,7 +99,7 @@ export async function PostArchive({
                   })}
                 </time>
                 <h2>
-                  <a href={contentPath(post, 'post')}>{post.title}</a>
+                  <a href={contentPath(post, 'post')}>{post.title || post.slug || 'Yueli'}</a>
                 </h2>
                 <p>{plainText(post.migration?.summary || post.meta?.description || '')}</p>
                 <a className="yl-text-link" href={contentPath(post, 'post')}>

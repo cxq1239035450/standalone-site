@@ -30,7 +30,7 @@ const eslintConfig = [
     },
   },
   {
-    ignores: ['.next/', 'src/payload-types.ts', 'src/payload-generated-schema.ts'],
+    ignores: ['.deployment/', '.backups/', '.migration/', '.next/', 'src/payload-types.ts', 'src/payload-generated-schema.ts'],
   },
 ]
 

@@ -50,7 +50,7 @@ export const Card: React.FC<{
       ? '/pet-assets/walking.webp'
       : '/pet-assets/hero-pets.webp'
   const formattedDate = publishedAt
-    ? new Intl.DateTimeFormat(locale === 'zh' ? 'zh-CN' : 'en-US', {
+    ? new Intl.DateTimeFormat(locale, {
         day: 'numeric',
         month: locale === 'zh' ? 'numeric' : 'short',
         year: 'numeric',

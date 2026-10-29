@@ -58,7 +58,7 @@ function PostCard({ post }: { post: Post }) {
         {imageURL(post.heroImage) && (
           <Image
             src={imageURL(post.heroImage)}
-            alt={post.title}
+            alt={post.title || post.slug || 'Yueli'}
             fill
             sizes="(max-width:760px) 92vw, 32vw"
           />
@@ -72,7 +72,7 @@ function PostCard({ post }: { post: Post }) {
         })}
       </time>
       <h2>
-        <a href={contentPath(post, 'post')}>{post.title}</a>
+        <a href={contentPath(post, 'post')}>{post.title || post.slug || 'Yueli'}</a>
       </h2>
       <p>{plainText(post.migration?.summary || post.meta?.description || '')}</p>
       <a className="yl-text-link" href={contentPath(post, 'post')}>
@@ -121,7 +121,10 @@ export async function SourcePage({ path }: { path: string }) {
     return <SourceLayout html={page.migration!.contentHTML!} />
   return (
     <>
-      <PageIntro title={page.title} trail={[{ name: page.title, href: path }]} />
+      <PageIntro
+        title={page.title || page.slug || 'Yueli'}
+        trail={[{ name: page.title || page.slug || 'Yueli', href: path }]}
+      />
       <section className="yl-wrap yl-section">
         <div
           className="yl-source-content yl-information-content"

@@ -1,0 +1,150 @@
+.trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 12px;
+  flex-shrink: 0;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  color: var(--pet-forest);
+  background: transparent;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    background 160ms ease,
+    border-color 160ms ease,
+    box-shadow 160ms ease;
+}
+.trigger:hover,
+.trigger[data-state='open'] {
+  background: var(--pet-sage);
+  border-color: var(--pet-line);
+}
+.trigger:focus-visible {
+  outline: 2px solid var(--pet-forest);
+  outline-offset: 3px;
+}
+.trigger:disabled {
+  cursor: progress;
+  opacity: 0.65;
+}
+.current {
+  white-space: nowrap;
+}
+.chevron {
+  transition: transform 180ms ease;
+}
+.trigger[data-state='open'] .chevron {
+  transform: rotate(180deg);
+}
+.spinner {
+  animation: spin 800ms linear infinite;
+}
+.content {
+  z-index: 90;
+  min-width: 196px;
+  max-width: calc(100vw - 32px);
+  max-height: var(--radix-select-content-available-height);
+  overflow: hidden;
+  padding: 6px;
+  border: 1px solid var(--pet-line);
+  border-radius: 14px;
+  background: var(--pet-cream);
+  color: var(--pet-forest);
+  box-shadow: 0 12px 32px rgb(23 63 53 / 12%);
+  transform-origin: var(--radix-select-content-transform-origin);
+}
+.content[data-state='open'] {
+  animation: reveal 180ms ease-out;
+}
+.content[data-state='closed'] {
+  animation: dismiss 120ms ease-in;
+}
+.viewport {
+  padding: 0;
+}
+.label {
+  padding: 8px 10px 10px;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--pet-muted);
+}
+.item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 46px;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  outline: none;
+  user-select: none;
+  transition: background 120ms ease;
+}
+.item[data-state='checked'] {
+  background: rgb(221 229 218 / 50%);
+}
+.item[data-highlighted] {
+  background: var(--pet-sage);
+}
+.code {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 24px;
+  border: 1px solid var(--pet-line);
+  border-radius: 5px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+.indicator {
+  display: flex;
+  margin-left: auto;
+}
+@keyframes reveal {
+  from {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+@keyframes dismiss {
+  to {
+    opacity: 0;
+    transform: translateY(-3px) scale(0.98);
+  }
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@media (max-width: 767px) {
+  .trigger {
+    padding-inline: 8px;
+    gap: 5px;
+    font-size: 13px;
+  }
+  .globe {
+    display: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .trigger,
+  .chevron,
+  .item {
+    transition: none;
+  }
+  .content[data-state],
+  .spinner {
+    animation: none;
+  }
+}

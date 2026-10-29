@@ -1,7 +1,8 @@
 import type React from 'react'
-import type { Page, Post } from '@/payload-types'
 
-import { getCachedDocument } from '@/utilities/getDocument'
+import { getPayload } from '@/i18n/content'
+import config from '@payload-config'
+import { getLocale } from 'next-intl/server'
 import { getCachedRedirects } from '@/utilities/getRedirects'
 import { notFound, redirect } from 'next/navigation'
 
@@ -21,25 +22,14 @@ export const PayloadRedirects: React.FC<Props> = async ({ disableNotFound, url }
       redirect(redirectItem.to.url)
     }
 
-    let redirectUrl: string
-
-    if (typeof redirectItem.to?.reference?.value === 'string') {
-      const collection = redirectItem.to?.reference?.relationTo
-      const id = redirectItem.to?.reference?.value
-
-      const document = (await getCachedDocument(collection, id)()) as Page | Post
-      redirectUrl = `${redirectItem.to?.reference?.relationTo !== 'pages' ? `/${redirectItem.to?.reference?.relationTo}` : ''}/${
-        document?.slug
-      }`
-    } else {
-      redirectUrl = `${redirectItem.to?.reference?.relationTo !== 'pages' ? `/${redirectItem.to?.reference?.relationTo}` : ''}/${
-        typeof redirectItem.to?.reference?.value === 'object'
-          ? redirectItem.to?.reference?.value?.slug
-          : ''
-      }`
+    const reference = redirectItem.to?.reference
+    const id = typeof reference?.value === 'object' ? reference.value.id : reference?.value
+    if (reference && id) {
+      const locale = await getLocale()
+      const payload = await getPayload({ config })
+      const document = await payload.findByID({ collection: reference.relationTo, id, locale, depth: 0, disableErrors: true })
+      if (document?.slug) redirect(`/${locale}${reference.relationTo === 'pages' ? '' : `/${reference.relationTo}`}/${encodeURIComponent(document.slug)}`)
     }
-
-    if (redirectUrl) redirect(redirectUrl)
   }
 
   if (disableNotFound) return null

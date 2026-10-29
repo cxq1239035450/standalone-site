@@ -14,18 +14,20 @@ export const localeConfig = {
   ],
 } as const
 
-export type Locale = (typeof localeConfig.locales)[number]['code']
+// Legacy configuration is retained only for archived Payload fields and migration.
+// Public languages are loaded from the languages collection at request time.
+export type Locale = string
 
-export const defaultLocale: Locale = localeConfig.defaultLocale
+export const defaultLocale = localeConfig.defaultLocale
 
-export const localeCodes = localeConfig.locales.map(({ code }) => code) as Locale[]
+export const localeCodes = localeConfig.locales.map(({ code }) => code)
 
 export const localeNames = Object.fromEntries(
   localeConfig.locales.map(({ code, label }) => [code, label]),
 ) as Record<Locale, string>
 
 export function isLocale(value: unknown): value is Locale {
-  return typeof value === 'string' && localeCodes.includes(value as Locale)
+  return typeof value === 'string' && /^[a-z]{2,3}(?:-[A-Z][a-z]{3})?(?:-(?:[A-Z]{2}|\d{3}))?$/.test(value)
 }
 
 export function getHtmlLang(locale: Locale): string {

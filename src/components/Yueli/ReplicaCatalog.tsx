@@ -59,7 +59,7 @@ export async function ReplicaCatalog({
       (product) =>
         (!ids || categoryIDs(product).some((id) => ids.has(id))) &&
         (!q ||
-          `${product.title} ${product.general?.shortDescription || ''} ${product.pricing?.sku || ''}`
+          `${product.title || product.slug || 'Yueli'} ${product.general?.shortDescription || ''} ${product.pricing?.sku || ''}`
             .toLowerCase()
             .includes(q.toLowerCase())),
     )
@@ -84,12 +84,12 @@ export async function ReplicaCatalog({
             items={[
               { name: 'Products', href: '/products' },
               ...categoryTrail(category, categories).map((item) => ({
-                name: item.title,
+                name: item.title || item.slug || 'Yueli',
                 href: contentPath(item, 'category'),
               })),
             ]}
           />
-          <h1>{category.title}</h1>
+          <h1>{category.title || category.slug || 'Yueli'}</h1>
         </>
       ) : (
         <>
@@ -141,14 +141,14 @@ export async function ReplicaCatalog({
                   {imageURL(product.general?.heroImage) && (
                     <Image
                       src={imageURL(product.general?.heroImage)}
-                      alt={product.title}
+                      alt={product.title || product.slug || 'Yueli'}
                       width={600}
                       height={450}
                       sizes="(max-width:600px) 90vw, (max-width:900px) 45vw, 22vw"
                     />
                   )}
                 </div>
-                <h2>{product.title}</h2>
+                <h2>{product.title || product.slug || 'Yueli'}</h2>
               </a>
             </article>
           ))}

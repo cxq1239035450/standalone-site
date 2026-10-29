@@ -14,7 +14,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   )
   return p
     ? equipmentMetadata(
-        p.meta?.title || p.title,
+        p.meta?.title || p.title || p.slug || 'Yueli equipment',
         contentPath(p, 'product'),
         p.meta?.description || p.general?.shortDescription,
         imageURL(p.general?.heroImage),

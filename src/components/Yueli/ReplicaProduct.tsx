@@ -25,20 +25,33 @@ export async function ReplicaProduct({ slug }: { slug: string }) {
   const original = source.products.find((item) => item.id === product.migration?.sourceId)
   const images =
     product.general?.gallery?.flatMap((row) =>
-      imageURL(row.image) ? [{ src: imageURL(row.image), alt: row.caption || product.title }] : [],
+      imageURL(row.image)
+        ? [
+            {
+              src: imageURL(row.image),
+              alt: row.caption || product.title || product.slug || 'Yueli',
+            },
+          ]
+        : [],
     ) || []
   if (!images.length && imageURL(product.general?.heroImage))
-    images.push({ src: imageURL(product.general?.heroImage), alt: product.title })
+    images.push({
+      src: imageURL(product.general?.heroImage),
+      alt: product.title || product.slug || 'Yueli',
+    })
   const category = product.organization?.category
   const origin = siteOrigin(settings.siteUrl)
   const description = (
     <ProductDescription
       html={product.migration?.contentHTML || ''}
-      title={product.title}
+      title={product.title || product.slug || 'Yueli'}
       summary={product.general?.shortDescription}
       category={
         typeof category === 'object' && category
-          ? { title: category.title, href: contentPath(category, 'category') }
+          ? {
+              title: category.title || category.slug || 'Yueli',
+              href: contentPath(category, 'category'),
+            }
           : undefined
       }
       fallback={
@@ -57,7 +70,7 @@ export async function ReplicaProduct({ slug }: { slug: string }) {
             '@context': 'https://schema.org',
             '@type': 'Product',
             '@id': `${origin}${contentPath(product, 'product')}#product`,
-            name: product.title,
+            name: product.title || product.slug || 'Yueli',
             description: product.general?.shortDescription || undefined,
             sku: product.pricing?.sku || undefined,
             image: images.map((image) => new URL(image.src, origin).href),
@@ -70,7 +83,7 @@ export async function ReplicaProduct({ slug }: { slug: string }) {
       <section className="yl-wrap yl-product-hero">
         <EquipmentGallery images={images} />
         <div className="yl-product-description">
-          <h1>{product.title}</h1>
+          <h1>{product.title || product.slug || 'Yueli'}</h1>
           {original?.shortHTML && product.general?.shortDescription === original.summary ? (
             <div
               className="yl-original-short-description"
@@ -81,11 +94,14 @@ export async function ReplicaProduct({ slug }: { slug: string }) {
           )}
           {typeof category === 'object' && category && (
             <p className="yl-product-category">
-              Category: <a href={contentPath(category, 'category')}>{category.title}</a>
+              Category:{' '}
+              <a href={contentPath(category, 'category')}>
+                {category.title || category.slug || 'Yueli'}
+              </a>
             </p>
           )}
           <a
-            href={`/contact-us?product=${encodeURIComponent(product.title)}`}
+            href={`/contact-us?product=${encodeURIComponent(product.title || product.slug || 'Yueli')}`}
             className="yl-button yl-configuration-link"
           >
             Request Configuration
@@ -95,7 +111,7 @@ export async function ReplicaProduct({ slug }: { slug: string }) {
       <section className="yl-wrap yl-product-content">
         <ProductTabs
           productID={product.id}
-          productTitle={product.title}
+          productTitle={product.title || product.slug || 'Yueli'}
           description={description}
         />
       </section>

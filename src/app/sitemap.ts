@@ -40,7 +40,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ['page', pages],
   ] as const)
     for (const doc of docs) {
-      if (doc._status === 'published' && !doc.discovery?.noIndex)
+      if (
+        doc._status === 'published' &&
+        !doc.discovery?.noIndex &&
+        doc.title?.trim() &&
+        !(type === 'page' && ['search', 'products', 'blog', 'home'].includes(doc.slug || ''))
+      )
         paths.set(contentPath(doc, type), doc.updatedAt)
     }
   for (const cat of categories)

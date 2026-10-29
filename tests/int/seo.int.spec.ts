@@ -1,7 +1,18 @@
+vi.mock('@/i18n/service', () => ({
+  getLanguageRegistry: async () => ({
+    defaultLocale: 'zh',
+    languages: [
+      { id: 1, code: 'zh', htmlLang: 'zh-CN' },
+      { id: 2, code: 'en', htmlLang: 'en-US' },
+    ],
+  }),
+}))
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 const { findGlobal } = vi.hoisted(() => ({ findGlobal: vi.fn() }))
-vi.mock('payload', () => ({ getPayload: async () => ({ findGlobal }) }))
+vi.mock('@/i18n/content', () => ({
+  getPayload: async () => ({ findGlobal, find: async () => ({ docs: [{}] }) }),
+}))
 vi.mock('@payload-config', () => ({ default: {} }))
 vi.mock('@/utilities/getURL', () => ({ getServerSideURL: () => 'http://localhost:3000' }))
 
@@ -10,7 +21,14 @@ import robots from '@/app/robots'
 
 describe('Public search metadata', () => {
   beforeEach(() => {
-    findGlobal.mockResolvedValue({ siteName: 'PawSupply', siteUrl: 'https://pets.example/path/', allowIndexing: true, description: 'Wholesale pet supplies', socialImage: { url: '/share.png' }, geo: { allowAITraining: false } })
+    findGlobal.mockResolvedValue({
+      siteName: 'PawSupply',
+      siteUrl: 'https://pets.example/path/',
+      allowIndexing: true,
+      description: 'Wholesale pet supplies',
+      socialImage: { url: '/share.png' },
+      geo: { allowAITraining: false },
+    })
   })
 
   it('normalizes the site origin and strips paths', () => {
@@ -19,10 +37,18 @@ describe('Public search metadata', () => {
   })
 
   it('uses explicit noindex over the site indexing preference and retains the canonical', async () => {
-    const result = await pageMetadata({ locale: 'en', path: '/products/dog-bowl', title: 'Dog bowl', noIndex: true, languages: false })
+    const result = await pageMetadata({
+      locale: 'en',
+      path: '/products/dog-bowl',
+      title: 'Dog bowl',
+      noIndex: true,
+      languages: false,
+    })
     expect(result.robots).toEqual({ index: false, follow: true })
     expect(result.alternates).toEqual({ canonical: 'https://pets.example/en/products/dog-bowl' })
-    expect(findGlobal).toHaveBeenCalledWith(expect.objectContaining({ overrideAccess: false, locale: 'en' }))
+    expect(findGlobal).toHaveBeenCalledWith(
+      expect.objectContaining({ overrideAccess: false, locale: 'en' }),
+    )
   })
 
   it('uses default share imagery and description and avoids duplicate branded titles', async () => {
@@ -30,19 +56,27 @@ describe('Public search metadata', () => {
     expect(result.title).toEqual({ absolute: '宠物用品批发 | PawSupply' })
     expect(result.description).toBe('Wholesale pet supplies')
     expect(result.openGraph).toMatchObject({ images: [{ url: 'https://pets.example/share.png' }] })
-    expect(result.alternates?.languages).toMatchObject({ 'zh-CN': 'https://pets.example/zh', 'en-US': 'https://pets.example/en' })
+    expect(result.alternates?.languages).toMatchObject({
+      'zh-CN': 'https://pets.example/zh',
+      'en-US': 'https://pets.example/en',
+    })
   })
 
   it('the site indexing switch overrides individual pages', async () => {
     findGlobal.mockResolvedValue({ allowIndexing: false })
-    expect((await pageMetadata({ locale: 'en', noIndex: false })).robots).toEqual({ index: false, follow: true })
+    expect((await pageMetadata({ locale: 'en', noIndex: false })).robots).toEqual({
+      index: false,
+      follow: true,
+    })
     expect((await robots()).rules).toContainEqual({ userAgent: '*', disallow: '/' })
   })
 
   it('separates search discovery from training crawlers', async () => {
     const result = await robots()
     expect(result.rules).toContainEqual({ userAgent: ['GPTBot', 'ClaudeBot'], disallow: '/' })
-    expect(result.rules).toContainEqual(expect.objectContaining({ userAgent: '*', allow: '/' }))
+    expect(result.rules).toContainEqual(
+      expect.objectContaining({ userAgent: '*', allow: expect.arrayContaining(['/']) }),
+    )
   })
 
   it('prevents a CMS value from terminating a JSON-LD script', () => {

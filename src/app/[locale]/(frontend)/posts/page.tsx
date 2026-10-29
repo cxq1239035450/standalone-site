@@ -5,14 +5,14 @@ import { CollectionArchive } from '@/components/CollectionArchive'
 import { PageRange } from '@/components/PageRange'
 import { Pagination } from '@/components/Pagination'
 import configPromise from '@payload-config'
-import { getPayload } from 'payload'
+import { getPayload } from '@/i18n/content'
 import React from 'react'
 import PageClient from './page.client'
 import { getTranslations } from 'next-intl/server'
 import { notFound } from 'next/navigation'
 import { isLocale } from '@/i18n/config'
 
-export const dynamic = 'force-static'
+export const dynamic = 'force-dynamic'
 export const revalidate = 600
 
 type Args = {

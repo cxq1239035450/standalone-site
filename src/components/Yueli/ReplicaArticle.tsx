@@ -55,9 +55,9 @@ export async function ReplicaArticle({ path, slug }: { path?: string; slug?: str
           <div className="yl-source-content">
             {post.migration?.contentHTML ? (
               <div dangerouslySetInnerHTML={{ __html: safeHTML(post.migration.contentHTML) }} />
-            ) : (
+            ) : post.content ? (
               <RichText data={post.content} enableGutter={false} />
-            )}
+            ) : null}
           </div>
           {tags.length > 0 && (
             <div className="yl-article-tags">

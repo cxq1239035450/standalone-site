@@ -1,5 +1,6 @@
 import { ValidationError, type CollectionBeforeValidateHook } from 'payload'
 import type { Form, FormSubmission } from '@/payload-types'
+import { createContentReader } from '@/i18n/content'
 
 export function validateSubmissionFields(fields: Form['fields'], submitted: unknown) {
   const definitions = new Map((fields || []).flatMap(field => 'name' in field && field.name ? [[field.name, field] as const] : []))
@@ -45,7 +46,9 @@ export const validateFormSubmission: CollectionBeforeValidateHook<FormSubmission
   if (operation !== 'create' || !data) return data
   const id = typeof data.form === 'object' ? data.form?.id : data.form
   if (!id) throw new ValidationError({ errors: [{ path: 'form', message: 'Choose an existing form.' }] })
-  const form = await req.payload.findByID({ collection: 'forms', id, depth: 0, overrideAccess: false, req })
+  const locale = (data as unknown as { contentLocale?: string }).contentLocale
+  const form = await createContentReader(req.payload).findByID({ collection: 'forms', id, depth: 0, locale, overrideAccess: false, disableErrors: true })
+  if (!form) throw new ValidationError({ errors: [{ path: 'form', message: 'This form is not published in the requested language.' }] })
   const errors = validateSubmissionFields(form.fields, data.submissionData)
   if (errors.length) throw new ValidationError({ errors })
   // The reusable form renderer sends booleans and numbers, whereas Payload stores textarea

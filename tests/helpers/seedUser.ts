@@ -1,46 +1,14 @@
-import { getPayload } from 'payload'
-import config from '../../src/payload.config.js'
+import { execFileSync } from 'node:child_process'
+import { randomUUID } from 'node:crypto'
 
-export const testUser = {
-  email: 'dev@payloadcms.com',
-  password: 'test',
-}
+export const testUser = { email: `e2e-${randomUUID()}@example.test`, password: randomUUID() }
 
-/**
- * Seeds a test user for e2e admin tests.
- */
-export async function seedTestUser(): Promise<void> {
-  const payload = await getPayload({ config })
-
-  // Delete existing test user if any
-  await payload.delete({
-    collection: 'users',
-    where: {
-      email: {
-        equals: testUser.email,
-      },
-    },
-  })
-
-  // Create fresh test user
-  await payload.create({
-    collection: 'users',
-    data: testUser,
+function manage(action: 'create' | 'delete') {
+  if (process.env.E2E_DATABASE_COPY !== '1') throw new Error('Set E2E_DATABASE_COPY=1 only with DATABASE_URL pointing to a disposable test database.')
+  execFileSync(process.execPath, ['--import', 'tsx', 'tests/helpers/manageUser.ts', action], {
+    env: { ...process.env, E2E_TEST_EMAIL: testUser.email, E2E_TEST_PASSWORD: testUser.password },
+    stdio: 'pipe',
   })
 }
-
-/**
- * Cleans up test user after tests
- */
-export async function cleanupTestUser(): Promise<void> {
-  const payload = await getPayload({ config })
-
-  await payload.delete({
-    collection: 'users',
-    where: {
-      email: {
-        equals: testUser.email,
-      },
-    },
-  })
-}
+export async function seedTestUser(): Promise<void> { manage('create') }
+export async function cleanupTestUser(): Promise<void> { manage('delete') }

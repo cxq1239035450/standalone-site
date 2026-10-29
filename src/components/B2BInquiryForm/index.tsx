@@ -1,4 +1,5 @@
 'use client'
+import { useLocale } from 'next-intl'
 import { useState } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import { Button } from '@/components/ui/button'
@@ -72,13 +73,18 @@ export function B2BInquiryForm({
   initialCategory,
   initialRequirements,
 }: B2BInquiryFormProps) {
+  const contentLocale = useLocale()
   const {
     register,
     handleSubmit,
     control,
     formState: { errors },
     reset,
+    setFocus,
   } = useForm<InquiryFormData>({
+    // Controlled selects register later than native inputs. Focus errors in
+    // visual order instead of React Hook Form's registration order.
+    shouldFocusError: false,
     defaultValues: {
       'company-name': '',
       'contact-name': '',
@@ -117,6 +123,7 @@ export function B2BInquiryForm({
         },
         body: JSON.stringify({
           form: formID,
+          contentLocale,
           submissionData,
         }),
       })
@@ -161,8 +168,8 @@ export function B2BInquiryForm({
   }
 
   const inputClassName = (invalid: boolean) =>
-    `h-12 rounded-xl bg-white px-4 transition focus-visible:ring-emerald-600 ${
-      invalid ? 'border-red-300' : 'border-stone-200'
+    `h-12 rounded-xl bg-white px-4 transition focus-visible:ring-ring/20 ${
+      invalid ? 'border-red-300' : 'border-input'
     }`
 
   return (
@@ -171,7 +178,21 @@ export function B2BInquiryForm({
       aria-busy={isLoading}
       className="space-y-6"
       noValidate
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={handleSubmit(onSubmit, (invalid) => {
+        const fieldOrder: Array<keyof InquiryFormData> = [
+          'company-name',
+          'contact-name',
+          'email',
+          'phone',
+          'business-type',
+          'product-category',
+          'monthly-volume',
+          'delivery-city',
+          'requirements',
+        ]
+        const firstInvalid = fieldOrder.find((name) => invalid[name])
+        if (firstInvalid) setFocus(firstInvalid)
+      })}
     >
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
         <Field
@@ -254,14 +275,21 @@ export function B2BInquiryForm({
             name="business-type"
             rules={{ required: labels.validation.required }}
             render={({ field }) => (
-              <Select onValueChange={field.onChange} value={field.value}>
+              <Select
+                name={field.name}
+                onValueChange={field.onChange}
+                value={field.value}
+                disabled={isLoading}
+              >
                 <SelectTrigger
+                  ref={field.ref}
+                  onBlur={field.onBlur}
                   aria-describedby="business-type-error"
                   aria-invalid={Boolean(errors['business-type'])}
                   aria-required="true"
                   id="business-type"
                   className={`h-12 w-full rounded-xl border bg-white px-4 ${
-                    errors['business-type'] ? 'border-red-300' : 'border-stone-200'
+                    errors['business-type'] ? 'border-red-300' : 'border-input'
                   }`}
                 >
                   <SelectValue placeholder={labels.placeholders.select} />
@@ -289,14 +317,21 @@ export function B2BInquiryForm({
             name="product-category"
             rules={{ required: labels.validation.required }}
             render={({ field }) => (
-              <Select onValueChange={field.onChange} value={field.value}>
+              <Select
+                name={field.name}
+                onValueChange={field.onChange}
+                value={field.value}
+                disabled={isLoading}
+              >
                 <SelectTrigger
+                  ref={field.ref}
+                  onBlur={field.onBlur}
                   aria-describedby="product-category-error"
                   aria-invalid={Boolean(errors['product-category'])}
                   aria-required="true"
                   id="product-category"
                   className={`h-12 w-full rounded-xl border bg-white px-4 ${
-                    errors['product-category'] ? 'border-red-300' : 'border-stone-200'
+                    errors['product-category'] ? 'border-red-300' : 'border-input'
                   }`}
                 >
                   <SelectValue placeholder={labels.placeholders.select} />
@@ -324,14 +359,21 @@ export function B2BInquiryForm({
             name="monthly-volume"
             rules={{ required: labels.validation.required }}
             render={({ field }) => (
-              <Select onValueChange={field.onChange} value={field.value}>
+              <Select
+                name={field.name}
+                onValueChange={field.onChange}
+                value={field.value}
+                disabled={isLoading}
+              >
                 <SelectTrigger
+                  ref={field.ref}
+                  onBlur={field.onBlur}
                   aria-describedby="monthly-volume-error"
                   aria-invalid={Boolean(errors['monthly-volume'])}
                   aria-required="true"
                   id="monthly-volume"
                   className={`h-12 w-full rounded-xl border bg-white px-4 ${
-                    errors['monthly-volume'] ? 'border-red-300' : 'border-stone-200'
+                    errors['monthly-volume'] ? 'border-red-300' : 'border-input'
                   }`}
                 >
                   <SelectValue placeholder={labels.placeholders.select} />
@@ -372,7 +414,7 @@ export function B2BInquiryForm({
           aria-describedby="requirements-error"
           id="requirements"
           rows={5}
-          className="rounded-xl border-stone-200 bg-white px-4 py-3"
+          className="rounded-xl border-input bg-white px-4 py-3"
           {...register('requirements')}
         />
       </Field>
@@ -386,12 +428,14 @@ export function B2BInquiryForm({
         </div>
       )}
 
-      <div className="flex flex-col items-start gap-4 border-t border-stone-200 pt-6 sm:flex-row sm:items-center sm:justify-between">
-        <p className="max-w-md text-xs leading-5 text-stone-500 sm:text-sm">{labels.privacy}</p>
+      <div className="flex flex-col items-start gap-4 border-t border-input pt-6 sm:flex-row sm:items-center sm:justify-between">
+        <p className="max-w-md text-xs leading-5 text-muted-foreground sm:text-sm">
+          {labels.privacy}
+        </p>
         <Button
           type="submit"
           disabled={isLoading}
-          className="h-12 w-full rounded-xl bg-emerald-700 px-8 font-semibold text-white shadow-lg shadow-emerald-900/10 transition hover:bg-emerald-800 disabled:opacity-50 sm:w-auto"
+          className="h-12 w-full rounded-xl bg-primary px-8 font-semibold text-primary-foreground shadow-sm transition hover:bg-primary/90 disabled:opacity-50 sm:w-auto"
         >
           {isLoading ? (
             <>
@@ -425,7 +469,7 @@ function Field({
 }) {
   return (
     <div>
-      <Label htmlFor={id} className="mb-2 block text-sm font-medium text-stone-700">
+      <Label htmlFor={id} className="mb-2 block text-sm font-medium text-foreground">
         {label}
         {required && <span className="ml-1 text-red-500">*</span>}
       </Label>
