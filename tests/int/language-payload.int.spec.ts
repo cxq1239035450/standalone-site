@@ -7,7 +7,9 @@ import fs from 'node:fs/promises'
 import config from '@payload-config'
 import enMessages from '../../messages/en.json'
 import { createContentReader } from '@/i18n/content'
+import { migrateSeo, seoMigrationName } from '@/scripts/seoMigration'
 import { migrateLanguageContent } from '@/i18n/migrateContent'
+import { migrateInquiryMail } from '@/scripts/inquiryMailMigration'
 
 it('runs Japanese draft/publish/withdraw and shared inventory through the real Payload adapter', async () => {
   const database = new PGlite()
@@ -21,7 +23,9 @@ it('runs Japanese draft/publish/withdraw and shared inventory through the real P
     const pool = {
       async query(query: string | { text: string; rowMode?: string }, values?: unknown[]) {
         const text = typeof query === 'string' ? query : query.text
-        const result = await database.query(text, values)
+        const result = text.trim().startsWith('CREATE TYPE')
+          ? (await database.exec(text)).at(-1)!
+          : await database.query(text, values)
         const rows = result.rows.map((row) =>
           Object.fromEntries(
             Object.entries(row as Record<string, unknown>).map(([key, value]) => [
@@ -51,10 +55,50 @@ it('runs Japanese draft/publish/withdraw and shared inventory through the real P
     // PostgreSQL adapter, schema, hooks, validation and access-control pipeline.
     Object.assign(payload.db, { pool })
     await payload.db.connect!()
+    expect((await migrateSeo(payload)).state).toBe('ready')
+    expect((await database.query('SELECT name FROM payload_migrations')).rows).toHaveLength(0)
+    expect((await migrateSeo(payload, true)).state).toBe('applied')
+    expect((await migrateSeo(payload, true)).state).toBe('already-applied')
+    expect((await database.query('SELECT name FROM payload_migrations')).rows).toEqual([{name:seoMigrationName}])
+    await migrateInquiryMail(payload, true)
     const req = await createLocalReq(
       { context: { disableRevalidate: true, languageMigration: true } },
       payload,
     )
+    // A first-ever draft has no live global row and must not expose its URL.
+    await payload.updateGlobal({slug:'search-settings', req, draft:true, data:{siteUrl:'https://first-draft.example', _status:'draft'}})
+    expect((await payload.findGlobal({slug:'search-settings', draft:false})).siteUrl).not.toBe('https://first-draft.example')
+    const firstDraftPublic = await createContentReader(payload).findGlobal({slug:'search-settings', locale:'zh', draft:false})
+    expect(firstDraftPublic.siteUrl).toBeUndefined()
+    expect(firstDraftPublic.allowIndexing).toBe(false)
+    expect(firstDraftPublic.geo?.enabled).toBe(false)
+    // Global configuration uses independent draft and live records.
+    await payload.updateGlobal({slug: 'search-settings', req, data: {
+      siteUrl: 'https://published.example', allowIndexing: false, allowCrawling: true, _status: 'published',
+      robotsRules: [{userAgent: 'ExampleBot', allow: '/public', disallow: '/private'}],
+    }})
+    await payload.updateGlobal({slug: 'search-settings', req, draft: true, data: {
+      siteUrl: 'https://draft.example', _status: 'draft',
+    }})
+    expect((await payload.findGlobal({slug:'search-settings', draft:false})).siteUrl).toBe('https://published.example')
+    expect((await payload.findGlobal({slug:'search-settings', draft:true})).siteUrl).toBe('https://draft.example')
+    expect((await payload.findGlobalVersions({slug:'search-settings'})).totalDocs).toBeGreaterThanOrEqual(2)
+    // Payload's raw global API returns the base row even after withdrawal.
+    // The public reader must explicitly reject its now-unpublished fields.
+    await payload.updateGlobal({slug:'search-settings', req, draft:false, data:{siteUrl:'https://withdrawn.example', _status:'draft'}})
+    expect((await payload.findGlobal({slug:'search-settings', draft:false})).siteUrl).toBe('https://withdrawn.example')
+    const withdrawn = await createContentReader(payload).findGlobal({slug:'search-settings', locale:'zh', draft:false})
+    expect(withdrawn.siteUrl).toBeUndefined()
+    expect(withdrawn.robotsRules).toBeUndefined()
+    expect(withdrawn.sitemap?.enabled).toBe(false)
+    expect(withdrawn.allowIndexing).toBe(false)
+    expect(withdrawn.allowCrawling).toBe(false)
+    expect(withdrawn.geo?.enabled).toBe(false)
+    await payload.updateGlobal({slug:'search-settings', req, data:{siteUrl:'https://published.example', _status:'published'}})
+
+    await expect(payload.updateGlobal({slug:'search-settings', req, data:{robotsRules:[{userAgent:'*', disallow:'/'}]}})).rejects.toThrow()
+    await expect(payload.updateGlobal({slug:'search-settings', req, data:{robotsRules:[{userAgent:'ExampleBot', disallow:'Sitemap: https://untrusted.example'}]}})).rejects.toThrow()
+    await expect(payload.updateGlobal({slug:'search-settings', req, data:{robotsRules:[{userAgent:'ExampleBot'},{userAgent:'examplebot'}]}})).rejects.toThrow()
     const language = await payload.create({
       collection: 'languages',
       req,

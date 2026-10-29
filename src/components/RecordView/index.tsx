@@ -6,6 +6,8 @@ import './modal.css'
 import { Button, DefaultEditView, useConfig, useDocumentInfo } from '@payloadcms/ui'
 import type { ClientField, DocumentViewClientProps } from 'payload'
 import { useSearchParams } from 'next/navigation'
+import DiscoveryPanel from '@/components/DiscoveryPanel'
+import InquiryMailPanel from '@/components/InquiryMailPanel'
 
 function label(value: unknown, fallback: string): string {
   if (typeof value === 'string') return value
@@ -74,7 +76,9 @@ export default function RecordView(props: DocumentViewClientProps) {
       {info.hasSavePermission && <Button type="button" margin={false} onClick={()=>setModalEdit(true)}>编辑</Button>}
     </header>
     <p>只读详情。点击“编辑”可修改此记录的全部可编辑内容。</p>
-    <Fields fields={entity?.fields || []} data={info.data || {}} />
+    {info.globalSlug === 'search-settings' && <DiscoveryPanel onEdit={info.hasSavePermission ? () => setModalEdit(true) : undefined}/>}
+    {info.globalSlug === 'inquiry-mail-settings' && <InquiryMailPanel refreshKey={modalEdit} onEdit={info.hasSavePermission ? () => setModalEdit(true) : undefined}/>}
+    {info.globalSlug !== 'inquiry-mail-settings' && <Fields fields={entity?.fields || []} data={info.data || {}} />}
     <Dialog.Root open={modalEdit} onOpenChange={setModalEdit}><Dialog.Portal><Dialog.Overlay className="record-overlay"/><Dialog.Content className="record-modal" aria-describedby={undefined}><div className="record-modal-heading"><Dialog.Title>编辑内容</Dialog.Title><Dialog.Close className="record-icon-button" aria-label="关闭弹窗"><X size={20}/></Dialog.Close></div><DefaultEditView {...props}/></Dialog.Content></Dialog.Portal></Dialog.Root>
   </div>
 }

@@ -1,3 +1,7 @@
+import { InquiryMailSettings } from './globals/InquiryMailSettings'
+import { InquiryMailDeliveries } from './collections/InquiryMailDeliveries'
+import { sendInquiryMailTask } from './email/service'
+import { inquiryMailEndpoints } from './endpoints/inquiryMail'
 import { SearchSettings } from './globals/SearchSettings'
 import { IndustryTemplates } from './collections/IndustryTemplates'
 import { postgresAdapter } from '@payloadcms/db-postgres'
@@ -23,6 +27,7 @@ import { defaultLocale, localeConfig } from './i18n/config'
 import { dynamicContentPlugin } from './i18n/contentPlugin'
 import { recordViewsPlugin } from './plugins/recordViews'
 import { translationEndpoints } from './i18n/endpoints'
+import { seoEndpoints } from './i18n/seoEndpoints'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -106,11 +111,11 @@ export default buildConfig({
       connectionString: process.env.DATABASE_URL || '',
     },
   }),
-  collections: [Pages, Posts, Media, Categories, Users, Products, IndustryTemplates],
+  collections: [Pages, Posts, Media, Categories, Users, Products, IndustryTemplates, InquiryMailDeliveries],
   cors: [getServerSideURL()].filter(Boolean),
-  globals: [Header, Footer, SearchSettings],
+  globals: [Header, Footer, SearchSettings, InquiryMailSettings],
   plugins: [...plugins, dynamicContentPlugin, recordViewsPlugin],
-  endpoints: translationEndpoints,
+  endpoints: [...translationEndpoints, ...seoEndpoints, ...inquiryMailEndpoints],
   secret: process.env.PAYLOAD_SECRET,
   sharp,
   typescript: {
@@ -132,6 +137,8 @@ export default buildConfig({
         return authHeader === `Bearer ${secret}`
       },
     },
-    tasks: [],
+    autoRun: [{ cron: '* * * * *', queue: 'inquiry-mail', limit: 10 }],
+    shouldAutoRun: () => process.env.INQUIRY_EMAIL_AUTORUN === 'true' && process.env.NODE_ENV !== 'test' && !process.env.VERCEL,
+    tasks: [sendInquiryMailTask],
   },
 })

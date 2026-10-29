@@ -74,6 +74,7 @@ export interface Config {
     users: User;
     products: Product;
     'industry-templates': IndustryTemplate;
+    'inquiry-mail-deliveries': InquiryMailDelivery;
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -110,6 +111,7 @@ export interface Config {
     users: UsersSelect<false> | UsersSelect<true>;
     products: ProductsSelect<false> | ProductsSelect<true>;
     'industry-templates': IndustryTemplatesSelect<false> | IndustryTemplatesSelect<true>;
+    'inquiry-mail-deliveries': InquiryMailDeliveriesSelect<false> | InquiryMailDeliveriesSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
@@ -141,12 +143,14 @@ export interface Config {
     header: Header;
     footer: Footer;
     'search-settings': SearchSetting;
+    'inquiry-mail-settings': InquiryMailSetting;
     'language-settings': LanguageSetting;
   };
   globalsSelect: {
     header: HeaderSelect<false> | HeaderSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
     'search-settings': SearchSettingsSelect<false> | SearchSettingsSelect<true>;
+    'inquiry-mail-settings': InquiryMailSettingsSelect<false> | InquiryMailSettingsSelect<true>;
     'language-settings': LanguageSettingsSelect<false> | LanguageSettingsSelect<true>;
   };
   locale: 'zh' | 'en';
@@ -156,6 +160,7 @@ export interface Config {
   user: User;
   jobs: {
     tasks: {
+      sendInquiryMail: TaskSendInquiryMail;
       schedulePublish: TaskSchedulePublish;
       inline: {
         input: unknown;
@@ -196,6 +201,10 @@ export interface Page {
      * 输出 noindex，并从 sitemap 和 llms.txt 中排除。
      */
     noIndex?: boolean | null;
+    /**
+     * 填写完整 HTTP(S) 地址可覆盖当前语言的规范地址；不允许查询参数和锚点。
+     */
+    canonicalUrl?: string | null;
     /**
      * 回答产品用途、采购适用对象等，会展示在内容页及机器可读摘要中；不要填写无法验证的优势。
      */
@@ -277,6 +286,10 @@ export interface Post {
      * 输出 noindex，并从 sitemap 和 llms.txt 中排除。
      */
     noIndex?: boolean | null;
+    /**
+     * 填写完整 HTTP(S) 地址可覆盖当前语言的规范地址；不允许查询参数和锚点。
+     */
+    canonicalUrl?: string | null;
     /**
      * 回答产品用途、采购适用对象等，会展示在内容页及机器可读摘要中；不要填写无法验证的优势。
      */
@@ -848,6 +861,10 @@ export interface Product {
      */
     noIndex?: boolean | null;
     /**
+     * 填写完整 HTTP(S) 地址可覆盖当前语言的规范地址；不允许查询参数和锚点。
+     */
+    canonicalUrl?: string | null;
+    /**
      * 回答产品用途、采购适用对象等，会展示在内容页及机器可读摘要中；不要填写无法验证的优势。
      */
     summary?: string | null;
@@ -993,6 +1010,68 @@ export interface IndustryTemplate {
   createdAt: string;
 }
 /**
+ * 发送成功表示邮件服务已接受，不代表一定进入收件箱。失败记录可在询盘邮件通知配置页手动重发。
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "inquiry-mail-deliveries".
+ */
+export interface InquiryMailDelivery {
+  id: number;
+  kind: 'test' | 'inquiry';
+  dedupeKey: string;
+  submission?: (number | null) | FormSubmission;
+  status: 'pending' | 'sending' | 'sent' | 'failed';
+  attempts?: number | null;
+  recipients:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  acceptedRecipients?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  fromEmail?: string | null;
+  fromName?: string | null;
+  subject: string;
+  bodyText: string;
+  configFingerprint: string;
+  lastError?: string | null;
+  messageId?: string | null;
+  sentAt?: string | null;
+  confirmedAt?: string | null;
+  startedAt?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "form-submissions".
+ */
+export interface FormSubmission {
+  id: number;
+  form: number | Form;
+  submissionData?:
+    | {
+        field: string;
+        value: string;
+        id?: string | null;
+      }[]
+    | null;
+  contentLocale?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
@@ -1015,24 +1094,6 @@ export interface Redirect {
         } | null);
     url?: string | null;
   };
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "form-submissions".
- */
-export interface FormSubmission {
-  id: number;
-  form: number | Form;
-  submissionData?:
-    | {
-        field: string;
-        value: string;
-        id?: string | null;
-      }[]
-    | null;
-  contentLocale?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -1068,6 +1129,8 @@ export interface Search {
   createdAt: string;
 }
 /**
+ * 禁用后可删除；删除会一并清理该语言的前台文案、导航、SEO 配置及相关发布计划。商品、文章等业务翻译需先处理，默认语言不可删除。
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "languages".
  */
@@ -1122,6 +1185,10 @@ export interface PagesTranslation {
   subject: number | Page;
   language: number | Language;
   discovery?: {
+    /**
+     * 填写完整 HTTP(S) 地址可覆盖当前语言的规范地址；不允许查询参数和锚点。
+     */
+    canonicalUrl?: string | null;
     /**
      * 回答产品用途、采购适用对象等，会展示在内容页及机器可读摘要中；不要填写无法验证的优势。
      */
@@ -1195,6 +1262,10 @@ export interface PostsTranslation {
   subject: number | Post;
   language: number | Language;
   discovery?: {
+    /**
+     * 填写完整 HTTP(S) 地址可覆盖当前语言的规范地址；不允许查询参数和锚点。
+     */
+    canonicalUrl?: string | null;
     /**
      * 回答产品用途、采购适用对象等，会展示在内容页及机器可读摘要中；不要填写无法验证的优势。
      */
@@ -1292,6 +1363,10 @@ export interface ProductsTranslation {
   subject: number | Product;
   language: number | Language;
   discovery?: {
+    /**
+     * 填写完整 HTTP(S) 地址可覆盖当前语言的规范地址；不允许查询参数和锚点。
+     */
+    canonicalUrl?: string | null;
     /**
      * 回答产品用途、采购适用对象等，会展示在内容页及机器可读摘要中；不要填写无法验证的优势。
      */
@@ -1662,6 +1737,35 @@ export interface SearchSettingsTranslation {
   geo?: {
     summary?: string | null;
     /**
+     * 按语言编辑，拖动调整顺序。仅输出已启用语言中已发布、允许索引的关联内容。
+     */
+    sections?:
+      | {
+          title: string;
+          links?:
+            | {
+                label: string;
+                description?: string | null;
+                content:
+                  | {
+                      relationTo: 'pages';
+                      value: number | Page;
+                    }
+                  | {
+                      relationTo: 'posts';
+                      value: number | Post;
+                    }
+                  | {
+                      relationTo: 'products';
+                      value: number | Product;
+                    };
+                id?: string | null;
+              }[]
+            | null;
+          id?: string | null;
+        }[]
+      | null;
+    /**
      * 填写后替换首页默认采购问答，并与可见内容同步生成 FAQ 结构化数据。只填写可核实的采购政策。
      */
     faq?:
@@ -1745,7 +1849,7 @@ export interface PayloadJob {
     | {
         executedAt: string;
         completedAt: string;
-        taskSlug: 'inline' | 'schedulePublish';
+        taskSlug: 'inline' | 'sendInquiryMail' | 'schedulePublish';
         taskID: string;
         input?:
           | {
@@ -1778,7 +1882,7 @@ export interface PayloadJob {
         id?: string | null;
       }[]
     | null;
-  taskSlug?: ('inline' | 'schedulePublish') | null;
+  taskSlug?: ('inline' | 'sendInquiryMail' | 'schedulePublish') | null;
   queue?: string | null;
   waitUntil?: string | null;
   processing?: boolean | null;
@@ -1819,6 +1923,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'industry-templates';
         value: number | IndustryTemplate;
+      } | null)
+    | ({
+        relationTo: 'inquiry-mail-deliveries';
+        value: number | InquiryMailDelivery;
       } | null)
     | ({
         relationTo: 'redirects';
@@ -1939,6 +2047,7 @@ export interface PagesSelect<T extends boolean = true> {
     | T
     | {
         noIndex?: T;
+        canonicalUrl?: T;
         summary?: T;
       };
   title?: T;
@@ -2080,6 +2189,7 @@ export interface PostsSelect<T extends boolean = true> {
     | T
     | {
         noIndex?: T;
+        canonicalUrl?: T;
         summary?: T;
       };
   title?: T;
@@ -2254,6 +2364,7 @@ export interface ProductsSelect<T extends boolean = true> {
     | T
     | {
         noIndex?: T;
+        canonicalUrl?: T;
         summary?: T;
       };
   industryTemplate?: T;
@@ -2336,6 +2447,31 @@ export interface IndustryTemplatesSelect<T extends boolean = true> {
             };
         id?: T;
       };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "inquiry-mail-deliveries_select".
+ */
+export interface InquiryMailDeliveriesSelect<T extends boolean = true> {
+  kind?: T;
+  dedupeKey?: T;
+  submission?: T;
+  status?: T;
+  attempts?: T;
+  recipients?: T;
+  acceptedRecipients?: T;
+  fromEmail?: T;
+  fromName?: T;
+  subject?: T;
+  bodyText?: T;
+  configFingerprint?: T;
+  lastError?: T;
+  messageId?: T;
+  sentAt?: T;
+  confirmedAt?: T;
+  startedAt?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -2567,6 +2703,7 @@ export interface PagesTranslationsSelect<T extends boolean = true> {
   discovery?:
     | T
     | {
+        canonicalUrl?: T;
         summary?: T;
       };
   title?: T;
@@ -2622,6 +2759,7 @@ export interface PostsTranslationsSelect<T extends boolean = true> {
   discovery?:
     | T
     | {
+        canonicalUrl?: T;
         summary?: T;
       };
   title?: T;
@@ -2680,6 +2818,7 @@ export interface ProductsTranslationsSelect<T extends boolean = true> {
   discovery?:
     | T
     | {
+        canonicalUrl?: T;
         summary?: T;
       };
   technicalValues?: T;
@@ -2944,6 +3083,20 @@ export interface SearchSettingsTranslationsSelect<T extends boolean = true> {
     | T
     | {
         summary?: T;
+        sections?:
+          | T
+          | {
+              title?: T;
+              links?:
+                | T
+                | {
+                    label?: T;
+                    description?: T;
+                    content?: T;
+                    id?: T;
+                  };
+              id?: T;
+            };
         faq?:
           | T
           | {
@@ -3128,9 +3281,31 @@ export interface SearchSetting {
   description?: string | null;
   socialImage?: (number | null) | Media;
   /**
-   * 关闭后输出 noindex 与 robots 禁止抓取；不替代访问权限。
+   * 关闭后输出 noindex，并从 sitemap 和 llms.txt 排除；抓取权限单独配置。
    */
   allowIndexing?: boolean | null;
+  /**
+   * 关闭后 robots.txt 禁止抓取。需要爬虫读取 noindex 时，请保持允许抓取。
+   */
+  allowCrawling?: boolean | null;
+  sitemap?: {
+    enabled?: boolean | null;
+    includeCore?: boolean | null;
+    includePages?: boolean | null;
+    includeProducts?: boolean | null;
+    includePosts?: boolean | null;
+  };
+  /**
+   * 每个爬虫一条规则。通用爬虫和 GPTBot / ClaudeBot 使用上述开关；后台和接口路径始终排除。
+   */
+  robotsRules?:
+    | {
+        userAgent: string;
+        allow?: string | null;
+        disallow?: string | null;
+        id?: string | null;
+      }[]
+    | null;
   organization?: {
     legalName?: string | null;
     email?: string | null;
@@ -3149,6 +3324,35 @@ export interface SearchSetting {
     enabled?: boolean | null;
     summary?: string | null;
     /**
+     * 按语言编辑，拖动调整顺序。仅输出已启用语言中已发布、允许索引的关联内容。
+     */
+    sections?:
+      | {
+          title: string;
+          links?:
+            | {
+                label: string;
+                description?: string | null;
+                content:
+                  | {
+                      relationTo: 'pages';
+                      value: number | Page;
+                    }
+                  | {
+                      relationTo: 'posts';
+                      value: number | Post;
+                    }
+                  | {
+                      relationTo: 'products';
+                      value: number | Product;
+                    };
+                id?: string | null;
+              }[]
+            | null;
+          id?: string | null;
+        }[]
+      | null;
+    /**
      * 填写后替换首页默认采购问答，并与可见内容同步生成 FAQ 结构化数据。只填写可核实的采购政策。
      */
     faq?:
@@ -3163,6 +3367,32 @@ export interface SearchSetting {
      */
     allowAITraining?: boolean | null;
   };
+  _status?: ('draft' | 'published') | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * 先保存配置并发送测试邮件，确认实际收信后再开启新询盘通知。QQ 邮箱授权码只在服务器环境变量中配置。
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "inquiry-mail-settings".
+ */
+export interface InquiryMailSetting {
+  id: number;
+  /**
+   * 默认关闭；需要当前配置测试发送成功并确认收信后才能开启。
+   */
+  enabled?: boolean | null;
+  recipients: {
+    email: string;
+    id?: string | null;
+  }[];
+  fromName: string;
+  /**
+   * 填写已获发信授权的 QQ 邮箱，必须与服务器 SMTP_USER 一致；未配置时保留为空。
+   */
+  fromEmail?: string | null;
+  subjectPrefix: string;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -3234,6 +3464,24 @@ export interface SearchSettingsSelect<T extends boolean = true> {
   description?: T;
   socialImage?: T;
   allowIndexing?: T;
+  allowCrawling?: T;
+  sitemap?:
+    | T
+    | {
+        enabled?: T;
+        includeCore?: T;
+        includePages?: T;
+        includeProducts?: T;
+        includePosts?: T;
+      };
+  robotsRules?:
+    | T
+    | {
+        userAgent?: T;
+        allow?: T;
+        disallow?: T;
+        id?: T;
+      };
   organization?:
     | T
     | {
@@ -3252,6 +3500,20 @@ export interface SearchSettingsSelect<T extends boolean = true> {
     | {
         enabled?: T;
         summary?: T;
+        sections?:
+          | T
+          | {
+              title?: T;
+              links?:
+                | T
+                | {
+                    label?: T;
+                    description?: T;
+                    content?: T;
+                    id?: T;
+                  };
+              id?: T;
+            };
         faq?:
           | T
           | {
@@ -3261,6 +3523,26 @@ export interface SearchSettingsSelect<T extends boolean = true> {
             };
         allowAITraining?: T;
       };
+  _status?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "inquiry-mail-settings_select".
+ */
+export interface InquiryMailSettingsSelect<T extends boolean = true> {
+  enabled?: T;
+  recipients?:
+    | T
+    | {
+        email?: T;
+        id?: T;
+      };
+  fromName?: T;
+  fromEmail?: T;
+  subjectPrefix?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
@@ -3284,6 +3566,18 @@ export interface CollectionsWidget {
     [k: string]: unknown;
   };
   width: 'full';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TaskSendInquiryMail".
+ */
+export interface TaskSendInquiryMail {
+  input: {
+    deliveryID: number;
+  };
+  output: {
+    status?: string | null;
+  };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

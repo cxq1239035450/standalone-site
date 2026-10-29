@@ -39,3 +39,33 @@ describe('Additive multilingual PostgreSQL schema', () => {
     }
   }, 60000)
 })
+
+
+describe('SEO configuration migration', () => {
+  it('preserves live settings, archived translated data and a published version', async () => {
+    const db = new PGlite()
+    try {
+      const sqlFrom = async (name: string) =>
+        (await fs.readFile(`src/migrations/${name}.ts`, 'utf8')).match(/sql`([\s\S]*?)`/)![1]
+      await db.exec(await sqlFrom('20260818_035022'))
+      await db.exec(await sqlFrom('20261028_143927_dynamic_languages'))
+      await db.exec(`
+        INSERT INTO search_settings (id, site_name, site_url, allow_indexing) VALUES (1, 'Existing brand', 'https://existing.example', false);
+        INSERT INTO search_settings_locales (_parent_id, _locale, description, geo_summary) VALUES (1, 'zh', '原始描述', '原始简介');
+        INSERT INTO search_settings_organization_same_as (_parent_id, _order, id, url) VALUES (1, 1, 'social-one', 'https://social.example');
+        INSERT INTO search_settings_geo_faq (_parent_id, _order, _locale, id, question, answer) VALUES (1, 1, 'zh', 'faq-one', '原始问题', '原始回答');
+      `)
+      await db.exec(await sqlFrom('20261029_171455_seo_discovery'))
+      expect((await db.query('SELECT site_name, site_url, _status, allow_crawling FROM search_settings')).rows).toEqual([
+        {site_name:'Existing brand', site_url:'https://existing.example', _status:'published', allow_crawling:false},
+      ])
+      expect((await db.query('SELECT version_site_url, version__status, latest FROM _search_settings_v')).rows).toEqual([
+        {version_site_url:'https://existing.example', version__status:'published', latest:true},
+      ])
+      expect((await db.query('SELECT version_description FROM _search_settings_v_locales')).rows).toEqual([{version_description:'原始描述'}])
+      expect((await db.query('SELECT question, answer, _uuid FROM _search_settings_v_version_geo_faq')).rows).toEqual([{question:'原始问题',answer:'原始回答',_uuid:'faq-one'}])
+      expect((await db.query('SELECT url FROM _search_settings_v_version_organization_same_as')).rows).toEqual([{url:'https://social.example'}])
+      expect((await db.query('SELECT description FROM search_settings_locales')).rows).toEqual([{description:'原始描述'}])
+    } finally { await db.close() }
+  }, 60000)
+})

@@ -1,7 +1,8 @@
 vi.mock('@/i18n/service', () => ({ getLanguageRegistry: async () => ({ defaultLocale: 'zh', languages: [{ id: 1, code: 'zh', htmlLang: 'zh-CN' }, { id: 2, code: 'en', htmlLang: 'en-US' }] }) }))
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 const { find, settings } = vi.hoisted(() => ({ find: vi.fn(), settings: vi.fn() }))
-vi.mock('@/i18n/content', () => ({ getPayload: async () => ({ find }) }))
+vi.mock('payload', () => ({getPayload:async()=>({find:async()=>({docs:[{id:1,code:'zh'},{id:2,code:'en'}]}),findGlobal:async()=>({defaultLanguage:1})})}))
+vi.mock('@/i18n/content', () => ({ createContentReader: () => ({ find, findGlobal: settings }) }))
 vi.mock('@payload-config', () => ({ default: {} }))
 vi.mock('@/utilities/searchSettings', () => ({ getSearchSettings: settings, siteOrigin: () => 'https://pets.example' }))
 import sitemap from '@/app/sitemap'
@@ -24,7 +25,7 @@ describe('Published localized sitemap', () => {
     expect(urls.some(url => /hidden|search|untranslated/.test(url))).toBe(false)
     for (const [options] of find.mock.calls) {
       expect(options).toMatchObject({ draft: false, overrideAccess: false, fallbackLocale: false })
-      expect(options.where.and).toContainEqual({ _status: { equals: 'published' } })
+      expect(options.where).toEqual({ _status: { equals: 'published' } })
     }
   })
   it('does not expose a URL list when indexing is disabled', async () => {

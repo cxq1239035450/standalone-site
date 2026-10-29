@@ -16,6 +16,7 @@ import { adminLabel } from '@/i18n/adminLabels'
 import { contentLanguageField } from '@/fields/contentLanguageField'
 import { siteInsightsPlugin } from '@/integrations/insights/plugin'
 import { validateFormSubmission } from '@/hooks/validateFormSubmission'
+import { enqueueInquiryMail } from '@/email/service'
 
 const generateTitle: GenerateTitle<Post | Page> = async ({ doc, req }) => {
   const settings = await req.payload.findGlobal({ slug: 'search-settings', req, overrideAccess: false })
@@ -69,6 +70,8 @@ export const plugins: Plugin[] = [
     generateURL,
   }),
   formBuilderPlugin({
+    // A single durable notification pipeline owns submission emails.
+    beforeEmail: async () => [],
     fields: {
       payment: false,
     },
@@ -101,7 +104,7 @@ export const plugins: Plugin[] = [
     },
     formSubmissionOverrides: {
       fields: ({ defaultFields }) => [...defaultFields, { name: 'contentLocale', type: 'text', label: '提交语言' }],
-      hooks: { beforeValidate: [validateFormSubmission] },
+      hooks: { beforeValidate: [validateFormSubmission], afterChange: [enqueueInquiryMail] },
       labels: {
         singular: adminLabel('表单提交', 'Form submission'),
         plural: adminLabel('表单提交', 'Form submissions'),

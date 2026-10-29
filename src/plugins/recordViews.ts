@@ -4,6 +4,19 @@ import type { Plugin } from 'payload'
 export const recordViewsPlugin: Plugin = (config) => {
   for (const collection of config.collections || []) {
     if (collection.slug.startsWith('payload-')) continue
+    // Mail delivery records are immutable audit data. Their dedicated global
+    // panel provides detail dialogs and controlled retries, without edit/delete.
+    if (collection.slug === 'inquiry-mail-deliveries') {
+      collection.admin = { ...collection.admin, hidden: true }
+      collection.disableBulkEdit = true
+      continue
+    }
+    if (['pages-translations', 'posts-translations', 'products-translations'].includes(collection.slug)) {
+      collection.fields.push({ name: 'canonicalPreview', type: 'ui', admin: { components: { Field: '@/components/DiscoveryPanel/CanonicalField' } } })
+    }
+    if (collection.slug === 'search-settings-translations') {
+      collection.fields.unshift({ name: 'discoveryPreview', type: 'ui', admin: { components: { Field: '@/components/DiscoveryPanel' } } })
+    }
     const admin = collection.admin ||= {}
     collection.disableBulkEdit = true
     const components = admin.components ||= {}
@@ -17,6 +30,12 @@ export const recordViewsPlugin: Plugin = (config) => {
     } }
   }
   for (const global of config.globals || []) {
+    if (global.slug === 'search-settings') {
+      global.fields.unshift({ name: 'discoveryPreview', type: 'ui', admin: { components: { Field: '@/components/DiscoveryPanel' } } })
+    }
+    if (global.slug === 'inquiry-mail-settings') {
+      global.fields.unshift({ name: 'mailStatus', type: 'ui', admin: { components: { Field: '@/components/InquiryMailPanel' } } })
+    }
     const admin = global.admin ||= {}
     const components = admin.components ||= {}
     components.views = { ...components.views, edit: {
