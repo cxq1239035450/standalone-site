@@ -6,6 +6,7 @@ import {
   translationSlug,
 } from './contentSchema'
 import { createContentReader } from './content'
+import { resolveContentRoute } from './contentRoutes'
 
 export const translationEndpoints: Endpoint[] = [
   {
@@ -123,45 +124,36 @@ export const translationEndpoints: Endpoint[] = [
     method: 'get',
     handler: async (req) => {
       const path = new URL(req.url!).searchParams.get('path') || ''
-      const segments = path.split('/').filter(Boolean)
-      const source = ['products', 'posts'].includes(segments[1]) ? segments[1] : 'pages'
-      const slug = source === 'pages' ? segments[1] : segments[2]
-      if (!slug) return Response.json([])
-      const base = await req.payload.find({
-        collection: source as 'pages',
-        depth: 0,
-        limit: 1,
-        where: { slug: { equals: decodeURIComponent(slug) } },
-        overrideAccess: true,
-        req,
-      })
-      if (!base.docs[0]) return Response.json([])
-      const translations = await req.payload.find({
-        collection: translationSlug(source) as CollectionSlug,
-        depth: 0,
-        pagination: false,
-        draft: false,
-        overrideAccess: false,
-        where: {
-          and: [
-            { subject: { equals: base.docs[0].id } },
-            { _status: { equals: 'published' } },
-            { 'language.enabled': { equals: true } },
-          ],
-        },
-      })
       const languages = await req.payload.find({
         collection: 'languages',
         depth: 0,
         pagination: false,
         overrideAccess: false,
+        where: { enabled: { equals: true } },
       })
-      const ids = translations.docs.map((doc) => (doc as unknown as { language: number }).language)
-      return Response.json(
-        languages.docs
-          .filter((language) => ids.includes(language.id))
-          .map((language) => language.code),
+      const route = resolveContentRoute(
+        path,
+        languages.docs.map((language) => language.code),
       )
+      if (!route) return Response.json([])
+      // The public reader never receives req.user: editor sessions must not make
+      // a draft or preparing language appear available to ordinary visitors.
+      const reader = createContentReader(req.payload)
+      const available = await Promise.all(
+        languages.docs.map(async (language) => {
+          const result = await reader.find({
+            collection: route.collection,
+            locale: language.code,
+            depth: 0,
+            limit: 1,
+            draft: false,
+            overrideAccess: false,
+            where: { and: [route.where, { title: { exists: true } }] },
+          })
+          return result.docs.some((doc) => doc.title?.trim()) ? language.code : null
+        }),
+      )
+      return Response.json(available.filter(Boolean))
     },
   },
   {

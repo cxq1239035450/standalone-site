@@ -6,6 +6,8 @@ import { contentPath, getPosts, imageURL } from './data'
 import { plainText } from './html'
 import { equipmentMetadata } from './metadata'
 import { getPostArchiveDefinitions, postsInArchive, type PostArchiveKind } from './postTaxonomy'
+import { getLocale } from 'next-intl/server'
+import { yueliLocalePath } from '@/i18n/yueliPaths'
 
 export type { PostArchiveKind } from './postTaxonomy'
 export const postArchivePageSize = 12
@@ -56,6 +58,7 @@ export async function PostArchive({
   slug: string
   query?: CatalogQuery
 }) {
+  const locale = await getLocale()
   const data = await archiveData(kind, slug, query)
   if (!data || !data.valid || data.page === null) notFound()
   const { archive, posts, page, pages } = data
@@ -111,7 +114,7 @@ export async function PostArchive({
         ) : (
           <div className="yl-empty">
             <h2>No published articles in this archive yet.</h2>
-            <a className="yl-text-link" href="/blog">
+            <a className="yl-text-link" href={yueliLocalePath('/blog', locale)}>
               Browse the Yueli blog <span aria-hidden="true">↗</span>
             </a>
           </div>

@@ -1,6 +1,7 @@
 import { PreviewSearchParams } from '@/app/(frontend)/next/preview/route'
 import { PayloadRequest, CollectionSlug } from 'payload'
 import { defaultLocale, isLocale } from '@/i18n/config'
+import { yueliLocalePath } from '@/i18n/yueliPaths'
 
 const collectionPrefixMap: Partial<Record<CollectionSlug, string>> = {
   posts: '/blog',
@@ -27,8 +28,7 @@ export const generatePreviewPath = ({ collection, locale, slug, sourcePath }: Pr
 
   const encodedParams = new URLSearchParams({
     path:
-      sourcePath ||
-      `${resolvedLocale === 'en' ? '' : `/${resolvedLocale}`}${collectionPrefixMap[collection]}/${encodedSlug}`,
+      yueliLocalePath(sourcePath || `${collectionPrefixMap[collection]}/${encodedSlug}`, resolvedLocale, [resolvedLocale]),
     previewSecret: process.env.PREVIEW_SECRET || '',
   } satisfies PreviewSearchParams)
 

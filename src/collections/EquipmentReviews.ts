@@ -7,6 +7,14 @@ import {
   type Where,
 } from 'payload'
 import { adminLabel } from '@/i18n/adminLabels'
+import { createContentReader } from '@/i18n/content'
+import { isLocale } from '@/i18n/config'
+
+function reviewLocale(req: PayloadRequest): string | null {
+  const candidate =
+    req.query?.contentLocale ?? (req.locale === 'all' ? undefined : req.locale) ?? 'en'
+  return isLocale(candidate) ? candidate : null
+}
 
 /** This project has one protected auth collection; its users are CMS administrators. */
 export const isEquipmentReviewModerator = ({ req }: { req: Pick<PayloadRequest, 'user'> }) =>
@@ -39,10 +47,16 @@ export const prepareEquipmentReview: CollectionBeforeValidateHook = async ({
       throw new ValidationError({
         errors: [{ path: 'product', message: 'Choose a published product to review.' }],
       })
-    const product = await req.payload.findByID({
+    const locale = reviewLocale(req)
+    if (!locale)
+      throw new ValidationError({
+        errors: [{ path: 'product', message: 'Choose a published product to review.' }],
+      })
+    const reader = createContentReader(req.payload)
+    const product = await reader.findByID({
       collection: 'products',
       id: numericID,
-      locale: 'en',
+      locale,
       depth: 0,
       disableErrors: true,
       overrideAccess: false,
@@ -79,15 +93,31 @@ export const EquipmentReviews: CollectionConfig = {
   },
   access: {
     create: () => true,
-    read: ({ req }): boolean | Where =>
-      isEquipmentReviewModerator({ req })
-        ? true
-        : {
-            and: [
-              { status: { equals: 'published' } },
-              { 'product._status': { equals: 'published' } },
-            ],
-          },
+    read: async ({ req }): Promise<boolean | Where> => {
+      if (isEquipmentReviewModerator({ req })) return true
+      const locale = reviewLocale(req)
+      if (!locale) return false
+      if (req.payload?.collections?.languages) {
+        const published = await createContentReader(req.payload).find({
+          collection: 'products',
+          locale,
+          depth: 0,
+          pagination: false,
+          overrideAccess: false,
+        })
+        return published.docs.length
+          ? {
+              and: [
+                { status: { equals: 'published' } },
+                { product: { in: published.docs.map(({ id }) => id) } },
+              ],
+            }
+          : false
+      }
+      return {
+        and: [{ status: { equals: 'published' } }, { 'product._status': { equals: 'published' } }],
+      }
+    },
     update: isEquipmentReviewModerator,
     delete: isEquipmentReviewModerator,
   },

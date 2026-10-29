@@ -1,8 +1,12 @@
 import { getSearchSettings, siteOrigin, jsonLd } from '@/utilities/searchSettings'
+import { getLocale, getTranslations } from 'next-intl/server'
+import { yueliLocalePath } from '@/i18n/yueliPaths'
 
 export async function Breadcrumbs({ items }: { items: { name: string; href: string }[] }) {
-  const origin = siteOrigin((await getSearchSettings('en')).siteUrl)
-  const trail = [{ name: 'Home', href: '/' }, ...items]
+  const locale = await getLocale()
+  const t = await getTranslations('yueli')
+  const origin = siteOrigin((await getSearchSettings(locale)).siteUrl)
+  const trail = [{ name: t('home'), href: '/' }, ...items].map(item => ({ ...item, href: yueliLocalePath(item.href, locale, [locale]) }))
   const data = {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',

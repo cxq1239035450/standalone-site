@@ -7,13 +7,16 @@ import { SourceLayout } from './SourceLayout'
 import { EquipmentInquiryForm } from './InquiryForm'
 import { safeHTML, plainText } from './html'
 import { Breadcrumbs } from './Breadcrumbs'
+import { getLocale } from 'next-intl/server'
+import { yueliLocalePath } from '@/i18n/yueliPaths'
 
 export { EquipmentCard } from './EquipmentCard'
 
 export async function YueliHome() {
+  if ((await getLocale()) !== 'en') return <SourcePage path="/" />
   return <ReplicaHome />
 }
-function PageIntro({
+async function PageIntro({
   title,
   description,
   breadcrumb,
@@ -24,6 +27,7 @@ function PageIntro({
   breadcrumb?: string
   trail?: { name: string; href: string }[]
 }) {
+  const locale = await getLocale()
   return (
     <section className="yl-page-intro">
       <div className="yl-wrap">
@@ -31,11 +35,11 @@ function PageIntro({
           <Breadcrumbs items={trail} />
         ) : (
           <nav className="yl-breadcrumb" aria-label="Breadcrumb">
-            <a href="/">Home</a>
+            <a href={yueliLocalePath('/', locale)}>Home</a>
             <span aria-hidden="true">/</span>
             {breadcrumb && (
               <>
-                <a href="/products/">Products</a>
+                <a href={yueliLocalePath('/products/', locale)}>Products</a>
                 <span aria-hidden="true">/</span>
               </>
             )}
@@ -82,9 +86,11 @@ function PostCard({ post }: { post: Post }) {
   )
 }
 export async function BlogView() {
+  const locale = await getLocale()
   const page = (await getPages()).find((item) => item.slug === 'blog')
+  if (!page && (await getLocale()) !== 'en') notFound()
   if (page?.migration?.contentHTML?.includes('yb-blog'))
-    return <SourceLayout html={page.migration.contentHTML} />
+    return <SourceLayout html={page.migration.contentHTML} locale={locale} />
   const posts = await getPosts()
   return (
     <>
@@ -114,11 +120,12 @@ export async function BlogView() {
 }
 export { ReplicaArticle as ArticleView } from './ReplicaArticle'
 export async function SourcePage({ path }: { path: string }) {
+  const locale = await getLocale()
   const pages = await getPages()
-  const page = pages.find((p) => contentPath(p, 'page') === path)
+  const page = pages.find((p) => contentPath(p, 'page') === yueliLocalePath(path, locale))
   if (!page) notFound()
   if (/class="(?:ya-about|yf-faq|yc-contact|yb-blog)/.test(page.migration?.contentHTML || ''))
-    return <SourceLayout html={page.migration!.contentHTML!} />
+    return <SourceLayout html={page.migration!.contentHTML!} locale={locale} />
   return (
     <>
       <PageIntro
@@ -128,25 +135,29 @@ export async function SourcePage({ path }: { path: string }) {
       <section className="yl-wrap yl-section">
         <div
           className="yl-source-content yl-information-content"
-          dangerouslySetInnerHTML={{ __html: safeHTML(page.migration?.contentHTML) }}
+          dangerouslySetInnerHTML={{ __html: safeHTML(page.migration?.contentHTML, locale) }}
         />
         <div className="yl-proof-links">
           <h2>Continue your equipment review</h2>
-          <a href="/manufacturing">Manufacturing and verification</a>
-          <a href="/resources/prepare-equipment-rfq">Prepare your project brief</a>
-          <a href="/contact-us">Contact Yueli</a>
+          <a href={yueliLocalePath('/manufacturing', locale)}>Manufacturing and verification</a>
+          <a href={yueliLocalePath('/resources/prepare-equipment-rfq', locale)}>
+            Prepare your project brief
+          </a>
+          <a href={yueliLocalePath('/contact-us', locale)}>Contact Yueli</a>
         </div>
       </section>
     </>
   )
 }
 export async function ContactView({ product, project }: { product?: string; project?: string }) {
-  const { site } = await getYueli()
+  const { site, locale } = await getYueli()
   const formID = typeof site.inquiryForm === 'object' ? site.inquiryForm?.id : site.inquiryForm
   const page = (await getPages()).find((item) => item.slug === 'contact-us')
+  if (!page && (await getLocale()) !== 'en') notFound()
   if (page?.migration?.contentHTML?.includes('yc-contact'))
     return (
       <SourceLayout
+        locale={locale}
         html={page.migration.contentHTML}
         formID={formID}
         product={product}
@@ -180,7 +191,9 @@ export async function ContactView({ product, project }: { product?: string; proj
               Include material, key dimensions, required operations, target output and destination
               country. Send drawings through the contact email; this form accepts text.
             </p>
-            <a href="/resources/prepare-equipment-rfq">Read the equipment RFQ checklist ↗</a>
+            <a href={yueliLocalePath('/resources/prepare-equipment-rfq', locale)}>
+              Read the equipment RFQ checklist ↗
+            </a>
           </div>
         </div>
         <div className="yl-contact-form-panel">

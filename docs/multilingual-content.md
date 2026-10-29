@@ -101,3 +101,61 @@
 - 副本详细验收：`.backups/yueli-language-copy-verification.json`。副本成功并不表示当前前台已适配动态读取：启用前还需改造 Yueli 内容读取层、语言路由及迁移工具，并完成语言发布与前台验收。
 
 当前 3000 服务、原库和 `.env` 均保持原配置。没有执行正式库迁移或启用动态模块。正式切换前必须暂停写入/任务、重新备份并恢复验证，针对该库建立经核对的基线，再执行已验证的增量流程；多个分支指向同库时只能统一执行一次。
+
+## 2026-10-30 Yueli 原库迁移（取代上一节的未迁移状态）
+
+已迁移实际连接的 `127.0.0.1:5433/yueliautomation`，没有切换 DATABASE_URL。数据库迁移与启用动态前台是两个步骤；本次完成数据库步骤，应用的 `ENABLE_DYNAMIC_CONTENT` 仍保持关闭。Yueli 页面继续读取保留的旧数据，英文准备状态和中文草稿不会被擅自发布。
+
+### 经验证的迁移基线
+
+原库的 124 张表、983 个字段与现有旧模型的类型、非空约束完全一致。`src/migrations/yueli-support/baseline.json` 保存无业务数据的结构快照，覆盖字段、默认值、枚举、304 个约束、547 个索引、序列及用户触发器。基线 SHA-256 为 `c8d849d0e4520169b8a3cfa274f773f1d66a7b762634a2ed3fbd0abcc1080d01`。
+
+当前分支的 Payload `migrationDir` 固定为 `src/migrations/yueli`，按顺序执行：
+
+1. `20261030_010000_verified_baseline`：严格比较实际结构与已验收快照，匹配后由 Payload 正常登记“接管现有结构”。它没有创建旧结构，也没有声称旧初始化脚本曾执行。结构漂移或空库会直接失败；新环境应先恢复经过验证的 Yueli 备份。
+2. `20261030_020000_dynamic_languages`：复用主分支多语言增量。
+3. `20261030_030000_translation_fields`：复用 Yueli 的 30 个 HTML/参数/分类扩展字段增量。
+4. `20261030_040000_archive_search_brand`：解除旧 `search_settings.site_name` 归档字段的非空约束，与动态模型一致；保留原值，新翻译仍需通过发布校验。
+
+旧 `dev / -1` 记录保留，四项实际执行的迁移由 Payload 事务写入 batch 1。没有补写通用初始化 `20260818_035022` 的完成记录。不要把本分支的迁移目录切回通用 `src/migrations`，也不要对现有库运行初始化、fresh/reset/down。其他分支若共用此库，应先同步这套基线与目录配置，读取已完成记录后再决定是否存在增量，不能重复迁移同一数据库。
+
+### 备份、恢复与执行证据
+
+- 停止 3000 服务并确认没有其他数据库连接后备份。数据库：`.backups/yueliautomation-release-20261029163459.dump`；上传文件：`.backups/yueliautomation-media-20261029163459.tar`。文件名使用 UTC 时间。
+- 恢复到全新副本 `yueli_release_check_20261029163459`；123 张旧业务表（不含迁移账本）完整行摘要一致，701 个上传文件逐一 SHA-256 一致。
+- 全新副本依次通过实际 Payload 迁移、1,792 个字段的类型/非空检查、522 条内容预检及正式搬迁、内容读取、重复迁移测试，之后才迁移原库。
+- 原库与副本迁移后的结构 SHA-256 都为 `95c1d3e95206ec53365f88e108b5c3137f01e298c03f94d3a665145e8c1f8445`。
+- 原库 123 张旧业务表原有字段数据完全一致；34 个英文产品、7 篇文章、9 个页面通过真实内容读取层核对标题、HTML 和参数 JSON。禁用语言与中文草稿的访问控制符合预期。
+- 原库再次执行内容迁移，82 张多语言相关表无变化。没有重复写入或覆盖已有翻译。
+- 详细证据：`.backups/yueli-release-state.json`、`.backups/yueli-release-original-verification.json`、`.backups/release-reader-yueliautomation.json`、`.backups/release-repeat-yueliautomation.json`。迁移与验证脚本同样保存在 `.backups/`；这些文件和数据库备份均不提交 Git。
+
+已通过 28 个集成测试文件共 100 项测试、TypeScript、修改文件 ESLint 和生产构建。后续基线归档字段修正也经过副本/原库真实 SQL 及字段检查和针对性回归。浏览器与 HTTP 验收使用原库和恢复后的 3000 服务；不在原库创建测试账号、测试语言或提交测试询盘。
+
+迁移后 HTTP 验收 59 个页面/资源入口全部通过，包含全部 34 个产品、7 篇文章和 9 个旧页面路径，以及后台入口、sitemap、robots 和 favicon。浏览器核对首页、博客、产品详情（示例规格表 13 行）、FAQ 展开、联系页实际表单、咨询弹窗、复制微信号及二维码弹层；首页已加载图片无损坏，视频 controls=false。联系页原二维码区已移除，后台正常显示登录页；本次未进行正式库后台写入测试。HTTP 报告为 `.backups/yueli-release-http-verification.json`。Next 流式响应需要等正文与客户端表单完成加载，不能只根据最初返回的骨架屏判断页面为空。
+
+仍待单独完成：Yueli 动态内容读取与语言路由适配、英文基础翻译补齐及发布。完成前不要开启 `ENABLE_DYNAMIC_CONTENT=true`；此限制不代表数据库尚未迁移。中文为默认启用语言，英文仍为准备状态，中文产品保留草稿。
+
+## 2026-10-30 英文基础内容及动态前台启用（取代上一节的待启用状态）
+
+已在实际连接的 `127.0.0.1:5433/yueliautomation` 补齐并发布英文基础内容，启用 English，并将本地 `.env` 的 `ENABLE_DYNAMIC_CONTENT` 设为 `true`。DATABASE_URL 未变；3000 端口运行已验证的生产构建（`next start --port 3000`），避免开发模式编译与热重载造成的长时间等待。后续代码改动需重新构建或切回开发模式。数据库默认语言仍为中文；原有英文 URL 保持无语言前缀，其他语言使用显式前缀。启用语言不代表其所有页面已翻译：只展示已发布译文，34 条中文产品仍为草稿，语言切换入口只显示当前页面实际可用的译文。
+
+### 变更与保护
+
+- Yueli 前台产品、文章、页面、分类、媒体及询盘表单改为通过动态内容读取层获取；页头、页脚、SEO 和公共文案读取对应语言的已发布翻译。
+- 补齐英文分类、媒体说明、导航、页脚、表单、SEO 和界面基础文案，替换旧模板的宠物行业占位内容。保留原站样式、英文页面标题、HTML、参数与 URL；导入内容内链、产品询价链接、文章日期路径、预览和 canonical 适配语言前缀。
+- 公共原图及缩略图仍可访问；旧 products/media 等归档 API 只向已登录后台开放。询盘携带 `contentLocale`；评论继续强制待审核并隐藏邮箱。
+- `src/scripts/publish-yueli-english.ts` 默认只预检；正式执行要求备份路径和旧文案模板。保留非空自定义译文、使用正常发布校验及单事务，遇到已有发布历史的新编辑草稿则中止。脚本不写 products/posts/pages 及其翻译正文，也不修改默认语言。
+
+### 原库执行与回滚材料
+
+- 原库只读审计确认 91 个英文分类草稿和 1 个英文 SEO 草稿均为迁移原样，没有已有发布历史或后续用户编辑；英文公共文案与旧模板完全一致。证据：`.backups/english-publication-readonly-audit.json`。
+- 先恢复到 `yueli_dynamic_check_1793293016928` 验证。英文基础发布共 212 条，最后启用 English；重复执行为 212 条 `keep-existing` 和 1 条 `keep-enabled`，206 张表完整行摘要完全不变。
+- 停止原库应用连接后再次备份：`.backups/yueliautomation-dynamic-release-1793294395557.dump` 和 `.backups/yueliautomation-dynamic-media-1793294395557.tar`。数据库恢复至 `yueli_dynamic_restore_1793294395557`，206 张表一致；701 个上传文件逐一 SHA-256 一致。环境配置备份为同目录 `env-before-dynamic-1793294395557.private`，含敏感配置，不提交或分享。
+- 原库正式发布报告：`.backups/yueli-english-applied-1793294645797.json`。原库核对 151 张不属于本次写入范围的表完整行摘要不变；英文 34 产品、7 文章、9 页面仍已发布，中文 34 产品仍为草稿。证据：`.backups/dynamic-original-verification.json` 和 `.backups/dynamic-original-reader.json`。
+- 本次没有新增表结构，也没有重跑历史迁移。备份、报告、临时脚本及测试账号只保存在忽略目录 `.backups/`；测试账号、询盘和评论仅创建于验证副本。
+
+### 验收
+
+34 个集成测试文件共 121 项测试、TypeScript、修改文件 ESLint 及动态生产构建通过。副本 401 项 HTTP 断言通过，覆盖 123 个入口，包括全部原 59 个入口、50 个归档、分页筛选、语言隔离、SEO、sitemap 及资源权限。副本真实 API 验证 50 条英文正文、68 个产品分类关系及 94 个媒体引用；询盘保存英文语言，评论强制待审，原始归档拒绝匿名读取，图片公开可读。浏览器核对首页、产品规格、FAQ 展开、联系页表单、咨询弹窗、微信复制、二维码、视频无控件，以及后台登录、语言列表和编辑弹窗；390 像素目录无页面横向溢出。
+
+原库切换后的完整只读 HTTP 回归 401 项断言全部通过，覆盖 123 个页面与接口、106 条 sitemap URL，结果为 `.backups/yueli-dynamic-original-http-verification.json`；7 项资源权限检查通过，结果为 `.backups/dynamic-original-access-verification.json`。最终生产包已检查包含全部动态后台组件，并通过产品翻译管理及英文译文编辑器的浏览器验收。未向原库提交测试询盘或创建测试账号。`pnpm build` 现在先生成当前模式的后台组件索引，避免旧开发进程留下的静态索引漏打包翻译管理组件；切换模式或构建时应先停掉旧开发进程。需要回退应用时先暂停服务，将 `.env` 中 `ENABLE_DYNAMIC_CONTENT` 改回 `false`，执行 `pnpm build` 并重启即可继续读取保留的旧内容；数据库恢复仅在确有必要且确认切换后写入处置方案后进行。

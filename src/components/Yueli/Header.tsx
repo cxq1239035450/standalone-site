@@ -2,6 +2,9 @@ import Image from 'next/image'
 import type { EquipmentSite } from '@/payload-types'
 import { imageURL } from './data'
 import { SiteNavigation } from './Navigation'
+import { getTranslations } from 'next-intl/server'
+import { LanguageSwitcher } from '@/components/LanguageSwitcher'
+import { yueliLocalePath } from '@/i18n/yueliPaths'
 
 export const originalNavigation = [
   { label: 'Home', href: '/' },
@@ -12,20 +15,30 @@ export const originalNavigation = [
   { label: 'Contact', href: '/contact-us/' },
 ]
 
-export function YueliHeader({ site }: { site: EquipmentSite }) {
+export async function YueliHeader({
+  site,
+  navigation,
+  locale = 'en',
+}: {
+  site: EquipmentSite
+  navigation?: { label: string; href: string }[]
+  locale?: string
+}) {
+  const t = await getTranslations({ locale, namespace: 'yueli' })
   const items =
-    site.navigation?.length &&
+    navigation ||
+    (site.navigation?.length &&
     !site.navigation.some((item) => /^\/(solutions|resources|manufacturing)/.test(item.href))
       ? site.navigation
-      : originalNavigation
+      : originalNavigation)
   return (
     <>
       <a href="#main-content" className="yl-skip">
-        Skip to content
+        {t('skipToContent')}
       </a>
       <header className="yl-header">
         <div className="yl-wrap yl-header-top">
-          <a href="/" aria-label="Yueli Automation home" className="yl-brand">
+          <a href={yueliLocalePath('/', locale)} aria-label={t('homeAria')} className="yl-brand">
             {imageURL(site.logo) ? (
               <Image src={imageURL(site.logo)} alt={site.name} width={206} height={58} priority />
             ) : (
@@ -34,14 +47,17 @@ export function YueliHeader({ site }: { site: EquipmentSite }) {
           </a>
           <div className="yl-header-assurance">
             <span>
-              <b>ISO</b> Quality-focused production
+              <b>ISO</b> {t('qualityFocused')}
             </span>
             <span>
-              <b>QC</b> Engineering support
+              <b>QC</b> {t('engineeringSupport')}
             </span>
           </div>
-          <a href="/contact-us/" className="yl-button yl-header-quote">
-            <span aria-hidden="true">✉</span> Get Quote
+          {process.env.ENABLE_DYNAMIC_CONTENT === 'true' && (
+            <LanguageSwitcher unprefixedLocale="en" />
+          )}
+          <a href={yueliLocalePath('/contact-us/', locale)} className="yl-button yl-header-quote">
+            <span aria-hidden="true">✉</span> {t('getQuote')}
           </a>
         </div>
         <div className="yl-mobile-navigation">

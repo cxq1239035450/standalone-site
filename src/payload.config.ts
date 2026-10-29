@@ -105,6 +105,8 @@ export default buildConfig({
   editor: defaultLexical,
   db: postgresAdapter({
     push: false,
+    // This branch adopts its verified imported schema, not the generic site's init.
+    migrationDir: path.resolve(dirname, 'migrations/yueli'),
     pool: {
       connectionString: process.env.DATABASE_URL || '',
     },

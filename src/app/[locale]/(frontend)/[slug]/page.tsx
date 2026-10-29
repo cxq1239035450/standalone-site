@@ -1,6 +1,8 @@
 import { SourcePage, YueliHome } from '@/components/Yueli/Views'
 import { getPages, contentPath } from '@/components/Yueli/data'
 import { equipmentMetadata } from '@/components/Yueli/metadata'
+import { getLocale } from 'next-intl/server'
+import { yueliLocalePath } from '@/i18n/yueliPaths'
 export const dynamic = 'force-dynamic'
 export default async function PublicPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
@@ -8,12 +10,13 @@ export default async function PublicPage({ params }: { params: Promise<{ slug: s
 }
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
-  const page = (await getPages()).find((p) => contentPath(p, 'page') === `/${slug}`)
+  const localizedPath = yueliLocalePath(`/${slug}`, await getLocale())
+  const page = (await getPages()).find((p) => contentPath(p, 'page') === localizedPath)
   return equipmentMetadata(
     page?.meta?.title || page?.title || 'Page',
     `/${slug}`,
     page?.meta?.description || page?.migration?.summary,
     undefined,
-    Boolean(page?.discovery?.noIndex),
+    !page || Boolean(page.discovery?.noIndex),
   )
 }

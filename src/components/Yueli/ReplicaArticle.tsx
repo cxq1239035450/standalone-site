@@ -5,17 +5,20 @@ import { getPostArchiveDefinitions, postTaxonomiesForPost, postsInArchive } from
 import { getPosts, getYueli, imageURL, contentPath } from './data'
 import { safeHTML } from './html'
 import { getSearchSettings, siteOrigin, jsonLd } from '@/utilities/searchSettings'
+import { getLocale } from 'next-intl/server'
+import { yueliLocalePath } from '@/i18n/yueliPaths'
 
 export async function ReplicaArticle({ path, slug }: { path?: string; slug?: string }) {
+  const locale = await getLocale()
   const [posts, { site }, settings, categoryDefinitions, tagDefinitions] = await Promise.all([
     getPosts(),
     getYueli(),
-    getSearchSettings('en'),
+    getSearchSettings(locale),
     getPostArchiveDefinitions('category'),
     getPostArchiveDefinitions('tag'),
   ])
   const post = posts.find((item) =>
-    path ? contentPath(item, 'post') === path : item.slug === slug,
+    path ? contentPath(item, 'post') === yueliLocalePath(path, locale) : item.slug === slug,
   )
   if (!post) notFound()
   const categories = postTaxonomiesForPost('category', post, categoryDefinitions)
@@ -54,7 +57,9 @@ export async function ReplicaArticle({ path, slug }: { path?: string; slug?: str
         <div>
           <div className="yl-source-content">
             {post.migration?.contentHTML ? (
-              <div dangerouslySetInnerHTML={{ __html: safeHTML(post.migration.contentHTML) }} />
+              <div
+                dangerouslySetInnerHTML={{ __html: safeHTML(post.migration.contentHTML, locale) }}
+              />
             ) : post.content ? (
               <RichText data={post.content} enableGutter={false} />
             ) : null}

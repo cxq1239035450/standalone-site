@@ -13,6 +13,8 @@ import { categoryTrail } from './architecture'
 import { parseCatalogPage } from './catalogSEO'
 import type { SearchParams } from './Views'
 import source from '@/data/yueli.json'
+import { getLocale } from 'next-intl/server'
+import { yueliLocalePath } from '@/i18n/yueliPaths'
 
 const firstPage = [1708, 1710, 1712, 2436, 1716, 2290, 2450, 1718, 1724, 1714, 1727, 1709]
 const categoryLinks = [
@@ -31,6 +33,7 @@ export async function ReplicaCatalog({
   categorySlug?: string
   searchParams?: SearchParams
 }) {
+  const locale = await getLocale()
   const [products, categories] = await Promise.all([getProducts(), getCategories()])
   const selected =
     categorySlug ||
@@ -69,7 +72,7 @@ export async function ReplicaCatalog({
   const totalPages = Math.ceil(matches.length / 12)
   if (page > Math.max(1, totalPages)) notFound()
   const shown = matches.slice((page - 1) * 12, page * 12)
-  const base = category ? contentPath(category, 'category') : '/products'
+  const base = category ? contentPath(category, 'category') : yueliLocalePath('/products', locale)
   const pageURL = (number: number) => {
     const query = new URLSearchParams()
     if (q) query.set('q', q)
@@ -105,7 +108,7 @@ export async function ReplicaCatalog({
           const item = categories.find((item) => item.slug === slug)
           return item ? (
             <a key={slug} href={contentPath(item, 'category')}>
-              {title}
+              {locale === 'en' ? title : item.title || title}
             </a>
           ) : null
         })}
@@ -128,7 +131,7 @@ export async function ReplicaCatalog({
         {q && (
           <>
             {' '}
-            for “{q}” · <a href="/products">Clear search</a>
+            for “{q}” · <a href={yueliLocalePath('/products', locale)}>Clear search</a>
           </>
         )}
       </p>
@@ -156,7 +159,7 @@ export async function ReplicaCatalog({
       ) : (
         <div className="yl-empty">
           <p>Contact Yueli for help selecting equipment for your workpiece.</p>
-          <a href="/contact-us" className="yl-button">
+          <a href={yueliLocalePath('/contact-us', locale)} className="yl-button">
             Contact Us
           </a>
         </div>

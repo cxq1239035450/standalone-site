@@ -4,11 +4,15 @@ import { getYueli } from './data'
 
 /** These navigation/discovery lists intentionally never expose drafts, even during preview. */
 export const getEquipmentContent = cache(async () => {
-  const { payload } = await getYueli()
+  const { payload, locale } = await getYueli()
+  // Equipment guides still use native localized fields. Other languages have no
+  // published guide translation yet and must not receive the English fallback.
+  if (locale !== 'en' && locale !== 'zh') return []
   return (
     await payload.find({
       collection: 'equipment-content',
-      locale: 'en',
+      locale,
+      fallbackLocale: false,
       depth: 0,
       pagination: false,
       draft: false,

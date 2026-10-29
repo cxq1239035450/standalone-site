@@ -3,6 +3,7 @@ import type { Category, Post } from '@/payload-types'
 import taxonomy from '@/data/yueli-taxonomy.json'
 import { getYueli } from './data'
 import { plainText } from './html'
+import { yueliLocalePath } from '@/i18n/yueliPaths'
 
 export type PostArchiveKind = 'category' | 'tag'
 export type PostArchiveDefinition = {
@@ -51,17 +52,24 @@ export function normalizePostTaxonomies(
 }
 
 export const getPostArchiveDefinitions = cache(async (kind: PostArchiveKind) => {
-  const { payload } = await getYueli()
+  const { payload, locale } = await getYueli()
   const records = await payload.find({
     collection: 'categories',
     where: { taxonomy: { equals: postTaxonomyType(kind) } },
-    locale: 'en',
+    locale,
     depth: 0,
     pagination: false,
     sort: 'title',
     overrideAccess: false,
   })
-  return normalizePostTaxonomies(kind, records.docs)
+  // Snapshots only repair legacy English imports. Dynamic empty translations
+  // (or another requested language) must remain empty instead of resurrecting them.
+  if (!records.docs.length && (process.env.ENABLE_DYNAMIC_CONTENT === 'true' || locale !== 'en'))
+    return []
+  return normalizePostTaxonomies(kind, records.docs).map((term) => ({
+    ...term,
+    path: yueliLocalePath(term.path, locale),
+  }))
 })
 
 export function postTaxonomiesForPost(

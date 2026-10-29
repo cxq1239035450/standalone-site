@@ -1,7 +1,8 @@
 import sanitize from 'sanitize-html'
+import { yueliLocalePath } from '@/i18n/yueliPaths'
 
 /** CMS-authored imported HTML is untrusted. Never render scripts, event handlers or arbitrary embeds. */
-export function safeHTML(html: string | null | undefined): string {
+export function safeHTML(html: string | null | undefined, locale = 'en'): string {
   return sanitize(html || '', {
     allowedTags: [
       'p',
@@ -63,6 +64,13 @@ export function safeHTML(html: string | null | undefined): string {
         } catch {
           /* Relative links remain relative. */
         }
+        // Preserve file downloads and anchors; translate only public page links.
+        if (
+          locale !== 'en' &&
+          !/^\/(?:api|media|uploads|wp-content)\//.test(href) &&
+          !/\.[a-z0-9]{2,5}(?:[?#]|$)/i.test(href)
+        )
+          href = yueliLocalePath(href, locale)
         return { tagName: tag, attribs: { ...attributes, href } }
       },
     },

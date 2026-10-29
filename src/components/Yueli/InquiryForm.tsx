@@ -1,5 +1,6 @@
 'use client'
 import { useState, type FormEvent } from 'react'
+import { useLocale } from 'next-intl'
 
 export function EquipmentInquiryForm({
   formID,
@@ -14,6 +15,7 @@ export function EquipmentInquiryForm({
   layout?: 'home'
   variant?: 'contact'
 }) {
+  const locale = useLocale()
   const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle')
   const [error, setError] = useState('')
   async function submit(event: FormEvent<HTMLFormElement>) {
@@ -42,6 +44,7 @@ export function EquipmentInquiryForm({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           form: formID,
+          contentLocale: locale,
           submissionData: fields.map((field) => ({
             field,
             value:

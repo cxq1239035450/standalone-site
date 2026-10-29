@@ -8,12 +8,15 @@ import { getSearchSettings, siteOrigin, jsonLd } from '@/utilities/searchSetting
 import { ProductTabs } from './ProductTabs'
 import { ProductDescription } from './ProductDescription'
 import './product-detail.css'
+import { getLocale } from 'next-intl/server'
+import { yueliLocalePath } from '@/i18n/yueliPaths'
 
 export async function ReplicaProduct({ slug }: { slug: string }) {
+  const locale = await getLocale()
   const [products, { site }, settings] = await Promise.all([
     getProducts(),
     getYueli(),
-    getSearchSettings('en'),
+    getSearchSettings(locale),
   ])
   const product = products.find(
     (item) =>
@@ -43,6 +46,7 @@ export async function ReplicaProduct({ slug }: { slug: string }) {
   const origin = siteOrigin(settings.siteUrl)
   const description = (
     <ProductDescription
+      locale={locale}
       html={product.migration?.contentHTML || ''}
       title={product.title || product.slug || 'Yueli'}
       summary={product.general?.shortDescription}
@@ -84,7 +88,9 @@ export async function ReplicaProduct({ slug }: { slug: string }) {
         <EquipmentGallery images={images} />
         <div className="yl-product-description">
           <h1>{product.title || product.slug || 'Yueli'}</h1>
-          {original?.shortHTML && product.general?.shortDescription === original.summary ? (
+          {locale === 'en' &&
+          original?.shortHTML &&
+          product.general?.shortDescription === original.summary ? (
             <div
               className="yl-original-short-description"
               dangerouslySetInnerHTML={{ __html: safeHTML(original.shortHTML) }}
@@ -101,7 +107,10 @@ export async function ReplicaProduct({ slug }: { slug: string }) {
             </p>
           )}
           <a
-            href={`/contact-us?product=${encodeURIComponent(product.title || product.slug || 'Yueli')}`}
+            href={yueliLocalePath(
+              `/contact-us?product=${encodeURIComponent(product.title || product.slug || 'Yueli')}`,
+              locale,
+            )}
             className="yl-button yl-configuration-link"
           >
             Request Configuration

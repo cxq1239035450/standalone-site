@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useId, useState, type FormEvent } from 'react'
+import { useLocale } from 'next-intl'
 
 type PublicReview = {
   id: number
@@ -20,6 +21,7 @@ export function ProductReviews({
   onCountChange?: (count: number) => void
 }) {
   const fieldID = useId()
+  const contentLocale = useLocale()
   const [reviews, setReviews] = useState<PublicReview[]>([])
   const [total, setTotal] = useState(0)
   const [page, setPage] = useState(1)
@@ -35,7 +37,7 @@ export function ProductReviews({
       'where[and][0][product][equals]': String(productID),
       'where[and][1][status][equals]': 'published',
       depth: '0',
-      locale: 'en',
+      contentLocale,
       limit: '10',
       page: String(page),
       sort: '-createdAt',
@@ -70,7 +72,7 @@ export function ProductReviews({
     }
     void loadReviews()
     return () => controller.abort()
-  }, [productID, page, reload, onCountChange])
+  }, [productID, page, reload, onCountChange, contentLocale])
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -79,18 +81,21 @@ export function ProductReviews({
     setStatus('sending')
     setError('')
     try {
-      const response = await fetch('/api/equipment-reviews', {
-        method: 'POST',
-        credentials: 'omit',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          product: productID,
-          rating: Number(fields.get('rating')),
-          comment: String(fields.get('comment') || '').trim(),
-          authorName: String(fields.get('authorName') || '').trim(),
-          email: String(fields.get('email') || '').trim(),
-        }),
-      })
+      const response = await fetch(
+        `/api/equipment-reviews?${new URLSearchParams({ contentLocale })}`,
+        {
+          method: 'POST',
+          credentials: 'omit',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            product: productID,
+            rating: Number(fields.get('rating')),
+            comment: String(fields.get('comment') || '').trim(),
+            authorName: String(fields.get('authorName') || '').trim(),
+            email: String(fields.get('email') || '').trim(),
+          }),
+        },
+      )
       if (!response.ok) {
         const result = await response.json().catch(() => null)
         throw new Error(

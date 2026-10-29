@@ -4,6 +4,8 @@ import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/re
 import { ProductReviews } from '../../src/components/Yueli/ProductReviews'
 import { ProductTabs } from '../../src/components/Yueli/ProductTabs'
 
+vi.mock('next-intl', () => ({ useLocale: () => 'en' }))
+
 afterEach(() => {
   cleanup()
   vi.unstubAllGlobals()
@@ -51,7 +53,7 @@ describe('equipment review form and accessible tabs', () => {
     fireEvent.submit(container.querySelector('form')!)
     await screen.findByText('Your review has been received and is awaiting moderation.')
     const [url, options] = fetch.mock.calls[1]
-    expect(url).toBe('/api/equipment-reviews')
+    expect(url).toBe('/api/equipment-reviews?contentLocale=en')
     expect(options.credentials).toBe('omit')
     expect(JSON.parse(options.body)).toEqual({
       product: 42,

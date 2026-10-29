@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 import { productDetailSections } from './productDetailSections'
 import { safeHTML } from './html'
+import { yueliLocalePath } from '@/i18n/yueliPaths'
 
 const navigation = [
   ['yl-overview', 'Overview'],
@@ -17,8 +18,8 @@ const checklist = [
   'Target output',
   'Destination country',
 ]
-const Imported = ({ html }: { html: string }) => (
-  <div dangerouslySetInnerHTML={{ __html: safeHTML(html) }} />
+const Imported = ({ html, locale }: { html: string; locale: string }) => (
+  <div dangerouslySetInnerHTML={{ __html: safeHTML(html, locale) }} />
 )
 
 export function ProductDescription({
@@ -27,12 +28,14 @@ export function ProductDescription({
   title,
   fallback,
   category,
+  locale = 'en',
 }: {
   html?: string
   summary?: string | null
   title: string
   fallback?: ReactNode
   category?: { title: string; href: string }
+  locale?: string
 }) {
   const content = productDetailSections(html)
   return (
@@ -51,7 +54,7 @@ export function ProductDescription({
             <section id="yl-overview">
               <h2>Product Overview</h2>
               {content.overview ? (
-                <Imported html={content.overview} />
+                <Imported html={content.overview} locale={locale} />
               ) : (
                 fallback || <p>{summary || title}</p>
               )}
@@ -68,7 +71,7 @@ export function ProductDescription({
                 </div>
               )}
               {content.technical ? (
-                <Imported html={content.technical} />
+                <Imported html={content.technical} locale={locale} />
               ) : (
                 <p className="yl-custom-spec">
                   A fixed specification table is not available for this configuration. Send your
@@ -78,12 +81,16 @@ export function ProductDescription({
             </section>
             <section id="yl-features">
               <h2>Key Features</h2>
-              {content.features ? <Imported html={content.features} /> : <p>{summary || title}</p>}
+              {content.features ? (
+                <Imported html={content.features} locale={locale} />
+              ) : (
+                <p>{summary || title}</p>
+              )}
             </section>
             <section id="yl-applications">
               <h2>Applications</h2>
               {content.applications ? (
-                <Imported html={content.applications} />
+                <Imported html={content.applications} locale={locale} />
               ) : (
                 <>
                   {category && (
@@ -101,7 +108,7 @@ export function ProductDescription({
             <section id="yl-prepare">
               <h2>Inquiry Checklist</h2>
               {content.prepare ? (
-                <Imported html={content.prepare} />
+                <Imported html={content.prepare} locale={locale} />
               ) : (
                 <div className="yueli-checklist">
                   <h3>Prepare Your Application Details</h3>
@@ -114,7 +121,7 @@ export function ProductDescription({
               )}
               <a
                 className="yl-detail-inquiry"
-                href={`/contact-us?product=${encodeURIComponent(title)}`}
+                href={yueliLocalePath(`/contact-us?product=${encodeURIComponent(title)}`, locale)}
               >
                 Discuss Your Application
               </a>

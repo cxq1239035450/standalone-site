@@ -95,6 +95,7 @@ export const dynamicContentPlugin: Plugin = (config) => {
                 collection: slug as 'products' | 'posts' | 'pages',
                 slug: subject.slug || '',
                 locale: language.code,
+                sourcePath: subject.migration?.sourcePath,
                 req,
               })
             }
@@ -148,11 +149,17 @@ export const dynamicContentPlugin: Plugin = (config) => {
       ],
       versions: { drafts: { schedulePublish: true, autosave: { interval: 1000 } }, maxPerDoc: 50 },
       hooks: {
-        beforeValidate: [({ data, originalDoc }) => {
-          if (!data) return data
-          const language = data.language ?? originalDoc?.language
-          return normalizeTranslationInput(data, fields, typeof language === 'object' ? language?.id : language)
-        }],
+        beforeValidate: [
+          ({ data, originalDoc }) => {
+            if (!data) return data
+            const language = data.language ?? originalDoc?.language
+            return normalizeTranslationInput(
+              data,
+              fields,
+              typeof language === 'object' ? language?.id : language,
+            )
+          },
+        ],
         beforeChange: [
           async ({ data, originalDoc, req }) => {
             const idOf = (value: unknown) =>
@@ -181,21 +188,27 @@ export const dynamicContentPlugin: Plugin = (config) => {
                   fallbackLocale: false,
                 })
             const merged = { ...originalDoc, ...data }
-          if (slug === 'header' || slug === 'footer') {
-            const shared = await req.payload.findGlobal({ slug, req, depth: 0 })
-            if (shared.useCustomNavigation && (!Array.isArray(merged.navItems) || !merged.navItems.length)) {
-              throw new APIError('已开启自定义导航，请先填写当前语言的导航项目。', 400)
-            }
-          }
-          if (slug === 'forms') {
-            if (!String(merged.submitButtonLabel || '').trim()) throw new APIError('请填写当前语言的提交按钮文字。', 400)
-            for (const field of (merged.fields || []) as Record<string, unknown>[]) {
-              if (field.name && !String(field.label || '').trim()) throw new APIError(`请填写表单字段 ${field.name} 的当前语言标签。`, 400)
-              for (const option of (field.options || []) as Record<string, unknown>[]) {
-                if (!String(option.label || '').trim()) throw new APIError(`请补全表单字段 ${field.name} 的选项文字。`, 400)
+            if (slug === 'header' || slug === 'footer') {
+              const shared = await req.payload.findGlobal({ slug, req, depth: 0 })
+              if (
+                shared.useCustomNavigation &&
+                (!Array.isArray(merged.navItems) || !merged.navItems.length)
+              ) {
+                throw new APIError('已开启自定义导航，请先填写当前语言的导航项目。', 400)
               }
             }
-          }
+            if (slug === 'forms') {
+              if (!String(merged.submitButtonLabel || '').trim())
+                throw new APIError('请填写当前语言的提交按钮文字。', 400)
+              for (const field of (merged.fields || []) as Record<string, unknown>[]) {
+                if (field.name && !String(field.label || '').trim())
+                  throw new APIError(`请填写表单字段 ${field.name} 的当前语言标签。`, 400)
+                for (const option of (field.options || []) as Record<string, unknown>[]) {
+                  if (!String(option.label || '').trim())
+                    throw new APIError(`请补全表单字段 ${field.name} 的选项文字。`, 400)
+                }
+              }
+            }
             // Required translated dependencies are checked even when publishing through REST or a scheduled job.
             const dependencies: Array<[string, unknown]> = []
             if (slug === 'products') {
@@ -298,7 +311,17 @@ export const dynamicContentPlugin: Plugin = (config) => {
       ...archiveFields(source.fields, paths),
     ]
     // Legacy localized values and version histories are private migration archives.
-    source.access = { ...source.access, read: authenticated, update: authenticated }
+    const originalRead = source.access?.read
+    source.access = {
+      ...source.access,
+      read: (args) =>
+        slug === 'media' && args.isReadingStaticFile
+          ? originalRead
+            ? originalRead(args)
+            : true
+          : authenticated(args),
+      update: authenticated,
+    }
     source.admin = {
       ...source.admin,
       description:
@@ -306,7 +329,10 @@ export const dynamicContentPlugin: Plugin = (config) => {
     }
     if ('versions' in source && source.versions && !global) {
       const collection = source as CollectionConfig
-      collection.versions = { ...(typeof collection.versions === 'object' ? collection.versions : {}), maxPerDoc: 0 }
+      collection.versions = {
+        ...(typeof collection.versions === 'object' ? collection.versions : {}),
+        maxPerDoc: 0,
+      }
       collection.admin = {
         ...collection.admin,
         components: { edit: { PublishButton: '@/components/SharedSaveButton' } },

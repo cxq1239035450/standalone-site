@@ -516,5 +516,27 @@
   },
   "company": {
     "summary": "PawSupply 是来自中国的宠物用品采购与品牌定制合作伙伴，与数十家工厂保持长期合作，为零售商、分销商及宠物品牌协调选品、样品与订单需求。"
+  },
+  "yueli": {
+    "home": "首页",
+    "products": "产品",
+    "about": "关于我们",
+    "blog": "博客",
+    "faq": "常见问题",
+    "contact": "联系我们",
+    "getQuote": "获取报价",
+    "skipToContent": "跳转至正文",
+    "quickLinks": "快捷链接",
+    "contactUs": "联系我们",
+    "startProject": "开始您的项目",
+    "footerDescription": "正在寻找标准设备或定制自动化方案？请发送您的工件详情和生产要求，我们的团队将在 24 小时内回复。",
+    "strapline": "自动化设备与定制生产线解决方案",
+    "copyright": "© {year} Quanzhou Yueli Automation Co., Ltd. 保留所有权利。",
+    "qualityFocused": "以质量为中心的生产",
+    "engineeringSupport": "工程支持",
+    "homeAria": "Yueli Automation 首页",
+    "primaryNavigation": "主导航",
+    "footerNavigation": "页脚导航",
+    "footerFaq": "常见问题"
   }
 }

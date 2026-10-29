@@ -1,15 +1,18 @@
 'use client'
 
 import { usePathname } from 'next/navigation'
+import { useLocale } from 'next-intl'
+import { yueliLocalePath } from '@/i18n/yueliPaths'
 
 type Item = { label: string; href: string }
 
 /** Document navigation also works after browser translators replace React's text nodes. */
 export function SiteNavigation({ items, mobile = false }: { items: Item[]; mobile?: boolean }) {
+  const locale = useLocale()
   const pathname =
-    (usePathname().replace(/^\/(en|zh)(?=\/|$)/, '') || '/').replace(/\/$/, '') || '/'
+    yueliLocalePath(usePathname(), 'en', [locale]).replace(/\/$/, '') || '/'
   const links = items.map((item) => {
-    const href = item.href.replace(/\/$/, '') || '/'
+    const href = yueliLocalePath(item.href, 'en', [locale]).replace(/\/$/, '') || '/'
     const current =
       pathname === href ||
       (href === '/products' && /^\/product(?:s|\-category)?\//.test(pathname)) ||

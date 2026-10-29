@@ -2,27 +2,39 @@ import type { EquipmentSite } from '@/payload-types'
 import { originalNavigation } from './Header'
 
 import { MapPin, Phone, Mail } from 'lucide-react'
+import { getTranslations } from 'next-intl/server'
 
-export function YueliFooter({ site }: { site: EquipmentSite }) {
+export async function YueliFooter({
+  site,
+  navigation,
+  locale = 'en',
+}: {
+  site: EquipmentSite
+  navigation?: { label: string; href: string }[]
+  locale?: string
+}) {
+  const t = await getTranslations({ locale, namespace: 'yueli' })
   return (
     <footer className="yl-footer yl-original-footer">
       <div className="yl-wrap yl-footer-grid">
         <div>
-          <h2>Quick Links</h2>
-          <nav aria-label="Footer navigation">
-            {originalNavigation.map((item) => (
+          <h2>{t('quickLinks')}</h2>
+          <nav aria-label={t('footerNavigation')}>
+            {(navigation || originalNavigation).map((item) => (
               <a href={item.href} key={item.href}>
-                {item.href === '/contact-us/'
-                  ? 'Contact Us'
-                  : item.href === '/faq/'
-                    ? 'Faq'
-                    : item.label}
+                {navigation
+                  ? item.label
+                  : item.href === '/contact-us/'
+                    ? 'Contact Us'
+                    : item.href === '/faq/'
+                      ? 'Faq'
+                      : item.label}
               </a>
             ))}
           </nav>
         </div>
         <div className="yl-footer-contact">
-          <h2>Contact Us</h2>
+          <h2>{t('contactUs')}</h2>
           <p className="yl-contact-line">
             <MapPin className="yl-footer-icon" size={24} strokeWidth={2.25} aria-hidden="true" />
             {site.address}
@@ -37,18 +49,13 @@ export function YueliFooter({ site }: { site: EquipmentSite }) {
           </a>
         </div>
         <div>
-          <h2>Start Your Project</h2>
-          <p>
-            Looking for a standard machine or a custom automation solution? Send us your workpiece
-            details and production requirements. Our team will respond within 24 hours.
-          </p>
+          <h2>{t('startProject')}</h2>
+          <p>{t('footerDescription')}</p>
         </div>
       </div>
       <div className="yl-wrap yl-footer-bottom">
-        <span>Automation Equipment &amp; Custom Production Line Solutions</span>
-        <span>
-          © {new Date().getFullYear()} Quanzhou Yueli Automation Co., Ltd. All Rights Reserved.
-        </span>
+        <span>{t('strapline')}</span>
+        <span>{t('copyright', { year: new Date().getFullYear() })}</span>
       </div>
     </footer>
   )

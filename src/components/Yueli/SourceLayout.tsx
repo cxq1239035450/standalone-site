@@ -9,11 +9,13 @@ export function SourceLayout({
   formID,
   product,
   project,
+  locale = 'en',
 }: {
   html: string
   formID?: number | null
   product?: string
   project?: string
+  locale?: string
 }) {
   // Apply this removal to existing CMS imports as well as newly collected layouts.
   if (html.includes('yc-contact')) {
@@ -45,13 +47,16 @@ export function SourceLayout({
   const pieces = html.split(slot)
   if (pieces.length === 1)
     return (
-      <div className="yl-original-layout" dangerouslySetInnerHTML={{ __html: safeHTML(html) }} />
+      <div
+        className="yl-original-layout"
+        dangerouslySetInnerHTML={{ __html: safeHTML(html, locale) }}
+      />
     )
   // A form slot is nested in the source grid. A client portal keeps its exact position
   // without dividing the surrounding HTML into invalid partial DOM trees.
   return (
     <SourceLayoutWithForm
-      html={safeHTML(html)}
+      html={safeHTML(html, locale)}
       form={
         <EquipmentInquiryForm
           formID={formID}
