@@ -21,6 +21,7 @@ import { defaultLexical } from '@/fields/defaultLexical'
 import { getServerSideURL } from './utilities/getURL'
 import { defaultLocale, localeConfig } from './i18n/config'
 import { dynamicContentPlugin } from './i18n/contentPlugin'
+import { recordViewsPlugin } from './plugins/recordViews'
 import { translationEndpoints } from './i18n/endpoints'
 
 const filename = fileURLToPath(import.meta.url)
@@ -108,7 +109,7 @@ export default buildConfig({
   collections: [Pages, Posts, Media, Categories, Users, Products, IndustryTemplates],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer, SearchSettings],
-  plugins: [...plugins, dynamicContentPlugin],
+  plugins: [...plugins, dynamicContentPlugin, recordViewsPlugin],
   endpoints: translationEndpoints,
   secret: process.env.PAYLOAD_SECRET,
   sharp,

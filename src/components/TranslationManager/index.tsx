@@ -1,12 +1,12 @@
 'use client'
 import React, { useEffect, useState } from 'react'
-import { useDocumentInfo } from '@payloadcms/ui'
-import { useRouter } from 'next/navigation'
+import { useDocumentInfo, useDocumentDrawer } from '@payloadcms/ui'
 
 type Language = { id: number; code: string; label: string; enabled: boolean }
 type Translation = { id: number; language: number; status: string; published: boolean }
 export default function TranslationManager() {
-  const router = useRouter()
+  const [created, setCreated] = useState<number>()
+  const [revision, setRevision] = useState(0)
   const { id, collectionSlug, globalSlug } = useDocumentInfo()
   const source = globalSlug || collectionSlug
   const subject = globalSlug || id
@@ -30,7 +30,7 @@ export default function TranslationManager() {
         if (error.name !== 'AbortError') setError(error.message)
       })
     return () => controller.abort()
-  }, [source, subject])
+  }, [source, subject, revision])
   async function create(language: number) {
     setBusy(true)
     setError('')
@@ -47,7 +47,9 @@ export default function TranslationManager() {
       })
       const result = await response.json()
       if (!response.ok) throw new Error(result.errors?.[0]?.message || '创建失败')
-      router.push(`/admin/collections/${source}-translations/${result.id}`)
+      setCreated(result.id)
+      setRevision(value => value + 1)
+      setBusy(false)
     } catch (error) {
       setError(error instanceof Error ? error.message : '创建失败')
       setBusy(false)
@@ -58,6 +60,7 @@ export default function TranslationManager() {
       style={{ padding: '20px', border: '1px solid var(--theme-elevation-150)', marginBottom: 24 }}
     >
       <h3>内容翻译</h3>
+      {created && <TranslationEditor key={created} source={source!} id={created} autoOpen onSave={() => setRevision(value => value + 1)} />}
       <p>共享数据只维护一份。每种语言单独保存、预览和发布；复制仅创建草稿。</p>
       {!subject ? (
         <p>请先保存共享资料，再添加翻译。</p>
@@ -92,9 +95,7 @@ export default function TranslationManager() {
                       : '草稿，未发布'
                     : '未翻译'}{' '}
                   {translation ? (
-                    <a href={`/admin/collections/${source}-translations/${translation.id}`}>
-                      编辑翻译
-                    </a>
+                    <TranslationEditor source={source!} id={translation.id} onSave={() => setRevision(value => value + 1)} />
                   ) : (
                     <button type="button" disabled={busy} onClick={() => create(language.id)}>
                       创建翻译
@@ -110,4 +111,10 @@ export default function TranslationManager() {
       {error && <p role="alert">{error}</p>}
     </section>
   )
+}
+
+function TranslationEditor({ source, id, autoOpen = false, onSave }: { source: string; id: number; autoOpen?: boolean; onSave: () => void }) {
+  const [Drawer,,{openDrawer}] = useDocumentDrawer({collectionSlug: `${source}-translations`, id})
+  useEffect(() => { if (autoOpen) openDrawer() }, [autoOpen, openDrawer])
+  return <>{!autoOpen && <button type="button" onClick={openDrawer}>编辑翻译</button>}<Drawer redirectAfterCreate={false} redirectAfterDelete={false} onSave={onSave}/></>
 }

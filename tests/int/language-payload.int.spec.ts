@@ -5,6 +5,7 @@ import { PGlite } from '@electric-sql/pglite'
 import { BasePayload, createLocalReq } from 'payload'
 import fs from 'node:fs/promises'
 import config from '@payload-config'
+import enMessages from '../../messages/en.json'
 import { createContentReader } from '@/i18n/content'
 import { migrateLanguageContent } from '@/i18n/migrateContent'
 
@@ -230,6 +231,33 @@ it('runs Japanese draft/publish/withdraw and shared inventory through the real P
       (await payload.find({ collection: 'products-translations', overrideAccess: false, depth: 0 }))
         .docs,
     ).toHaveLength(0)
+    await expect(payload.delete({collection: 'languages', id: language.id, req: normal})).rejects.toThrow('关联翻译')
+    const emptyLanguage = await payload.create({collection: 'languages', data: {code: 'de', label: 'Deutsch', enabled: false, direction: 'ltr'}})
+    await expect(payload.delete({collection: 'languages', id: emptyLanguage.id, overrideAccess: false})).rejects.toThrow()
+    await payload.delete({collection: 'languages', id: emptyLanguage.id})
+    expect((await payload.find({collection: 'languages', where: {code: {equals: 'de'}}})).docs).toHaveLength(0)
+    const configuredLanguage = await payload.create({collection: 'languages', data: {code: 'fr', label: 'Français', enabled: false, direction: 'ltr'}})
+    const copy = await payload.create({collection: 'site-copy', req, data: {language: configuredLanguage.id, messages: enMessages, _status: 'published'}})
+    const header = await payload.create({collection: 'header-translations', req, data: {subject: 'header', language: configuredLanguage.id, navItems: [], _status: 'published'}})
+    const footer = await payload.create({collection: 'footer-translations', req, data: {subject: 'footer', language: configuredLanguage.id, navItems: [], _status: 'draft'}, draft: true})
+    const searchSettings = await payload.create({collection: 'search-settings-translations', req, data: {subject: 'search-settings', language: configuredLanguage.id, siteName: 'Test', _status: 'published'}})
+    const scheduledCopy = await payload.jobs.queue({task: 'schedulePublish', input: {doc: {relationTo: 'site-copy', value: copy.id}, type: 'publish'}, waitUntil: new Date(Date.now() + 86400000)})
+    const unrelatedJob = await payload.jobs.queue({task: 'schedulePublish', input: {doc: {relationTo: 'products-translations', value: translation.id}, type: 'publish'}, waitUntil: new Date(Date.now() + 86400000)})
+    await payload.delete({collection: 'languages', id: configuredLanguage.id, req: normal})
+    for (const [collection, id] of [['site-copy', copy.id], ['header-translations', header.id], ['footer-translations', footer.id], ['search-settings-translations', searchSettings.id]] as const) {
+      expect((await payload.find({collection, draft: true, where: {id: {equals: id}}})).docs).toHaveLength(0)
+      expect((await payload.findVersions({collection, where: {parent: {equals: id}}})).docs).toHaveLength(0)
+    }
+    expect((await payload.find({collection: 'payload-jobs', where: {id: {equals: scheduledCopy.id}}})).docs).toHaveLength(0)
+    expect((await payload.find({collection: 'payload-jobs', where: {id: {equals: unrelatedJob.id}}})).docs).toHaveLength(1)
+    normal.query = {...normal.query, clearRelated: 'true'}
+    await payload.delete({collection: 'languages', id: language.id, req: normal})
+    expect((await payload.find({collection:'products-translations',draft:true,where:{language:{equals:language.id}}})).docs).toHaveLength(0)
+    expect((await payload.findVersions({collection:'products-translations',where:{parent:{equals:translation.id}}})).docs).toHaveLength(0)
+    expect((await payload.findByID({collection:'products',id:product.id})).id).toBe(product.id)
+    expect((await payload.find({collection:'payload-jobs',where:{id:{equals:unrelatedJob.id}}})).docs).toHaveLength(0)
+    const settings = await payload.findGlobal({slug: 'language-settings', depth: 0})
+    await expect(payload.delete({collection: 'languages', id: settings.defaultLanguage as number})).rejects.toThrow('默认语言')
   } finally {
     await database.close()
   }

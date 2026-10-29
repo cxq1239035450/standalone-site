@@ -1,4 +1,5 @@
-import { APIError, type CollectionConfig, type GlobalConfig, type Where } from 'payload'
+import { APIError, type CollectionSlug, type CollectionConfig, type GlobalConfig, type PayloadRequest, type Where } from 'payload'
+import { translatedCollections, translatedGlobals, translationSlug } from './contentSchema'
 import { authenticated } from '@/access/authenticated'
 import { validateMessages } from './messageValidation'
 import { revalidatePath, revalidateTag } from 'next/cache'
@@ -12,6 +13,55 @@ export function invalidateLanguages() {
     /* no request cache */
   }
 }
+
+const languageContentLabels = {
+  products: '商品', posts: '文章', pages: '页面', categories: '分类', media: '媒体说明',
+  forms: '表单', 'industry-templates': '行业参数',
+} as const
+
+/** Remove configuration owned only by this language, preserving business content. */
+async function removeLanguageConfiguration(req: PayloadRequest, languageID: number | string) {
+  const clearRelated = req.query?.clearRelated === 'true'
+  const blocking: string[] = []
+  for (const source of translatedCollections) {
+    const result = await req.payload.find({
+      collection: translationSlug(source) as CollectionSlug,
+      req, overrideAccess: true, draft: true, depth: 0, limit: 1,
+      where: { language: { equals: languageID } },
+    })
+    if (result.totalDocs) blocking.push(`${languageContentLabels[source]} ${result.totalDocs} 条`)
+  }
+  if (blocking.length && !clearRelated) throw new APIError(
+    `此语言仍有关联翻译（${blocking.join('、')}，包括草稿），请先处理并删除这些业务翻译，再删除语言。`, 400,
+  )
+
+  const targets: { collection: CollectionSlug; id: number | string }[] = []
+  for (const collection of ['site-copy', ...translatedGlobals.map(translationSlug), ...(clearRelated ? translatedCollections.map(translationSlug) : [])] as CollectionSlug[]) {
+    const result = await req.payload.find({
+      collection, req, overrideAccess: true, draft: true, depth: 0, pagination: false,
+      where: { language: { equals: languageID } },
+    })
+    for (const doc of result.docs) targets.push({ collection, id: doc.id })
+  }
+  if (!targets.length) return
+  const targetKeys = new Set(targets.map(({ collection, id }) => `${collection}:${id}`))
+  const jobs = await req.payload.find({
+    collection: 'payload-jobs', req, overrideAccess: true, depth: 0, pagination: false,
+    where: { and: [{ taskSlug: { equals: 'schedulePublish' } }, { completedAt: { exists: false } }] },
+  })
+  for (const job of jobs.docs) {
+    const input = job.input as { doc?: { relationTo?: string; value?: number | string } } | null
+    if (input?.doc && targetKeys.has(`${input.doc.relationTo}:${input.doc.value}`)) {
+      await req.payload.delete({ collection: 'payload-jobs', id: job.id, req, overrideAccess: true })
+    }
+  }
+  // The outer language deletion owns the transaction. Passing req keeps cleanup
+  // atomic and native deletes also remove the associated version history.
+  for (const { collection, id } of targets) {
+    await req.payload.delete({ collection, id, req, overrideAccess: true })
+  }
+}
+
 export const Languages: CollectionConfig = {
   slug: 'languages',
   labels: { singular: '语言', plural: '语言管理' },
@@ -19,12 +69,13 @@ export const Languages: CollectionConfig = {
     useAsTitle: 'label',
     group: '多语言',
     defaultColumns: ['label', 'code', 'enabled', 'sortOrder'],
+    description: '禁用后可删除；删除会一并清理该语言的前台文案、导航、SEO 配置及相关发布计划。商品、文章等业务翻译需先处理，默认语言不可删除。',
   },
   access: {
     read: ({ req }) => (req.user ? true : { enabled: { equals: true } }),
     create: authenticated,
     update: authenticated,
-    delete: () => false,
+    delete: authenticated,
   },
   fields: [
     {
@@ -66,6 +117,15 @@ export const Languages: CollectionConfig = {
     },
   ],
   hooks: {
+    beforeDelete: [async ({ req, id }) => {
+      const settings = await req.payload.findGlobal({slug: 'language-settings', req, depth: 0})
+      const defaultID = typeof settings.defaultLanguage === 'object' ? settings.defaultLanguage?.id : settings.defaultLanguage
+      if (String(defaultID) === String(id)) throw new APIError('默认语言不能删除，请先更换默认语言。', 400)
+      const language = await req.payload.findByID({collection: 'languages', id, req, depth: 0})
+      if (language.enabled) throw new APIError('请先禁用此语言，再执行删除。', 400)
+      await removeLanguageConfiguration(req, id)
+    }],
+    afterDelete: [({ doc }) => { invalidateLanguages(); return doc }],
     beforeChange: [
       async ({ data, originalDoc, req }) => {
         if (originalDoc?.code && data.code && data.code !== originalDoc.code)
