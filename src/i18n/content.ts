@@ -301,6 +301,8 @@ export function createContentReader(raw: Payload, previewUser?: User | null) {
       const paths = raw.collections[collection].config.custom?.translationPaths as string[]
       const base = await raw.findGlobal({
         slug: args.slug,
+        draft: Boolean(args.draft && args.user),
+        user: args.user,
         depth: 0,
         locale: 'zh',
         fallbackLocale: false,
@@ -322,8 +324,23 @@ export function createContentReader(raw: Payload, previewUser?: User | null) {
             },
           })
         : { docs: [] }
+      // Payload globals do not filter their base row by publication status.
+      // After withdrawal (or before first publication), never expose the saved
+      // rules through public readers; only authenticated draft previews may use
+      // them. Published language text may still merge onto these safe defaults.
+      const publicBase = args.slug === 'search-settings' && !(args.draft && args.user) &&
+        (base as unknown as Record<string, unknown>)._status !== 'published'
+        ? {
+            id: base.id,
+            _status: 'draft',
+            allowIndexing: false,
+            allowCrawling: false,
+            sitemap: { enabled: false },
+            geo: { enabled: false },
+          }
+        : base
       const document = mergeTranslation(
-        base as unknown as Record<string, unknown>,
+        publicBase as unknown as Record<string, unknown>,
         (result.docs[0] || {}) as unknown as Record<string, unknown>,
         paths,
       )

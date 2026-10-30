@@ -18,6 +18,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
         contentPath(p, 'product'),
         p.meta?.description || p.general?.shortDescription,
         imageURL(p.general?.heroImage),
+        Boolean(p.discovery?.noIndex),
+        p.discovery?.canonicalUrl,
       )
     : equipmentMetadata('Equipment not found', '/products', null, undefined, true)
 }

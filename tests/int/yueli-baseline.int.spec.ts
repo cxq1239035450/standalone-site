@@ -25,6 +25,8 @@ describe('Yueli database adoption', () => {
       '20261030_020000_dynamic_languages',
       '20261030_030000_translation_fields',
       '20261030_040000_archive_search_brand',
+      '20261030_050000_seo_discovery',
+      '20261030_060000_inquiry_mail_notifications',
     ])
   })
 })

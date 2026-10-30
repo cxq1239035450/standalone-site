@@ -4,6 +4,7 @@ import { createContentReader } from '@/i18n/content'
 import { siteOrigin } from '@/utilities/searchSettings'
 import { contentPath } from '@/components/Yueli/data'
 import { resourcePath } from '@/components/Yueli/architecture'
+import { llmsText, loadDiscovery } from '@/utilities/discovery'
 export const dynamic = 'force-dynamic'
 export async function GET() {
   // Machine-readable routes bypass the localized page proxy. Read public English
@@ -18,6 +19,10 @@ export async function GET() {
   })
   if (settings.allowIndexing === false || settings.geo?.enabled === false)
     return new Response('Not found', { status: 404 })
+  if (settings.geo?.sections?.length) {
+    const text = llmsText(await loadDiscovery({ lang: 'en' }))
+    return text === null ? new Response('Not found', { status: 404 }) : new Response(text, { headers: { 'Content-Type': 'text/plain; charset=utf-8' } })
+  }
   const origin = siteOrigin(settings.siteUrl)
   const published = {
     locale: 'en' as const,

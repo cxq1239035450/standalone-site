@@ -151,6 +151,17 @@ describe('Published localized sitemap', () => {
     expect(rawFind).not.toHaveBeenCalled()
   })
 
+  it('honors sitemap scopes and excludes non-self canonical products without changing Yueli paths', async () => {
+    settings.mockResolvedValue({allowIndexing:true,siteUrl:'https://yueli.example',sitemap:{includeCore:false,includePosts:false}})
+    find.mockImplementation(async ({collection,locale})=>({docs:locale !== 'en' ? [] : collection === 'products' ? [
+      {_status:'published',slug:'machine',title:'Machine'},
+      {_status:'published',slug:'duplicate',title:'Duplicate',discovery:{canonicalUrl:'https://yueli.example/product/machine'}},
+    ] : collection === 'posts' ? [{_status:'published',slug:'news',title:'News'}] : []}))
+    expect((await sitemap()).map(entry=>entry.url)).toEqual(['https://yueli.example/product/machine'])
+    settings.mockResolvedValue({allowIndexing:true,sitemap:{enabled:false}})
+    expect(await sitemap()).toEqual([])
+  })
+
   it('publishes only the configured production host, including translated URLs', async () => {
     settings.mockResolvedValue({ allowIndexing: true, siteUrl: 'https://yueliautomation.com/' })
     find.mockImplementation(async ({ collection }) => ({

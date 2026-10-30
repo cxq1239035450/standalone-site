@@ -9,10 +9,9 @@ vi.mock('@/i18n/service', () => ({
 }))
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
-const { findGlobal } = vi.hoisted(() => ({ findGlobal: vi.fn() }))
-vi.mock('@/i18n/content', () => ({
-  getPayload: async () => ({ findGlobal, find: async () => ({ docs: [{}] }) }),
-}))
+const { findGlobal, find } = vi.hoisted(() => ({ findGlobal: vi.fn(), find: vi.fn() }))
+vi.mock('payload', () => ({ getPayload: async () => ({}) }))
+vi.mock('@/i18n/content', () => ({ createContentReader: () => ({ findGlobal, find }) }))
 vi.mock('@payload-config', () => ({ default: {} }))
 vi.mock('@/utilities/getURL', () => ({ getServerSideURL: () => 'http://localhost:3000' }))
 vi.mock('next-intl/server', () => ({ getLocale: async () => 'en' }))
@@ -27,14 +26,8 @@ import { equipmentMetadata } from '@/components/Yueli/metadata'
 
 describe('Public search metadata', () => {
   beforeEach(() => {
-    findGlobal.mockResolvedValue({
-      siteName: 'PawSupply',
-      siteUrl: 'https://pets.example/path/',
-      allowIndexing: true,
-      description: 'Wholesale pet supplies',
-      socialImage: { url: '/share.png' },
-      geo: { allowAITraining: false },
-    })
+    find.mockResolvedValue({docs:[{discovery:{}}]})
+    findGlobal.mockResolvedValue({ siteName: 'PawSupply', siteUrl: 'https://pets.example/path/', allowIndexing: true, description: 'Wholesale pet supplies', socialImage: { url: '/share.png' }, geo: { allowAITraining: false } })
   })
 
   it('normalizes the site origin and strips paths', () => {
@@ -52,9 +45,7 @@ describe('Public search metadata', () => {
     })
     expect(result.robots).toEqual({ index: false, follow: true })
     expect(result.alternates).toEqual({ canonical: 'https://pets.example/en/products/dog-bowl' })
-    expect(findGlobal).toHaveBeenCalledWith(
-      expect.objectContaining({ overrideAccess: false, locale: 'en' }),
-    )
+    expect(findGlobal).toHaveBeenCalledWith(expect.objectContaining({ overrideAccess: false, locale: 'en', draft: false }))
   })
 
   it('uses default share imagery and description and avoids duplicate branded titles', async () => {
@@ -70,10 +61,9 @@ describe('Public search metadata', () => {
 
   it('the site indexing switch overrides individual pages', async () => {
     findGlobal.mockResolvedValue({ allowIndexing: false })
-    expect((await pageMetadata({ locale: 'en', noIndex: false })).robots).toEqual({
-      index: false,
-      follow: true,
-    })
+    expect((await pageMetadata({ locale: 'en', noIndex: false })).robots).toEqual({ index: false, follow: true })
+    expect((await robots()).rules).toContainEqual(expect.objectContaining({ userAgent: '*', allow: ['/', '/api/media/file/'] }))
+    findGlobal.mockResolvedValue({allowIndexing:false,allowCrawling:false})
     expect((await robots()).rules).toContainEqual({ userAgent: '*', disallow: '/' })
   })
 
@@ -103,10 +93,33 @@ describe('Public search metadata', () => {
     expect(JSON.stringify([home, product, await robots()])).not.toContain('localhost')
   })
 
+  it('shows a canonical override while advertising only published custom-page alternatives', async () => {
+    find.mockImplementation(async ({locale})=>({docs:locale==='zh'?[{discovery:{}}]:[]}))
+    const result = await pageMetadata({locale:'zh',path:'/custom',canonicalUrl:'https://pets.example/zh/preferred'})
+    expect(result.alternates?.canonical).toBe('https://pets.example/zh/preferred')
+    expect(result.openGraph).toMatchObject({url:'https://pets.example/zh/preferred'})
+    expect(result.alternates?.languages).toEqual({'zh-CN':'https://pets.example/zh/custom','x-default':'https://pets.example/zh/custom'})
+    expect(find).toHaveBeenCalledWith(expect.objectContaining({collection:'pages',draft:false,where:{slug:{equals:'custom'}}}))
+  })
+
+  it('keeps built-in marketing fallback alternatives and removes all alternatives when indexing is off',async()=>{
+    find.mockResolvedValue({docs:[]})
+    expect((await pageMetadata({locale:'zh',path:'/about'})).alternates?.languages).toHaveProperty('en-US','https://pets.example/en/about')
+    findGlobal.mockResolvedValue({allowIndexing:false})
+    expect((await pageMetadata({locale:'zh',path:'/about'})).alternates?.languages).toEqual({})
+  })
+
   it('prevents a CMS value from terminating a JSON-LD script', () => {
     const source = { name: '</script><script>alert(1)</script>' }
     const serialized = jsonLd(source)
     expect(serialized).not.toContain('<')
     expect(JSON.parse(serialized)).toEqual(source)
+  })
+
+  it('applies content canonical and noindex settings on Yueli product metadata', async () => {
+    const result = await equipmentMetadata('Machine', '/product/machine', null, undefined, true, 'https://pets.example/product/preferred')
+    expect(result.alternates?.canonical).toBe('https://pets.example/product/preferred')
+    expect(result.openGraph).toMatchObject({url:'https://pets.example/product/preferred'})
+    expect(result.robots).toMatchObject({index:false,follow:true})
   })
 })

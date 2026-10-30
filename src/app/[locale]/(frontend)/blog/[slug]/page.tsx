@@ -13,5 +13,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     post ? contentPath(post, 'post') : '/blog',
     post?.meta?.description,
     imageURL(post?.heroImage),
+    !post || Boolean(post.discovery?.noIndex),
+    post?.discovery?.canonicalUrl,
   )
 }

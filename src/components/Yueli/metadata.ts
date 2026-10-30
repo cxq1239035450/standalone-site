@@ -3,6 +3,7 @@ import { getSearchSettings, siteOrigin } from '@/utilities/searchSettings'
 import { imageURL, getYueli } from './data'
 import { getLocale } from 'next-intl/server'
 import { yueliLocalePath } from '@/i18n/yueliPaths'
+import { canonicalURL } from '@/utilities/discoveryRules'
 
 export async function equipmentMetadata(
   title: string,
@@ -10,6 +11,7 @@ export async function equipmentMetadata(
   description?: string | null,
   image?: string,
   noIndex = false,
+  canonicalOverride?: string | null,
 ): Promise<Metadata> {
   const locale = await getLocale()
   const settings = await getSearchSettings(locale)
@@ -24,7 +26,7 @@ export async function equipmentMetadata(
   const social =
     image || imageURL(settings.socialImage) || imageURL((await getYueli()).site.slides?.[0]?.image)
   const localizedPath = yueliLocalePath(path || '/', locale)
-  const url = origin + (localizedPath === '/' ? '' : localizedPath)
+  const url = canonicalURL(origin + (localizedPath === '/' ? '' : localizedPath), canonicalOverride)
   return {
     metadataBase: new URL(origin),
     title: { absolute: fullTitle },

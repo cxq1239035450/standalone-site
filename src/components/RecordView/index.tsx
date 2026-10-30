@@ -6,6 +6,9 @@ import './modal.css'
 import { Button, DefaultEditView, useConfig, useDocumentInfo } from '@payloadcms/ui'
 import type { ClientField, DocumentViewClientProps } from 'payload'
 import { useSearchParams } from 'next/navigation'
+import DiscoveryPanel from '@/components/DiscoveryPanel'
+import InquiryMailPanel from '@/components/InquiryMailPanel'
+import SubmissionDetails from './SubmissionDetails'
 
 function label(value: unknown, fallback: string): string {
   if (typeof value === 'string') return value
@@ -31,6 +34,7 @@ function scalar(value: unknown): string {
   return String(value)
 }
 export function Fields({ fields, data }: { fields: ClientField[]; data: Record<string, unknown> }) {
+  if (data.form && Array.isArray(data.submissionData)) return <SubmissionDetails key={String(data.id)} data={data} />
   return <>{fields.map((field, index) => {
     if (field.type === 'ui' || ('name' in field && ['password', 'hash', 'salt', 'resetPasswordToken'].includes(field.name)) || field.admin?.hidden) return null
     if (field.type === 'tabs') return <React.Fragment key={index}>{field.tabs.map((tab, i) => <section key={i}>
@@ -74,7 +78,9 @@ export default function RecordView(props: DocumentViewClientProps) {
       {info.hasSavePermission && <Button type="button" margin={false} onClick={()=>setModalEdit(true)}>编辑</Button>}
     </header>
     <p>只读详情。点击“编辑”可修改此记录的全部可编辑内容。</p>
-    <Fields fields={entity?.fields || []} data={info.data || {}} />
+    {info.globalSlug === 'search-settings' && <DiscoveryPanel onEdit={info.hasSavePermission ? () => setModalEdit(true) : undefined}/>}
+    {info.globalSlug === 'inquiry-mail-settings' && <InquiryMailPanel refreshKey={modalEdit} onEdit={info.hasSavePermission ? () => setModalEdit(true) : undefined}/>}
+    {info.globalSlug !== 'inquiry-mail-settings' && <Fields fields={entity?.fields || []} data={info.data || {}} />}
     <Dialog.Root open={modalEdit} onOpenChange={setModalEdit}><Dialog.Portal><Dialog.Overlay className="record-overlay"/><Dialog.Content className="record-modal" aria-describedby={undefined}><div className="record-modal-heading"><Dialog.Title>编辑内容</Dialog.Title><Dialog.Close className="record-icon-button" aria-label="关闭弹窗"><X size={20}/></Dialog.Close></div><DefaultEditView {...props}/></Dialog.Content></Dialog.Portal></Dialog.Root>
   </div>
 }

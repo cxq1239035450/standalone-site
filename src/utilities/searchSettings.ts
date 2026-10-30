@@ -1,5 +1,7 @@
 import { cache } from 'react'
-import { getPayload } from '@/i18n/content'
+import { createContentReader } from '@/i18n/content'
+import { getPayload } from 'payload'
+import { canonicalURL, sameCanonical } from './discoveryRules'
 import config from '@payload-config'
 import type { Metadata } from 'next'
 import type { Locale } from '@/i18n/config'
@@ -9,7 +11,7 @@ import { getLanguageRegistry } from '@/i18n/service'
 
 export const getSearchSettings = cache(async (locale?: Locale) => {
   const payload = await getPayload({ config })
-  return payload.findGlobal({ slug: 'search-settings', locale, depth: 1, overrideAccess: false })
+  return createContentReader(payload).findGlobal({ slug: 'search-settings', locale, depth: 1, draft: false, overrideAccess: false })
 })
 
 export const siteOrigin = (value?: string | null) => {
@@ -28,6 +30,7 @@ export async function pageMetadata({
   noIndex = false,
   image,
   languages = true,
+  canonicalUrl,
 }: {
   locale: Locale
   path?: string
@@ -36,24 +39,32 @@ export async function pageMetadata({
   noIndex?: boolean
   image?: string | null
   languages?: boolean
+  canonicalUrl?: string | null
 }): Promise<Metadata> {
   const settings = await getSearchSettings(locale)
   const origin = siteOrigin(settings.siteUrl)
   const name = settings.siteName || 'PawSupply'
   const fullTitle = searchTitle(title, name)
   const text = searchDescription(description, settings.description, locale)
-  const canonical = `${origin}/${locale}${path}`
+  const canonical = canonicalURL(`${origin}/${locale}${path}`, canonicalUrl)
   const registry = await getLanguageRegistry()
   let alternateLanguages = registry.languages
   const match = /^\/(products|posts)\/([^/]+)$/.exec(path)
-  if (match) {
-    const payload = await getPayload({ config })
+  const pageSlug = !['', '/products', '/posts', '/contact', '/search'].includes(path) && /^\/[^/]+$/.test(path) ? decodeURIComponent(path.slice(1)) : null
+  if (match || pageSlug) {
+    const payload = createContentReader(await getPayload({ config }))
+    const collection = match ? match[1] as 'products' | 'posts' : 'pages'
+    const slug = match ? decodeURIComponent(match[2]) : pageSlug!
     const available = await Promise.all(registry.languages.map(async language => {
-      const result = await payload.find({ collection: match[1] as 'products' | 'posts', locale: language.code, depth: 0, limit: 1, where: { slug: { equals: decodeURIComponent(match[2]) } } })
-      return result.docs.length ? language : null
+      const result = await payload.find({ collection, locale: language.code, depth: 0, limit: 1, draft: false, where: { slug: { equals: slug } } })
+      const doc = result.docs[0]
+      const url = `${origin}/${language.code}${path}`
+      const fallback = collection === 'pages' && ['about', 'solutions'].includes(slug)
+      return (doc ? !doc.discovery?.noIndex && sameCanonical(url, canonicalURL(url, doc.discovery?.canonicalUrl)) : fallback) ? language : null
     }))
     alternateLanguages = available.filter((item): item is typeof registry.languages[number] => Boolean(item))
   }
+  if (settings.allowIndexing === false) alternateLanguages = []
   const media = settings.socialImage
   const imageURL =
     image ||

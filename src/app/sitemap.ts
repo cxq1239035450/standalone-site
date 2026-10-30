@@ -6,6 +6,7 @@ import { localizedContentPath } from '@/i18n/contentRoutes'
 import { siteOrigin } from '@/utilities/searchSettings'
 import { contentPath, categoryIDs, categoryBranch } from '@/components/Yueli/data'
 import { normalizePostTaxonomies, postsInArchive } from '@/components/Yueli/postTaxonomy'
+import { canonicalURL, sameCanonical } from '@/utilities/discoveryRules'
 export const dynamic = 'force-dynamic'
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const raw = await getPayload({ config })
@@ -18,7 +19,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     depth: 0,
     overrideAccess: false,
   })
-  if (settings.allowIndexing === false) return []
+  if (settings.allowIndexing === false || settings.sitemap?.enabled === false) return []
   const origin = siteOrigin(settings.siteUrl)
   const languages = raw.collections.languages
     ? (
@@ -51,7 +52,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       reader.find({ ...common, collection: 'posts' }),
       reader.find({ ...common, collection: 'pages' }),
     ])
-    if (locale === 'en') {
+    if (locale === 'en' && settings.sitemap?.includeCore !== false) {
       // These English routes have their own Yueli layouts. Other languages must
       // never inherit them merely because the language is enabled.
       for (const path of [
@@ -72,7 +73,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       ['page', pages],
     ] as const)
       for (const doc of result.docs) {
+        const scope = type === 'product' ? 'includeProducts' : type === 'post' ? 'includePosts' : 'includePages'
+        if (settings.sitemap?.[scope] === false) continue
         if (doc._status !== 'published' || doc.discovery?.noIndex || !doc.title?.trim()) continue
+        const automatic = new URL(localizedContentPath(type === 'page' && doc.slug === 'home' ? '/' : contentPath(doc, type), locale), origin).href
+        if (!sameCanonical(automatic, canonicalURL(automatic, doc.discovery?.canonicalUrl))) continue
         if (type === 'page' && ['search', 'products', 'blog'].includes(doc.slug || '')) continue
         if (type === 'page' && doc.slug === 'home') add('/', locale, doc.updatedAt)
         else add(contentPath(doc, type), locale, doc.updatedAt)
@@ -102,14 +107,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     )
     for (const cat of productCategories)
       if (
-        cat.title?.trim() &&
+        settings.sitemap?.includeProducts !== false && cat.title?.trim() &&
         products.docs.some((product) =>
           categoryIDs(product).some((id) => categoryBranch(cat.id, productCategories).has(id)),
         )
       )
         add(contentPath(cat, 'category'), locale, cat.updatedAt)
     for (const doc of resources.docs)
-      if (!doc.noIndex && doc._status === 'published')
+      if (settings.sitemap?.includePages !== false && !doc.noIndex && doc._status === 'published')
         add(
           `${doc.kind === 'solution' ? '/solutions' : '/resources'}/${doc.slug}`,
           locale,
@@ -125,7 +130,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       if (!records.length) continue
       for (const archive of normalizePostTaxonomies(kind, records)) {
         const published = postsInArchive(kind, archive, posts.docs)
-        if (published.some((post) => !post.discovery?.noIndex))
+        if (settings.sitemap?.includePosts !== false && published.some((post) => !post.discovery?.noIndex))
           add(
             archive.path,
             locale,

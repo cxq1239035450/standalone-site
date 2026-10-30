@@ -336,7 +336,7 @@ export async function generateMetadata({ params: paramsPromise }: Args): Promise
       product.meta?.description || product.general?.shortDescription || product.discovery?.summary,
     noIndex: Boolean(product.discovery?.noIndex),
     image: image && typeof image === 'object' ? image.url : undefined,
-    languages: false,
+    canonicalUrl: product.discovery?.canonicalUrl,
   })
 }
 

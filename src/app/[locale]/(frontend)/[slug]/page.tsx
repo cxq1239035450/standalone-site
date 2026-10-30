@@ -18,5 +18,6 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     page?.meta?.description || page?.migration?.summary,
     undefined,
     !page || Boolean(page.discovery?.noIndex),
+    page?.discovery?.canonicalUrl,
   )
 }

@@ -16,6 +16,7 @@ export async function generateMetadata({ params }: { params: Promise<{ path: str
     path,
     post?.meta?.description,
     imageURL(post?.heroImage),
-    !post,
+    !post || Boolean(post.discovery?.noIndex),
+    post?.discovery?.canonicalUrl,
   )
 }

@@ -1,3 +1,7 @@
+import { InquiryMailSettings } from './globals/InquiryMailSettings'
+import { InquiryMailDeliveries } from './collections/InquiryMailDeliveries'
+import { sendInquiryMailTask } from './email/service'
+import { inquiryMailEndpoints } from './endpoints/inquiryMail'
 import { SearchSettings } from './globals/SearchSettings'
 import { EquipmentSite } from './globals/EquipmentSite'
 import { EquipmentContent } from './collections/EquipmentContent'
@@ -26,6 +30,7 @@ import { defaultLocale, localeConfig } from './i18n/config'
 import { dynamicContentPlugin } from './i18n/contentPlugin'
 import { recordViewsPlugin } from './plugins/recordViews'
 import { translationEndpoints } from './i18n/endpoints'
+import { seoEndpoints } from './i18n/seoEndpoints'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -126,15 +131,16 @@ export default buildConfig({
     IndustryTemplates,
     EquipmentContent,
     EquipmentReviews,
+    InquiryMailDeliveries,
   ],
   cors: [getServerSideURL()].filter(Boolean),
-  globals: [Header, Footer, SearchSettings, EquipmentSite],
+  globals: [Header, Footer, SearchSettings, EquipmentSite, InquiryMailSettings],
   plugins: [
     ...plugins,
     ...(process.env.ENABLE_DYNAMIC_CONTENT === 'true' ? [dynamicContentPlugin] : []),
     recordViewsPlugin,
   ],
-  endpoints: process.env.ENABLE_DYNAMIC_CONTENT === 'true' ? translationEndpoints : [],
+  endpoints: [...(process.env.ENABLE_DYNAMIC_CONTENT === 'true' ? [...translationEndpoints, ...seoEndpoints] : []), ...inquiryMailEndpoints],
   secret: process.env.PAYLOAD_SECRET,
   sharp,
   typescript: {
@@ -157,6 +163,8 @@ export default buildConfig({
         return authHeader === `Bearer ${secret}`
       },
     },
-    tasks: [],
+    autoRun: [{ cron: '* * * * *', queue: 'inquiry-mail', limit: 10 }],
+    shouldAutoRun: () => process.env.INQUIRY_EMAIL_AUTORUN === 'true' && process.env.NODE_ENV !== 'test' && !process.env.VERCEL,
+    tasks: [sendInquiryMailTask],
   },
 })

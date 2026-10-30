@@ -26,12 +26,15 @@ import { default as default_485d1f03d73c431c5f36e006176de57a } from '@/component
 import { LinkToDoc as LinkToDoc_aead06e4cbf6b2620c5c51c9ab283634 } from '@payloadcms/plugin-search/client'
 import { ReindexButton as ReindexButton_aead06e4cbf6b2620c5c51c9ab283634 } from '@payloadcms/plugin-search/client'
 import { default as default_e97913c6d00b6cd74b8d3066bd1f3602 } from '@/components/MessageEditor'
+import { default as default_7f1f4194d2ab0c53503398780ae8a357 } from '@/components/DiscoveryPanel/CanonicalField'
 import { default as default_c215208c47c179add42056341eba8ccb } from '@/components/TranslationActions'
 import { default as default_20ec9ffc2004c5f2ba9b4ecd6dc59889 } from '@/components/TranslationParameters'
 import { default as default_293285dbf25e52a29d00375035bbfcf6 } from '@/components/ProductSearchPreview'
+import { default as default_8c904bce276af15572b9b90048e8ce1d } from '@/components/DiscoveryPanel'
 import { FolderTypeField as FolderTypeField_2b8867833a34864a02ddf429b0728a40 } from '@payloadcms/next/client'
 import { RowLabel as RowLabel_ec255a65fa6fa8d1faeb09cf35284224 } from '@/Header/RowLabel'
 import { RowLabel as RowLabel_1f6ff6ff633e3695d348f4f3c58f1466 } from '@/Footer/RowLabel'
+import { default as default_d02f2ddca6362fa3f534e50d25a58787 } from '@/components/InquiryMailPanel'
 import { CollectionCards as CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1 } from '@payloadcms/next/rsc'
 
 /** @type import('payload').ImportMap */
@@ -64,11 +67,14 @@ export const importMap = {
   "@payloadcms/plugin-search/client#LinkToDoc": LinkToDoc_aead06e4cbf6b2620c5c51c9ab283634,
   "@payloadcms/plugin-search/client#ReindexButton": ReindexButton_aead06e4cbf6b2620c5c51c9ab283634,
   "@/components/MessageEditor#default": default_e97913c6d00b6cd74b8d3066bd1f3602,
+  "@/components/DiscoveryPanel/CanonicalField#default": default_7f1f4194d2ab0c53503398780ae8a357,
   "@/components/TranslationActions#default": default_c215208c47c179add42056341eba8ccb,
   "@/components/TranslationParameters#default": default_20ec9ffc2004c5f2ba9b4ecd6dc59889,
   "@/components/ProductSearchPreview#default": default_293285dbf25e52a29d00375035bbfcf6,
+  "@/components/DiscoveryPanel#default": default_8c904bce276af15572b9b90048e8ce1d,
   "@payloadcms/next/client#FolderTypeField": FolderTypeField_2b8867833a34864a02ddf429b0728a40,
   "@/Header/RowLabel#RowLabel": RowLabel_ec255a65fa6fa8d1faeb09cf35284224,
   "@/Footer/RowLabel#RowLabel": RowLabel_1f6ff6ff633e3695d348f4f3c58f1466,
+  "@/components/InquiryMailPanel#default": default_d02f2ddca6362fa3f534e50d25a58787,
   "@payloadcms/next/rsc#CollectionCards": CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1
 }
