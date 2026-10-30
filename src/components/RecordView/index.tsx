@@ -8,6 +8,7 @@ import type { ClientField, DocumentViewClientProps } from 'payload'
 import { useSearchParams } from 'next/navigation'
 import DiscoveryPanel from '@/components/DiscoveryPanel'
 import InquiryMailPanel from '@/components/InquiryMailPanel'
+import SubmissionDetails from './SubmissionDetails'
 
 function label(value: unknown, fallback: string): string {
   if (typeof value === 'string') return value
@@ -33,6 +34,7 @@ function scalar(value: unknown): string {
   return String(value)
 }
 export function Fields({ fields, data }: { fields: ClientField[]; data: Record<string, unknown> }) {
+  if (data.form && Array.isArray(data.submissionData)) return <SubmissionDetails key={String(data.id)} data={data} />
   return <>{fields.map((field, index) => {
     if (field.type === 'ui' || ('name' in field && ['password', 'hash', 'salt', 'resetPasswordToken'].includes(field.name)) || field.admin?.hidden) return null
     if (field.type === 'tabs') return <React.Fragment key={index}>{field.tabs.map((tab, i) => <section key={i}>
