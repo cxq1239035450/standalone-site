@@ -25,12 +25,12 @@ export function Matomo({ url, siteId, origin }: { url: string; siteId: string; o
     if (!enabled) return
     const target = window as MatomoWindow
     const key = `${url}:${siteId}`
-    target._paq ||= []
+    const queue = (target._paq ||= [] as unknown[][])
     if (target.yueliMatomo?.key === key) return
     target.yueliMatomo = { key }
-    target._paq.push(['setTrackerUrl', `${url}matomo.php`])
-    target._paq.push(['setSiteId', siteId])
-    target._paq.push(['enableLinkTracking'])
+    queue.push(['setTrackerUrl', `${url}matomo.php`])
+    queue.push(['setSiteId', siteId])
+    queue.push(['enableLinkTracking'])
   }, [enabled, siteId, url])
 
   useEffect(() => {
