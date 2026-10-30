@@ -8,8 +8,6 @@ import {
   categoryBranch,
   contentPath,
 } from './data'
-import { Breadcrumbs } from './Breadcrumbs'
-import { categoryTrail } from './architecture'
 import { parseCatalogPage } from './catalogSEO'
 import type { SearchParams } from './Views'
 import source from '@/data/yueli.json'
@@ -17,14 +15,6 @@ import { getLocale } from 'next-intl/server'
 import { yueliLocalePath } from '@/i18n/yueliPaths'
 
 const firstPage = [1708, 1710, 1712, 2436, 1716, 2290, 2450, 1718, 1724, 1714, 1727, 1709]
-const categoryLinks = [
-  ['Tapping Machines', 'tapping-machine'],
-  ['Drilling, Tapping & Milling', 'drilling-tapping-milling-machine'],
-  ['CNC Machining Centers', 'cnc-machining-center'],
-  ['Lathe Machines', 'lathe-machine'],
-  ['Polishing', 'sand-belt-polishing-machine'],
-  ['Accessories', 'machine-accessories'],
-]
 
 export async function ReplicaCatalog({
   categorySlug,
@@ -83,15 +73,6 @@ export async function ReplicaCatalog({
     <div className="yl-replica-catalog yl-wrap">
       {category ? (
         <>
-          <Breadcrumbs
-            items={[
-              { name: 'Products', href: '/products' },
-              ...categoryTrail(category, categories).map((item) => ({
-                name: item.title || item.slug || 'Yueli',
-                href: contentPath(item, 'category'),
-              })),
-            ]}
-          />
           <h1>{category.title || category.slug || 'Yueli'}</h1>
         </>
       ) : (
@@ -104,14 +85,14 @@ export async function ReplicaCatalog({
         </>
       )}
       <nav className="yl-category-rail" aria-label="Product categories">
-        {categoryLinks.map(([title, slug]) => {
-          const item = categories.find((item) => item.slug === slug)
-          return item ? (
-            <a key={slug} href={contentPath(item, 'category')}>
-              {locale === 'en' ? title : item.title || title}
+        {categories.filter((item) => {
+          const branch = categoryBranch(item.id, categories)
+          return products.some((product) => categoryIDs(product).some((id) => branch.has(id)))
+        }).map((item) => (
+            <a key={item.id} href={contentPath(item, 'category')} aria-current={category?.id === item.id ? 'page' : undefined}>
+              {item.title || item.slug || 'Yueli'}
             </a>
-          ) : null
-        })}
+        ))}
       </nav>
       {q && (
         <form role="search" className="yl-catalog-search" action={base}>
