@@ -6,8 +6,11 @@ import { BasePayload, createLocalReq } from 'payload'
 import { expect, it, vi } from 'vitest'
 
 const { sendMail, close } = vi.hoisted(() => ({ sendMail: vi.fn(), close: vi.fn() }))
+vi.mock('node:dns/promises', () => ({lookup: vi.fn(async () => ({address: '127.0.0.1', family: 4}))}))
 vi.mock('nodemailer', () => ({ default: { createTransport: () => ({ sendMail, close }) } }))
 import config from '@payload-config'
+import { createContentReader } from '@/i18n/content'
+import { migrateFormMail } from '@/scripts/formMailMigration'
 import { migrateInquiryMail, inquiryMailMigrationName } from '@/scripts/inquiryMailMigration'
 import { confirmTestMail, deliverMail, mailStatus, testMail } from '@/email/service'
 
@@ -42,6 +45,9 @@ it('migrates mail safely and isolates private settings, confirmed activation, ou
     expect((await migrateInquiryMail(payload, true)).state).toBe('applied')
     expect((await migrateInquiryMail(payload, true)).state).toBe('already-applied')
     expect((await database.query('SELECT name FROM payload_migrations')).rows).toEqual([{ name: inquiryMailMigrationName }])
+    await database.exec("INSERT INTO forms (title) VALUES ('Legacy mail form')")
+    await migrateFormMail(payload, true)
+    expect((await database.query('SELECT mail_enabled, mail_legacy FROM forms')).rows).toEqual([{mail_enabled: true, mail_legacy: true}])
     const settings = await payload.findGlobal({ slug: 'inquiry-mail-settings' })
     expect(settings).toMatchObject({ enabled: false, fromName: '网站询盘', subjectPrefix: '【网站新询盘】', recipients: [{ email: '1239035450@qq.com' }] })
     await expect(payload.findGlobal({ slug: 'inquiry-mail-settings', overrideAccess: false })).rejects.toThrow()
@@ -78,6 +84,9 @@ it('migrates mail safely and isolates private settings, confirmed activation, ou
     const fields = [{ blockType: 'email' as const, name: 'email', label: '邮箱', required: true }]
     const form = await payload.create({ collection: 'forms', req, data: { title: '询盘测试', fields, submitButtonLabel: '提交' } })
     await payload.create({ collection: 'forms-translations', req, data: { subject: form.id, language: language.id, title: '询盘测试', fields, submitButtonLabel: '提交', _status: 'published' } })
+    const formTest = await testMail(payload, form.id)
+    await confirmTestMail(payload, formTest.id)
+    await payload.update({collection: 'forms', id: form.id, data: {mailEnabled: true}, req})
     sendMail.mockClear()
     const submission = await payload.create({ collection: 'form-submissions', req, data: { form: form.id, contentLocale: 'zh', submissionData: [{ field: 'email', value: 'buyer@example.test' }] } })
     expect(sendMail).not.toHaveBeenCalled()
@@ -104,6 +113,31 @@ it('migrates mail safely and isolates private settings, confirmed activation, ou
     expect(sendMail).toHaveBeenCalledTimes(calls)
     expect((await payload.find({ collection: 'payload-jobs', where: { id: { equals: jobs.docs[0].id } } })).docs).toHaveLength(0)
 
+    // Per-form routing overrides recipients, tests are isolated, and reply-to stays the customer's email.
+    const custom = await payload.create({collection: 'forms', req, data: {title: '独立转发表单', fields, mailMode: 'custom', mailRecipients: 'sales@qq.com\nsales@qq.com', mailSubject: '销售询盘', mailReplyField: 'email'}})
+    expect(custom.mailEnabled).toBe(false)
+    await payload.create({collection: 'forms-translations', req, data: {subject: custom.id, language: language.id, title: '独立转发表单', fields, submitButtonLabel: '提交', _status: 'published'}})
+    const publicForm = await createContentReader(payload).findByID({collection: 'forms', id: custom.id, locale: 'zh', depth: 0})
+    expect(publicForm).not.toHaveProperty('mailRecipients')
+    expect(publicForm).not.toHaveProperty('mailReplyField')
+    await expect(payload.update({collection: 'forms', id: custom.id, req, data: {mailEnabled: true}})).rejects.toThrow('测试')
+    sendMail.mockResolvedValue({accepted: ['sales@qq.com'], rejected: [], messageId: 'custom'})
+    const customTest = await testMail(payload, custom.id)
+    await expect(payload.update({collection: 'forms', id: custom.id, req, data: {mailEnabled: true}})).rejects.toThrow('确认')
+    await confirmTestMail(payload, customTest.id)
+    await payload.update({collection: 'forms', id: custom.id, req, data: {mailEnabled: true}})
+    await expect(payload.update({collection: 'forms', id: custom.id, req, data: {mailRecipients: 'changed@qq.com'}})).rejects.toThrow('测试')
+    const customSubmission = await payload.create({collection: 'form-submissions', req, data: {form: custom.id, contentLocale: 'zh', submissionData: [{field: 'email', value: 'customer@example.test'}]}})
+    const customRecord = (await payload.find({collection: 'inquiry-mail-deliveries', where: {submission: {equals: customSubmission.id}}})).docs[0]
+    expect(customRecord).toMatchObject({formID: custom.id, recipients: ['sales@qq.com'], replyTo: 'customer@example.test'})
+    await deliverMail(payload, customRecord.id)
+    expect(sendMail.mock.calls.at(-1)![0]).toMatchObject({to: ['sales@qq.com'], replyTo: 'customer@example.test'})
+    await payload.update({collection: 'forms', id: custom.id, req, data: {mailEnabled: false}})
+    await payload.create({collection: 'form-submissions', req, data: {form: custom.id, contentLocale: 'zh', submissionData: [{field: 'email', value: 'disabled@example.test'}]}})
+    expect((await payload.find({collection: 'inquiry-mail-deliveries', where: {and: [{formID: {equals: custom.id}}, {kind: {equals: 'inquiry'}}]}})).docs).toHaveLength(1)
+    // Return the SMTP mock to the baseline used by the concurrency checks below.
+    sendMail.mockResolvedValue({accepted: ['first@qq.com', 'second@qq.com'], rejected: [], messageId: 'mock-message'})
+    const extraCalls = sendMail.mock.calls.length - calls
     const transaction = await payload.db.beginTransaction()
     const transactionalReq = await createLocalReq({ user: req.user!, context: { disableRevalidate: true } }, payload)
     transactionalReq.transactionID = transaction!
@@ -111,10 +145,10 @@ it('migrates mail safely and isolates private settings, confirmed activation, ou
     await payload.db.rollbackTransaction(transaction!)
     expect((await payload.find({ collection: 'form-submissions', where: { id: { equals: rollbackSubmission.id } } })).docs).toHaveLength(0)
     expect((await payload.find({ collection: 'inquiry-mail-deliveries', where: { dedupeKey: { equals: `submission:${rollbackSubmission.id}` } } })).docs).toHaveLength(0)
-    expect(sendMail).toHaveBeenCalledTimes(calls)
+    expect(sendMail).toHaveBeenCalledTimes(calls + extraCalls)
     await payload.updateGlobal({ slug: 'inquiry-mail-settings', data: { enabled: false } })
     await payload.create({ collection: 'form-submissions', req, data: { form: form.id, contentLocale: 'zh', submissionData: [{ field: 'email', value: 'disabled@example.test' }] } })
-    expect((await payload.find({ collection: 'inquiry-mail-deliveries', where: { kind: { equals: 'inquiry' } } })).docs).toHaveLength(1)
+    expect((await payload.find({ collection: 'inquiry-mail-deliveries', where: { kind: { equals: 'inquiry' } } })).docs).toHaveLength(2)
     const concurrent = await payload.create({ collection: 'inquiry-mail-deliveries', data: {
       kind: 'test', dedupeKey: 'concurrent-test', status: 'pending', attempts: 0,
       recipients: sentTest.recipients, acceptedRecipients: [], fromEmail: sentTest.fromEmail, fromName: sentTest.fromName,
@@ -124,7 +158,7 @@ it('migrates mail safely and isolates private settings, confirmed activation, ou
     const outcomes = await Promise.allSettled([deliverMail(payload, concurrent.id, true), deliverMail(payload, concurrent.id)])
     expect(outcomes.filter(result => result.status === 'fulfilled')).toHaveLength(1)
     expect(outcomes.find(result => result.status === 'rejected')).toMatchObject({ reason: { status: 409 } })
-    expect(sendMail).toHaveBeenCalledTimes(calls + 1)
+    expect(sendMail).toHaveBeenCalledTimes(calls + extraCalls + 1)
     expect(await payload.findByID({ collection: 'inquiry-mail-deliveries', id: concurrent.id })).toMatchObject({ status: 'sent', attempts: 1 })
     const unclaimed = await payload.create({ collection: 'inquiry-mail-deliveries', data: {
       kind: 'test', dedupeKey: 'unclaimed-test', status: 'pending', attempts: 0,
@@ -138,9 +172,9 @@ it('migrates mail safely and isolates private settings, confirmed activation, ou
       claimFailure.mockRestore()
     }
     expect(await payload.findByID({ collection: 'inquiry-mail-deliveries', id: unclaimed.id })).toMatchObject({ status: 'pending', attempts: 0 })
-    expect(sendMail).toHaveBeenCalledTimes(calls + 1)
+    expect(sendMail).toHaveBeenCalledTimes(calls + extraCalls + 1)
     expect(await deliverMail(payload, unclaimed.id, true)).toMatchObject({ status: 'sent', attempts: 1 })
-    expect(sendMail).toHaveBeenCalledTimes(calls + 2)
+    expect(sendMail).toHaveBeenCalledTimes(calls + extraCalls + 2)
     const interrupted = await payload.create({ collection: 'inquiry-mail-deliveries', data: {
       kind: 'test', dedupeKey: 'interrupted-test', status: 'sending', attempts: 1, startedAt: new Date().toISOString(),
       recipients: sentTest.recipients, acceptedRecipients: [], fromEmail: sentTest.fromEmail, fromName: sentTest.fromName,
@@ -150,7 +184,7 @@ it('migrates mail safely and isolates private settings, confirmed activation, ou
     await payload.update({ collection: 'inquiry-mail-deliveries', id: interrupted.id, data: { startedAt: new Date(Date.now() - 180000).toISOString() } })
     await expect(deliverMail(payload, interrupted.id, true)).rejects.toMatchObject({ status: 409 })
     expect((await deliverMail(payload, interrupted.id, true, true)).status).toBe('sent')
-    expect(sendMail).toHaveBeenCalledTimes(calls + 3)
+    expect(sendMail).toHaveBeenCalledTimes(calls + extraCalls + 3)
   } finally {
     vi.unstubAllEnvs()
     await database.close()

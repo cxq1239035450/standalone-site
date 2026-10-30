@@ -9,6 +9,7 @@ import enMessages from '../../messages/en.json'
 import { createContentReader } from '@/i18n/content'
 import { migrateSeo, seoMigrationName } from '@/scripts/seoMigration'
 import { migrateLanguageContent } from '@/i18n/migrateContent'
+import { migrateFormMail } from '@/scripts/formMailMigration'
 import { migrateInquiryMail } from '@/scripts/inquiryMailMigration'
 
 it('runs Japanese draft/publish/withdraw and shared inventory through the real Payload adapter', async () => {
@@ -61,6 +62,7 @@ it('runs Japanese draft/publish/withdraw and shared inventory through the real P
     expect((await migrateSeo(payload, true)).state).toBe('already-applied')
     expect((await database.query('SELECT name FROM payload_migrations')).rows).toEqual([{name:seoMigrationName}])
     await migrateInquiryMail(payload, true)
+    await migrateFormMail(payload, true)
     const req = await createLocalReq(
       { context: { disableRevalidate: true, languageMigration: true } },
       payload,

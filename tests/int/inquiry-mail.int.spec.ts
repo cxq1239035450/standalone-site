@@ -124,6 +124,7 @@ describe('QQ inquiry notifications', () => {
     await enqueueInquiryMail({ doc, operation: 'create', req } as never)
     expect(raw.create).not.toHaveBeenCalled()
     raw.findGlobal.mockResolvedValueOnce({ ...settings, enabled: true })
+    raw.findByID.mockResolvedValueOnce({ id: 1, mailEnabled: true } as never)
     findForm.mockResolvedValueOnce({ title: '询盘', fields: [{ blockType: 'text', name: 'company', label: '公司' }] })
     await enqueueInquiryMail({ doc, operation: 'create', req } as never)
     expect(raw.create).toHaveBeenCalledWith(expect.objectContaining({ req, data: expect.objectContaining({ dedupeKey: 'submission:42', bodyText: expect.stringContaining('公司：测试公司') }) }))

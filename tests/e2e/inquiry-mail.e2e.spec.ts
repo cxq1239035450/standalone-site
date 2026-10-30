@@ -21,17 +21,20 @@ test('QQ notification settings stay disabled without credentials and retain fail
     expect(status.subjectPrefix).toBe('【网站新询盘】')
     expect((await page.request.post(`${base}/api/globals/inquiry-mail-settings`, { data: { enabled: true } })).ok()).toBe(false)
     expect((await page.request.post(`${base}/api/inquiry-mail-deliveries`, { data: { status: 'sent' } })).ok()).toBe(false)
+    let releaseStatus!: () => void
+    const statusReady = new Promise<void>(resolve => { releaseStatus = resolve })
     await page.route('**/api/inquiry-mail/status', async route => {
-      await new Promise(resolve => setTimeout(resolve, 600))
+      await statusReady
       await route.continue()
     })
     await page.route('**/api/inquiry-mail/test', async route => {
       await new Promise(resolve => setTimeout(resolve, 600))
       await route.continue()
     })
-    await page.goto(`${base}/admin/globals/inquiry-mail-settings`)
+    await page.goto(`${base}/admin/globals/inquiry-mail-settings`, {waitUntil: 'domcontentloaded'})
     const panel = page.getByRole('region', { name: '询盘邮件通知管理' })
     await expect(panel.getByText('正在加载邮件配置与发送记录…')).toBeVisible()
+    releaseStatus()
     await expect(panel.getByText('已关闭', { exact: true })).toBeVisible()
     const initialURL = page.url()
     await panel.getByRole('button', { name: '发送测试邮件', exact: true }).click()

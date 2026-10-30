@@ -22,7 +22,8 @@
     "migrate:seo": "cross-env NODE_OPTIONS=--no-deprecation tsx src/scripts/migrate-seo.ts",
     "migrate:languages": "cross-env NODE_OPTIONS=--no-deprecation tsx src/scripts/migrate-languages.ts",
     "test:languages": "vitest run --config vitest.config.mts tests/int/dynamic-languages.int.spec.ts tests/int/language-schema.int.spec.ts tests/int/language-payload.int.spec.ts",
-    "migrate:inquiry-mail": "cross-env NODE_OPTIONS=--no-deprecation tsx src/scripts/migrate-inquiry-mail.ts"
+    "migrate:inquiry-mail": "cross-env NODE_OPTIONS=--no-deprecation tsx src/scripts/migrate-inquiry-mail.ts",
+    "migrate:form-mail": "cross-env NODE_OPTIONS=--no-deprecation tsx src/scripts/migrate-form-mail.ts"
   },
   "dependencies": {
     "@payloadcms/admin-bar": "3.88.0",

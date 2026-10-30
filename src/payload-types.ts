@@ -844,6 +844,24 @@ export interface Form {
         id?: string | null;
       }[]
     | null;
+  /**
+   * 全站通知和本表单转发均开启时才发送。先关闭并保存配置，测试收信后再开启。
+   */
+  mailEnabled?: boolean | null;
+  mailMode?: ('inherit' | 'custom') | null;
+  /**
+   * 每行一个邮箱，最多 20 个。指定邮箱将替代全站默认收件人。
+   */
+  mailRecipients?: string | null;
+  /**
+   * 留空沿用全站主题前缀，系统追加询盘编号。
+   */
+  mailSubject?: string | null;
+  /**
+   * 收件人点击回复时使用此字段的客户邮箱。
+   */
+  mailReplyField?: string | null;
+  mailLegacy?: boolean | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -1017,6 +1035,8 @@ export interface IndustryTemplate {
  */
 export interface InquiryMailDelivery {
   id: number;
+  formID?: number | null;
+  replyTo?: string | null;
   kind: 'test' | 'inquiry';
   dedupeKey: string;
   submission?: (number | null) | FormSubmission;
@@ -2455,6 +2475,8 @@ export interface IndustryTemplatesSelect<T extends boolean = true> {
  * via the `definition` "inquiry-mail-deliveries_select".
  */
 export interface InquiryMailDeliveriesSelect<T extends boolean = true> {
+  formID?: T;
+  replyTo?: T;
   kind?: T;
   dedupeKey?: T;
   submission?: T;
@@ -2621,6 +2643,12 @@ export interface FormsSelect<T extends boolean = true> {
         message?: T;
         id?: T;
       };
+  mailEnabled?: T;
+  mailMode?: T;
+  mailRecipients?: T;
+  mailSubject?: T;
+  mailReplyField?: T;
+  mailLegacy?: T;
   updatedAt?: T;
   createdAt?: T;
 }

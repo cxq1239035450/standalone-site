@@ -26,6 +26,8 @@ type Delivery = {
   messageId?: string | null
 }
 type Status = {
+  globalEnabled?: boolean
+  formEnabled?: boolean
   configured: boolean
   enabled: boolean
   fromEmail: string
@@ -39,7 +41,7 @@ type Status = {
 }
 type Records = { docs: Delivery[]; totalDocs: number; totalPages: number }
 type Modal = { type: 'test' } | { type: 'detail' | 'retry'; delivery: Delivery }
-type Props = { onEdit?: () => void; refreshKey?: unknown }
+type Props = { formID?: number; submissionID?: number; onEdit?: () => void; refreshKey?: unknown }
 
 const statusLabels: Record<Delivery['status'], string> = {
   pending: '等待发送', sending: '正在发送', sent: 'SMTP 已接受', failed: '发送失败',
@@ -49,11 +51,11 @@ const addresses = (value?: string[]) => value?.length ? value.join('、') : '未
 const errorText = (value: { errors?: { message?: string }[]; error?: string; message?: string }) =>
   value.errors?.map(item => item.message).filter(Boolean).join('；') || value.error || value.message || '请求失败，请重试。'
 
-export default function InquiryMailPanel({ onEdit, refreshKey }: Props) {
+export default function InquiryMailPanel({ onEdit, refreshKey, formID, submissionID }: Props) {
   const { config } = useConfig()
   const { lastUpdateTime } = useDocumentInfo()
   const [now, setNow] = useState(() => Date.now())
-  const [filter, setFilter] = useState('failed')
+  const [filter, setFilter] = useState(submissionID ? '' : 'failed')
   const [page, setPage] = useState(1)
   const [revision, setRevision] = useState(0)
   const [remote, setRemote] = useState<{ key: string; status?: Status; records?: Records; error?: string }>()
@@ -64,7 +66,7 @@ export default function InquiryMailPanel({ onEdit, refreshKey }: Props) {
   const [modalError, setModalError] = useState('')
   const mutation = useRef<AbortController | null>(null)
   const trigger = useRef<HTMLElement | null>(null)
-  const requestKey = JSON.stringify([filter, page, revision, refreshKey, lastUpdateTime])
+  const requestKey = JSON.stringify([filter, page, revision, refreshKey, lastUpdateTime, formID, submissionID])
   const loading = remote?.key !== requestKey
   const status = remote?.status
   const records = remote?.key === requestKey ? remote.records : undefined
@@ -80,6 +82,8 @@ export default function InquiryMailPanel({ onEdit, refreshKey }: Props) {
   useEffect(() => {
     const controller = new AbortController()
     const query = new URLSearchParams({ sort: '-createdAt', limit: '10', page: String(page), depth: '0' })
+    if (formID) query.set('where[formID][equals]', String(formID))
+    if (submissionID) query.set('where[submission][equals]', String(submissionID))
     if (filter) query.set('where[status][equals]', filter)
     const read = async (url: string) => {
       const response = await fetch(url, { signal: controller.signal, cache: 'no-store' })
@@ -88,7 +92,7 @@ export default function InquiryMailPanel({ onEdit, refreshKey }: Props) {
       return data
     }
     void Promise.all([
-      read(`${config.routes.api}/inquiry-mail/status`),
+      read(`${config.routes.api}/inquiry-mail/${formID ? `forms/${formID}/` : ''}status`),
       read(`${config.routes.api}/inquiry-mail-deliveries?${query}`),
     ]).then(([status, records]) => {
       if (!controller.signal.aborted) setRemote({ key: requestKey, status, records })
@@ -96,7 +100,7 @@ export default function InquiryMailPanel({ onEdit, refreshKey }: Props) {
       if (!controller.signal.aborted) setRemote({ key: requestKey, error: error.message })
     })
     return () => controller.abort()
-  }, [config.routes.api, filter, page, requestKey])
+  }, [config.routes.api, filter, page, requestKey, formID, submissionID])
 
   useEffect(() => {
     if (!detailID) return
@@ -127,7 +131,7 @@ export default function InquiryMailPanel({ onEdit, refreshKey }: Props) {
     setModalError('')
     setNotice(undefined)
     try {
-      const path = action === 'test' ? 'test' : `${id}/${action}`
+      const path = action === 'test' ? `${formID ? `forms/${formID}/` : ''}test` : `${id}/${action}`
       const response = await fetch(`${config.routes.api}/inquiry-mail/${path}`, { method: 'POST', signal: controller.signal, ...(confirmUncertain ? { headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ confirmUncertain: true }) } : {}) })
       const result = await response.json()
       if (!response.ok) throw new Error(errorText(result))
@@ -150,7 +154,7 @@ export default function InquiryMailPanel({ onEdit, refreshKey }: Props) {
   const canRecover = (record: Delivery) => record.status === 'sending' && Boolean(record.startedAt) && now - new Date(record.startedAt!).getTime() > 120000
 
   return <section className="inquiry-mail-panel" aria-label="询盘邮件通知管理">
-    <div className="inquiry-mail-heading"><div><h2><Mail size={23}/>询盘邮件通知</h2><p>测试与重发使用已保存配置。请先保存修改，再进行发送操作。</p></div><div className="inquiry-mail-actions">
+    <div className="inquiry-mail-heading"><div><h2><Mail size={23}/>{formID ? '本表单邮件转发' : '询盘邮件通知'}</h2><p>测试与重发使用已保存配置。请先保存修改，再进行发送操作。</p></div><div className="inquiry-mail-actions">
       <Button type="button" buttonStyle="secondary" margin={false} disabled={loading || busy} icon={<RefreshCw size={16} className={loading ? 'record-spinner' : ''}/>} onClick={refresh}>刷新状态</Button>
       {onEdit && <Button type="button" margin={false} disabled={busy} icon={<Pencil size={16}/>} onClick={onEdit}>编辑邮件配置</Button>}
     </div></div>
@@ -159,7 +163,7 @@ export default function InquiryMailPanel({ onEdit, refreshKey }: Props) {
     {error && <div className="record-error" role="alert"><AlertTriangle size={17}/><span>{error}</span><Button type="button" buttonStyle="secondary" size="small" margin={false} onClick={refresh}>重试加载</Button></div>}
     {!loading && status && <>
       <div className="inquiry-mail-summary">
-        <div><span>新询盘通知</span><strong>{status.enabled ? '已开启' : '已关闭'}</strong><small>{status.enabled ? '新询盘保存后进入通知队列。' : '仍可提交询盘，暂不发送新询盘通知。'}</small></div>
+        <div><span>新询盘通知</span><strong>{status.enabled ? '已开启' : '已关闭'}</strong><small>{status.enabled ? '新询盘保存后进入通知队列。' : formID ? `全站通知${status.globalEnabled ? '已开' : '已关'}，本表单转发${status.formEnabled ? '已开' : '已关'}。` : '仍可提交询盘，暂不发送新询盘通知。'}</small></div>
         <div><span>邮件服务</span><strong>{status.configured ? 'SMTP 已配置' : '待配置'}</strong><small>{status.fromEmail || '尚未配置实际发件邮箱'}</small></div>
         <div><span>最近一次测试</span><strong>{lastTest ? lastTest.confirmedAt ? '已确认收信' : statusLabels[lastTest.status] : '尚未测试'}</strong><small>{lastTest ? time(lastTest.sentAt || lastTest.createdAt) : '发送测试邮件后，在收件箱确认。'}</small></div>
       </div>
@@ -175,7 +179,7 @@ export default function InquiryMailPanel({ onEdit, refreshKey }: Props) {
     {!loading && records && <>
       <div className="inquiry-mail-table-wrap"><table><thead><tr><th>邮件主题 / 类型</th><th>状态</th><th>尝试次数</th><th>最近错误</th><th>时间</th><th>操作</th></tr></thead><tbody>{records.docs.map(record => <tr key={record.id}>
         <td><button type="button" className="inquiry-mail-record-title" onClick={() => open({ type: 'detail', delivery: record })}>{record.subject || `邮件 #${record.id}`}</button><small>{record.kind === 'test' ? '测试邮件' : '新询盘通知'}</small></td><td><span className={`inquiry-mail-badge is-${record.status}`}>{statusLabels[record.status]}</span></td><td>{record.attempts || 0}</td><td>{record.lastError || '—'}</td><td>{time(record.createdAt)}</td><td><div className="inquiry-mail-actions"><Button type="button" buttonStyle="secondary" size="small" margin={false} icon={<Eye size={14}/>} onClick={() => open({ type: 'detail', delivery: record })}>查看</Button>{(record.status === 'pending' || record.status === 'failed' || canRecover(record)) && <Button type="button" buttonStyle="secondary" size="small" margin={false} disabled={busy} icon={<RefreshCw size={14}/>} onClick={() => open({ type: 'retry', delivery: record })}>{record.status === 'pending' ? '立即发送' : record.status === 'sending' ? '核对后重发' : '重发'}</Button>}</div></td>
-      </tr>)}</tbody></table>{!records.docs.length && <p className="inquiry-mail-empty">{filter === 'failed' ? '暂无失败记录。' : '暂无符合条件的发送记录。'}</p>}</div>
+      </tr>)}</tbody></table>{!records.docs.length && <p className="inquiry-mail-empty">{filter === 'failed' ? '暂无失败记录。' : submissionID ? '此提交暂无发送记录，可能提交时通知未开启。' : '暂无符合条件的发送记录。'}</p>}</div>
       <div className="inquiry-mail-pagination"><span>共 {records.totalDocs} 条 · 第 {page} / {Math.max(records.totalPages, 1)} 页</span><div className="inquiry-mail-actions"><Button type="button" buttonStyle="secondary" size="small" margin={false} disabled={page <= 1 || busy} onClick={() => setPage(value => value - 1)}>上一页</Button><Button type="button" buttonStyle="secondary" size="small" margin={false} disabled={page >= records.totalPages || busy} onClick={() => setPage(value => value + 1)}>下一页</Button></div></div>
     </>}
     <Dialog.Root open={modal !== null} onOpenChange={open => { if (!open && !busy) setModal(null) }}><Dialog.Portal><Dialog.Overlay className="record-overlay inquiry-mail-overlay"/><Dialog.Content className="record-modal inquiry-mail-modal" onEscapeKeyDown={event => { if (busy) event.preventDefault() }} onPointerDownOutside={event => { if (busy) event.preventDefault() }} onCloseAutoFocus={event => { event.preventDefault(); trigger.current?.focus() }}>
