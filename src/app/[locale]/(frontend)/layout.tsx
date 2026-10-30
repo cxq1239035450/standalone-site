@@ -15,6 +15,8 @@ import { getYueli, imageURL } from '@/components/Yueli/data'
 import { getSearchSettings, siteOrigin, jsonLd } from '@/utilities/searchSettings'
 import { GoogleAnalytics } from '@/integrations/google/GoogleAnalytics'
 import { googleMeasurementId, googleSiteVerification } from '@/integrations/google/config'
+import { Matomo } from '@/integrations/matomo/Matomo'
+import { matomoConfig } from '@/integrations/matomo/config'
 import '@/components/Yueli/site.css'
 import '@/components/Yueli/source-fonts.css'
 import '@/components/Yueli/source-pages.css'
@@ -91,6 +93,7 @@ export default async function WebsiteLayout({
     })
   const origin = siteOrigin(settings.siteUrl)
   const measurementId = googleMeasurementId()
+  const matomo = matomoConfig()
   const organization = {
     '@context': 'https://schema.org',
     '@type': 'Organization',
@@ -159,6 +162,7 @@ export default async function WebsiteLayout({
           </LanguageProvider>
         </NextIntlClientProvider>
         {measurementId ? <GoogleAnalytics measurementId={measurementId} origin={origin} /> : null}
+        {matomo ? <Matomo {...matomo} origin={origin} /> : null}
       </body>
     </html>
   )
