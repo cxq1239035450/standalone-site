@@ -28,7 +28,7 @@
 | Node.js / pnpm | `22.23.4` / `10.27.0` |
 | PostgreSQL | `postgres:16-alpine`，不映射宿主端口 |
 | PostgreSQL 库 / 用户 | `yueliautomation` / `yueli` |
-| 当前版本目录 | `/opt/yueli-site/releases/20261030-seo-mail` |
+| 当前版本目录 | `/opt/yueli-site/releases/20261030-insights` |
 | 实际代码版本记录 | `/opt/yueli-site/current-commit.txt` |
 | 持久媒体 / 数据 | `/opt/yueli-site/shared/media` / `shared/postgres` |
 | 私有运行配置 | `/opt/yueli-site/shared/site.env`、`shared/db.env` |
@@ -164,3 +164,12 @@ pnpm exec tsx src/scripts/verify-yueli-release.ts
 
 服务器日志：`/opt/yueli-site/seo-mail-copy.log`、`seo-mail-build.log`、`seo-mail-http.log`、`seo-mail-production.log`。正式库前后审计报告在最终备份目录；本地匿名 HTTP 最终报告在忽略目录 `.deployment/production-seo-mail-final.json`。数据库、配置、私有报告不提交 Git。
 正式库已于 2026-10-30 14:49 UTC 完成三项增量，迁移前完整备份为 `/opt/yueli-site/backups/seo-mail-production-20261030T144919Z`。该数据库备份已恢复到独立库 `yueli_release_restore_20261030`，恢复无错误。正式库原 206 表数据哈希不变，模型字段和发布内容读取、匿名权限、幂等复跑全部通过；数据库迁移后自动恢复原应用，随后切换候选代码。
+## Site Insights 只读采集
+
+生产 Site ID 为 `yueliautomation`。规范 Token 保存位置为 `/opt/yueli-site/shared/site.env` 的 `INSIGHTS_READ_TOKEN`，同文件配置 `INSIGHTS_ENABLED=true`、`INSIGHTS_SITE_ID=yueliautomation`。Token 在服务器用 32 字节密码学随机值生成，不保存到仓库、本地文件、日志或对话；环境文件权限为 0600。统一后台的连接配置由后台项目独立完成，本项目不修改它。
+
+启用插件需要在构建、运行两阶段加载同一私有环境配置；在独立 `releases/20261030-insights` 目录构建后切换 Compose 的 app 挂载并重建应用容器。旧版本目录、配置和数据库备份位置保存在服务器 `/opt/yueli-site/insights-backup-path.txt`。本次没有新增表结构，不执行数据库迁移。
+
+接口仍由原插件的专用 Bearer Token 校验保护，不接受管理员登录代替集成 Token。内容接口使用现有动态多语言已发布读取器，保留插件的分页、固定集合及字段投影；越力返回真实导入路径和英文无前缀 URL。询盘返回 `formName` 及完整 `fields: [{ key, label, value }]`，保留提交顺序、未知字段、空值、`0` 与 `false`（表单文本值为字符串）。响应禁止缓存。
+
+在服务器的对应源码目录、已加载私有生产环境的一次性容器中执行 `pnpm exec tsx src/scripts/verify-insights.ts`，该工具只 GET 接口并读取数据库核对，不写入询盘或发送邮件。可先用 `--origin=http://127.0.0.1:3121` 验证仅绑定回环的候选应用，再验证默认正式 HTTPS。测试涵盖无 Token、错误 Token、有效 Token、站点标识、完整分页、英文发布内容、询盘字段与实际库的一致性；只输出数量和通过状态，不打印响应记录或凭据。原 WordPress 文件和接口保持原状。

@@ -21,6 +21,17 @@ describe('private insights submission fields', () => {
     expect(find).not.toHaveBeenCalled()
   })
 
+  it('retains numeric zero, false, null and undefined legacy values without dropping rows', () => {
+    const submission = { submissionData: [
+      { field: 'zero', value: 0 }, { field: 'false', value: false },
+      { field: 'null', value: null }, { field: 'undefined' },
+    ] } as unknown as Parameters<typeof submissionFields>[0]
+    expect(submissionFields(submission)).toEqual([
+      { key: 'zero', label: 'zero', value: '0' }, { key: 'false', label: 'false', value: 'false' },
+      { key: 'null', label: 'null', value: '' }, { key: 'undefined', label: 'undefined', value: '' },
+    ])
+  })
+
   it('enriches only authorized page IDs and does not return unrelated form configuration', async () => {
     const find = vi.fn().mockResolvedValueOnce({ docs: [{ id: 7, form: 3, submissionData: [{ field: 'message', value: '<script>alert(1)</script>\nHello' }] }] })
       .mockResolvedValueOnce({ docs: [{ id: 3, title: '设备咨询', fields: [{ name: 'message', label: '需求详情' }], emails: ['private@example.test'] }] })
