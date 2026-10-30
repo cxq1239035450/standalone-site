@@ -12,6 +12,8 @@ export const InquiryMailDeliveries: CollectionConfig = {
   },
   access: { read: authenticated, create: () => false, update: () => false, delete: () => false },
   fields: [
+    { name: 'formID', type: 'number', label: '来源表单编号' },
+    { name: 'replyTo', type: 'email', label: '客户回复邮箱' },
     { name: 'kind', type: 'select', required: true, label: '类型', options: [{ label: '测试邮件', value: 'test' }, { label: '新询盘', value: 'inquiry' }] },
     { name: 'dedupeKey', type: 'text', required: true, unique: true, admin: { hidden: true } },
     { name: 'submission', type: 'relationship', relationTo: 'form-submissions', label: '关联询盘' },

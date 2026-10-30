@@ -1,5 +1,6 @@
 import { createHash } from 'node:crypto'
 import nodemailer from 'nodemailer'
+import { lookup } from 'node:dns/promises'
 
 export type MailSettings = {
   enabled?: boolean | null
@@ -42,19 +43,22 @@ export function safeMailError(error: unknown) {
   return '邮件发送失败，请检查 SMTP 配置或稍后重试。'
 }
 
-export async function sendSMTP(configuration: ReturnType<typeof mailConfiguration>, message: { to: string[]; subject: string; text: string }) {
+export async function sendSMTP(configuration: ReturnType<typeof mailConfiguration>, message: { to: string[]; subject: string; text: string; replyTo?: string }) {
+  // Use the OS resolver (VPN / enterprise DNS included), while validating the
+  // certificate against the configured QQ hostname rather than its resolved IP.
+  const { address } = await lookup(configuration.host, { family: 4 })
   const transport = nodemailer.createTransport({
-    host: configuration.host, port: configuration.port, secure: configuration.secure,
+    host: address, port: configuration.port, secure: configuration.secure,
     requireTLS: true,
     auth: { user: configuration.user, pass: configuration.password },
     connectionTimeout: 10000, greetingTimeout: 10000, socketTimeout: 20000,
-    tls: { minVersion: 'TLSv1.2', rejectUnauthorized: true },
+    tls: { servername: configuration.host, minVersion: 'TLSv1.2', rejectUnauthorized: true },
     logger: false, debug: false,
   })
   try {
     const info = await transport.sendMail({
       from: { name: configuration.fromName, address: configuration.fromEmail },
-      to: message.to, subject: cleanHeader(message.subject), text: message.text,
+      replyTo: message.replyTo, to: message.to, subject: cleanHeader(message.subject), text: message.text,
       disableFileAccess: true, disableUrlAccess: true,
     })
     const addresses = (rows: unknown[]) => rows.map(row => typeof row === 'string' ? row : row && typeof row === 'object' && 'address' in row ? String(row.address) : '').map(value => value.trim().toLowerCase()).filter(Boolean)

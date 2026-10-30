@@ -1,3 +1,4 @@
+import * as formMail from './20261030_094707_form_mail_routing'
 import * as seo from './20261029_171455_seo_discovery'
 import * as inquiryMail from './20261029_173915_inquiry_mail_notifications'
 import * as migration_20260818_035022 from './20260818_035022'
@@ -22,4 +23,5 @@ export const migrations = [
   },
   { ...seo, name: '20261029_171455_seo_discovery' },
   { ...inquiryMail, name: '20261029_173915_inquiry_mail_notifications' },
+  { ...formMail, name: '20261030_094707_form_mail_routing' },
 ]

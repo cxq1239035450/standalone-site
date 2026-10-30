@@ -19,6 +19,10 @@ export const recordViewsPlugin: Plugin = (config) => {
     }
     const admin = collection.admin ||= {}
     collection.disableBulkEdit = true
+    if (collection.slug === 'forms') {
+      admin.defaultColumns = ['title', 'mailEnabled', 'mailMode', 'mailRecipients', 'updatedAt']
+      collection.fields.unshift({ name: 'mailPanel', type: 'ui', admin: {components: {Field: '@/components/InquiryMailPanel/FormField'}} })
+    }
     const components = admin.components ||= {}
     components.beforeListTable = [...(components.beforeListTable || []), {
       path: '@/components/RecordView/ListModals', clientProps: { slug: collection.slug },

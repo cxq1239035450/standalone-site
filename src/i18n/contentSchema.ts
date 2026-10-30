@@ -171,6 +171,7 @@ export function mergeTranslation(
   paths: string[],
 ) {
   const result = structuredClone(base)
+  for (const key of ['mailEnabled', 'mailMode', 'mailRecipients', 'mailSubject', 'mailReplyField', 'mailLegacy']) delete result[key]
   for (const path of paths) setPath(result, path, getPath(translation, path) ?? null)
   if (paths.includes('general.gallery')) {
     const shared = getPath(base, 'general.gallery') as Array<Record<string, unknown>> | undefined

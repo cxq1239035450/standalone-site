@@ -11,6 +11,12 @@ const idFrom = (req: PayloadRequest) => {
 }
 const response = (data: unknown) => Response.json(data, { headers: { 'Cache-Control': 'private, no-store' } })
 export const inquiryMailEndpoints: Endpoint[] = [
+  { path: '/inquiry-mail/forms/:id/status', method: 'get', handler: async req => { requireUser(req); return response(await mailStatus(req.payload, idFrom(req))) } },
+  { path: '/inquiry-mail/forms/:id/test', method: 'post', handler: async req => {
+    requireUser(req)
+    const delivery = await testMail(req.payload, idFrom(req))
+    return response({delivery: publicDelivery(delivery), message: delivery.status === 'sent' ? 'SMTP 已接受测试邮件，请确认实际收信。' : delivery.lastError})
+  } },
   { path: '/inquiry-mail/status', method: 'get', handler: async req => { requireUser(req); return response(await mailStatus(req.payload)) } },
   { path: '/inquiry-mail/test', method: 'post', handler: async req => {
     requireUser(req)

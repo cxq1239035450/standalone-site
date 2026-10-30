@@ -1,3 +1,4 @@
+import { formMailFields, validateFormMail } from '@/email/formSettings'
 import { formBuilderPlugin } from '@payloadcms/plugin-form-builder'
 import { nestedDocsPlugin } from '@payloadcms/plugin-nested-docs'
 import { redirectsPlugin } from '@payloadcms/plugin-redirects'
@@ -89,12 +90,14 @@ export const plugins: Plugin[] = [
       payment: false,
     },
     formOverrides: {
+      hooks: { beforeChange: [validateFormMail] },
       labels: {
         singular: adminLabel('表单', 'Form'),
         plural: adminLabel('表单', 'Forms'),
       },
       fields: ({ defaultFields }) => {
         const fields = defaultFields.map((field) => {
+          if (field.type === 'array' && field.name === 'emails') return {...field, admin: {...field.admin, hidden: true, readOnly: true}}
           if ('name' in field && field.name === 'confirmationMessage') {
             return {
               ...field,
@@ -112,7 +115,7 @@ export const plugins: Plugin[] = [
           return field
         })
 
-        return [contentLanguageField(), ...fields]
+        return [contentLanguageField(), ...fields, ...formMailFields]
       },
     },
     formSubmissionOverrides: {

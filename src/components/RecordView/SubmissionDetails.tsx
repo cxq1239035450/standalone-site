@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react'
 import { useConfig } from '@payloadcms/ui'
 import './submission.css'
+import InquiryMailPanel from '../InquiryMailPanel'
 
 type Field = { name?: string; label?: string; options?: { label?: string; value?: string }[] }
 type Form = { id?: number | string; title?: string; fields?: Field[] }
@@ -46,6 +47,7 @@ export default function SubmissionDetails({ data }: { data: Record<string, unkno
       return <div key={row.id || `${row.field}-${index}`}><dt>{label}</dt><dd>{Array.isArray(row.value) ? row.value.map(valueLabel).join('、') || '未填写' : valueLabel(row.value)}</dd></div>
     })}</dl>
     {!rows.length && <p>暂无提交内容。</p>}
+    {formID && data.id ? <InquiryMailPanel formID={Number(formID)} submissionID={Number(data.id)} /> : null}
     <p className="submission-note">标签取自当前表单配置；已删除的字段保留原字段名称，提交内容保持原样。</p>
   </section>
 }

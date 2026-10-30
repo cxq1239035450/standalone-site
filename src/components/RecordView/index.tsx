@@ -78,6 +78,7 @@ export default function RecordView(props: DocumentViewClientProps) {
       {info.hasSavePermission && <Button type="button" margin={false} onClick={()=>setModalEdit(true)}>编辑</Button>}
     </header>
     <p>只读详情。点击“编辑”可修改此记录的全部可编辑内容。</p>
+    {info.collectionSlug === 'forms' && <InquiryMailPanel formID={Number(info.id)} refreshKey={modalEdit} />}
     {info.globalSlug === 'search-settings' && <DiscoveryPanel onEdit={info.hasSavePermission ? () => setModalEdit(true) : undefined}/>}
     {info.globalSlug === 'inquiry-mail-settings' && <InquiryMailPanel refreshKey={modalEdit} onEdit={info.hasSavePermission ? () => setModalEdit(true) : undefined}/>}
     {info.globalSlug !== 'inquiry-mail-settings' && <Fields fields={entity?.fields || []} data={info.data || {}} />}
