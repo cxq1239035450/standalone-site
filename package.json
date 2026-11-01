@@ -5,6 +5,7 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
+    "migrate:media-cache": "cross-env NODE_OPTIONS=--no-deprecation tsx src/scripts/migrate-media-cache.ts",
     "build": "cross-env NODE_OPTIONS=--no-deprecation next build --webpack",
     "dev": "cross-env NODE_OPTIONS=--no-deprecation next dev",
     "dev:prod": "cross-env NODE_OPTIONS=--no-deprecation rm -rf .next && pnpm build && pnpm start",
@@ -63,7 +64,7 @@
     "react": "19.2.6",
     "react-dom": "19.2.6",
     "react-hook-form": "7.71.1",
-    "sharp": "0.34.2",
+    "sharp": "0.35.3",
     "tailwind-merge": "^3.4.0",
     "yet-another-react-lightbox": "^3.32.2"
   },
@@ -94,11 +95,12 @@
     "vitest": "4.0.18"
   },
   "engines": {
-    "node": "^18.20.2 || >=20.9.0",
+    "node": ">=20.9.0",
     "pnpm": "^9 || ^10 || ^11"
   },
   "pnpm": {
     "overrides": {
+      "sharp": "0.35.3",
       "@site-insights/contracts": "file:vendor/site-insights/site-insights-contracts-0.1.0.tgz"
     },
     "onlyBuiltDependencies": [

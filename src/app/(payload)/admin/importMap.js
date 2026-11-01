@@ -22,6 +22,7 @@ import { HorizontalRuleFeatureClient as HorizontalRuleFeatureClient_e70f5e05f09f
 import { BlocksFeatureClient as BlocksFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { FolderTableCell as FolderTableCell_f9c02e79a4aed9a3924487c0cd4cafb1 } from '@payloadcms/next/rsc'
 import { FolderField as FolderField_f9c02e79a4aed9a3924487c0cd4cafb1 } from '@payloadcms/next/rsc'
+import { default as default_3e8e5910560881a9306ef40e49f8a4d3 } from '@/components/PerformancePanel'
 import { default as default_485d1f03d73c431c5f36e006176de57a } from '@/components/IndustryParameters'
 import { default as default_1d8bc2a09e24e40cebe7c9b51b5a7e62 } from '@/components/InquiryMailPanel/FormField'
 import { default as default_de8eec11612bc0f531da22e6f910fda2 } from '@/components/InquiryMailPanel/ReplyField'
@@ -65,6 +66,7 @@ export const importMap = {
   "@payloadcms/richtext-lexical/client#BlocksFeatureClient": BlocksFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "@payloadcms/next/rsc#FolderTableCell": FolderTableCell_f9c02e79a4aed9a3924487c0cd4cafb1,
   "@payloadcms/next/rsc#FolderField": FolderField_f9c02e79a4aed9a3924487c0cd4cafb1,
+  "@/components/PerformancePanel#default": default_3e8e5910560881a9306ef40e49f8a4d3,
   "@/components/IndustryParameters#default": default_485d1f03d73c431c5f36e006176de57a,
   "@/components/InquiryMailPanel/FormField#default": default_1d8bc2a09e24e40cebe7c9b51b5a7e62,
   "@/components/InquiryMailPanel/ReplyField#default": default_de8eec11612bc0f531da22e6f910fda2,

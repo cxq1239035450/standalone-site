@@ -3,12 +3,12 @@ import type { Config } from '@/payload-types'
 import configPromise from '@payload-config'
 import { type DataFromGlobalSlug } from 'payload'
 import { getPayload } from '@/i18n/content'
-import { unstable_cache } from 'next/cache'
+import { cache } from 'react'
 import { defaultLocale, type Locale } from '@/i18n/config'
 
 type Global = keyof Config['globals']
 
-async function getGlobal<T extends Global>(slug: T, depth: number, locale: Locale): Promise<DataFromGlobalSlug<T>> {
+const getGlobal = cache(async <T extends Global>(slug: T, depth: number, locale: Locale): Promise<DataFromGlobalSlug<T>> => {
   const payload = await getPayload({ config: configPromise })
 
   const global = await payload.findGlobal({
@@ -20,12 +20,10 @@ async function getGlobal<T extends Global>(slug: T, depth: number, locale: Local
   })
 
   return global
-}
+})
 
 /**
- * Returns a unstable_cache function mapped with the cache tag for the slug
+ * Deduplicate within a server render only. Global relationships and preview permissions stay live.
  */
 export const getCachedGlobal = <T extends Global>(slug: T, depth = 0, locale: Locale = defaultLocale) =>
-  unstable_cache(async () => getGlobal<T>(slug, depth, locale), [slug, String(depth), locale], {
-    tags: [`global_${slug}`, 'languages'],
-  })
+  () => getGlobal<T>(slug, depth, locale)

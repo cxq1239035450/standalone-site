@@ -24,6 +24,9 @@ export const recordViewsPlugin: Plugin = (config) => {
       collection.fields.unshift({ name: 'mailPanel', type: 'ui', admin: {components: {Field: '@/components/InquiryMailPanel/FormField'}} })
     }
     const components = admin.components ||= {}
+    if (collection.slug === 'media') {
+      components.beforeListTable = [...(components.beforeListTable || []), '@/components/PerformancePanel']
+    }
     components.beforeListTable = [...(components.beforeListTable || []), {
       path: '@/components/RecordView/ListModals', clientProps: { slug: collection.slug },
     }]

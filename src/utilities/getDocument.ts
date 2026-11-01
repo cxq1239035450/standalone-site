@@ -2,11 +2,11 @@ import type { Config } from '@/payload-types'
 
 import configPromise from '@payload-config'
 import { getPayload } from '@/i18n/content'
-import { unstable_cache } from 'next/cache'
+import { cache } from 'react'
 
 type Collection = keyof Config['collections']
 
-async function getDocument(collection: Collection, slug: string, depth = 0) {
+const getDocument = cache(async (collection: Collection, slug: string, depth = 0) => {
   const payload = await getPayload({ config: configPromise })
 
   const page = await payload.find({
@@ -20,12 +20,10 @@ async function getDocument(collection: Collection, slug: string, depth = 0) {
   })
 
   return page.docs[0]
-}
+})
 
 /**
- * Returns a unstable_cache function mapped with the cache tag for the slug
+ * Request-local reuse; publication and preview are checked again on the next request.
  */
 export const getCachedDocument = (collection: Collection, slug: string) =>
-  unstable_cache(async () => getDocument(collection, slug), [collection, slug], {
-    tags: [`${collection}_${slug}`, 'languages'],
-  })
+  () => getDocument(collection, slug)

@@ -1,46 +1,60 @@
 'use client'
 
+import React, { useEffect, useRef, useState } from 'react'
 import { cn } from '@/utilities/ui'
-import React, { useEffect, useRef } from 'react'
-
+import { getMediaUrl } from '@/utilities/getMediaUrl'
 import type { Props as MediaProps } from '../types'
 
-import { getMediaUrl } from '@/utilities/getMediaUrl'
-
-export const VideoMedia: React.FC<MediaProps> = (props) => {
-  const { onClick, resource, videoClassName } = props
-
+export const VideoMedia: React.FC<MediaProps> = ({
+  onClick, resource, videoClassName, videoPoster, videoMode = 'on-demand',
+}) => {
   const videoRef = useRef<HTMLVideoElement>(null)
-  // const [showFallback] = useState<boolean>()
-
+  const [backgroundActive, setBackgroundActive] = useState(false)
+  const media = resource && typeof resource === 'object' ? resource : null
+  const url = getMediaUrl(media?.url, media?.url?.startsWith('/') ? media.updatedAt : undefined)
   useEffect(() => {
-    const { current: video } = videoRef
-    if (video) {
-      video.addEventListener('suspend', () => {
-        // setShowFallback(true);
-        // console.warn('Video was suspended, rendering fallback image.')
-      })
+    const video = videoRef.current
+    if (!video || videoMode !== 'background') return
+    const preference = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const connection = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection
+    let visible = false
+    const update = () => {
+      const allowed = visible && !preference.matches && !connection?.saveData && !document.hidden
+      setBackgroundActive(allowed)
+      if (!allowed) video.pause()
     }
-  }, [])
-
-  if (resource && typeof resource === 'object') {
-    const { filename } = resource
-
-    return (
-      <video
-        autoPlay
-        className={cn(videoClassName)}
-        controls={false}
-        loop
-        muted
-        onClick={onClick}
-        playsInline
-        ref={videoRef}
-      >
-        <source src={getMediaUrl(`/media/${filename}`)} />
-      </video>
-    )
-  }
-
-  return null
+    const observer = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; update() })
+    observer.observe(video)
+    preference.addEventListener('change', update)
+    document.addEventListener('visibilitychange', update)
+    return () => {
+      observer.disconnect()
+      preference.removeEventListener('change', update)
+      document.removeEventListener('visibilitychange', update)
+    }
+  }, [url, videoMode])
+  useEffect(() => {
+    if (backgroundActive) void videoRef.current?.play().catch(() => setBackgroundActive(false))
+  }, [backgroundActive])
+  if (!media || !url) return null
+  return (
+    <video
+      key={url}
+      ref={videoRef}
+      className={cn('w-full rounded-lg bg-black/5', videoClassName)}
+      controls={!backgroundActive}
+      preload="none"
+      poster={videoPoster}
+      width={media.width || undefined}
+      height={media.height || undefined}
+      style={{ aspectRatio: media.width && media.height ? `${media.width}/${media.height}` : '16/9' }}
+      aria-label={media.alt || undefined}
+      autoPlay={backgroundActive}
+      loop={videoMode === 'background'}
+      muted={videoMode === 'background'}
+      playsInline
+      onClick={onClick}
+      src={url}
+    />
+  )
 }

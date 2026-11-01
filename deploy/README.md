@@ -1,5 +1,7 @@
 # PawSupply 服务器部署
 
+性能与缓存更新请参阅 [实施及部署手册](../docs/performance-cache-operations.md)：本次不改数据库结构，提供 `pnpm migrate:media-cache` 文件预检查与 `--apply` 预热；应用与 Nginx 必须使用同一媒体快照目录。
+
 服务器：`38.76.170.123`。本次部署仅包含 standalone-site。
 
 ## 目录和服务

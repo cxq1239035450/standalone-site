@@ -13,6 +13,7 @@ import type { User } from '@/payload-types'
 import { Banner } from '@/blocks/Banner/config'
 import { Code } from '@/blocks/Code/config'
 import { MediaBlock } from '@/blocks/MediaBlock/config'
+import { findPublished } from '@/cache/published'
 
 type FindArgs<T extends CollectionSlug> = Omit<
   Parameters<Payload['find']>[0],
@@ -208,7 +209,7 @@ export function createContentReader(raw: Payload, previewUser?: User | null) {
         const path = descending ? key.slice(1) : key
         return `${descending ? '-' : ''}${path === '_status' || paths.includes(path) ? path : `subject.${path}`}`
       }
-      const result = await raw.find({
+      const result = await findPublished(raw, {
         collection,
         depth: 0,
         pagination: args.pagination,
@@ -233,19 +234,28 @@ export function createContentReader(raw: Payload, previewUser?: User | null) {
           ],
         },
       })
+      // Fetch shared records in bounded batches, rather than one query per list item.
+      // This remains a live read: stock, deletion and publication never depend on a TTL.
+      const subjectIDs = [...new Set(result.docs.map(row => (row as unknown as { subject: number }).subject))]
+      const bases = new Map<number | string, Record<string, unknown>>()
+      for (let offset = 0; offset < subjectIDs.length; offset += 100) {
+        const batch = await raw.find({
+          collection: args.collection,
+          where: { id: { in: subjectIDs.slice(offset, offset + 100) } },
+          limit: 100,
+          pagination: false,
+          depth: 0,
+          locale: 'zh',
+          fallbackLocale: false,
+          overrideAccess: true,
+        })
+        for (const base of batch.docs) bases.set(base.id, base as unknown as Record<string, unknown>)
+      }
       const docs = await Promise.all(
         result.docs.map(async (row) => {
           const translation = row as unknown as Record<string, unknown>
           // Only this internal lookup bypasses access; translated projection below removes legacy text.
-          const base = await raw.findByID({
-            collection: args.collection,
-            id: translation.subject as number,
-            depth: 0,
-            locale: 'zh',
-            fallbackLocale: false,
-            overrideAccess: true,
-            disableErrors: true,
-          })
+          const base = bases.get(translation.subject as number)
           if (!base) return null
           const document = mergeTranslation(
             base as unknown as Record<string, unknown>,

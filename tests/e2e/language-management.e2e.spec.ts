@@ -1,13 +1,15 @@
 import { test, expect } from '@playwright/test'
 import { readFileSync } from 'node:fs'
+import { cleanupTestUser, seedTestUser, testUser } from '../helpers/seedUser'
 const messages = JSON.parse(readFileSync(new URL('../../messages/zh.json', import.meta.url), 'utf8'))
 
-// Run only against a migrated database COPY. The language is retained disabled
-// afterward because languages with existing translations cannot be deleted.
+// Run only against a migrated database COPY, with an isolated temporary account.
+test.beforeEach(async () => { if (process.env.LANGUAGE_E2E === '1') await seedTestUser() })
+test.afterEach(async () => { if (process.env.LANGUAGE_E2E === '1') await cleanupTestUser() })
 test('adds a language without restarting, edits a translation and isolates its publication', async ({ page, request }) => {
   test.skip(process.env.LANGUAGE_E2E !== '1', 'Requires LANGUAGE_E2E=1 and a migrated database copy.')
   const origin = process.env.PLAYWRIGHT_BASE_URL || 'http://localhost:3000'
-  const login = await page.request.post(`${origin}/api/users/login`, { data: { email: process.env.LANGUAGE_E2E_EMAIL, password: process.env.LANGUAGE_E2E_PASSWORD } })
+  const login = await page.request.post(`${origin}/api/users/login`, { data: testUser })
   expect(login.ok()).toBe(true)
   const code = `qaa-${100 + Math.floor(Math.random() * 900)}`
   const create = async (collection: string, data: unknown) => {
@@ -16,6 +18,7 @@ test('adds a language without restarting, edits a translation and isolates its p
     return (await response.json()).doc
   }
   const language = await create('languages', { code, label: `测试语种 ${code}`, direction: 'ltr', enabled: false })
+  let productID: number | undefined
   try {
     await create('site-copy', { language: language.id, messages, _status: 'published' })
     for (const subject of ['header', 'footer']) await create(`${subject}-translations`, { subject, language: language.id, navItems: [{ link: { type: 'custom', url: '/products', label: '测试导航' } }], _status: 'published' })
@@ -23,6 +26,7 @@ test('adds a language without restarting, edits a translation and isolates its p
     expect((await page.request.patch(`${origin}/api/languages/${language.id}`, { data: { enabled: true } })).ok()).toBe(true)
     const slug = `language-test-${Date.now()}`
     const product = await create('products', { slug, pricing: { unit: 'piece', stock: 5 } })
+    productID = product.id
     await page.goto(`${origin}/admin/collections/products/${product.id}?mode=edit`)
     await expect(page.getByRole('listitem').filter({hasText: `测试语种 ${code} (${code})`})).toBeVisible()
     const draft = await create('products-translations?draft=true', { subject: product.id, language: language.id, title: '新语种商品', _status: 'draft' })
@@ -35,6 +39,8 @@ test('adds a language without restarting, edits a translation and isolates its p
     expect((await (await request.get(publicURL)).json()).docs[0].title).toBe('新语种商品')
   } finally {
     expect((await page.request.patch(`${origin}/api/languages/${language.id}`, { data: { enabled: false } })).ok()).toBe(true)
+    expect((await request.get(`${origin}/api/translations/content?source=products&language=${code}`)).status()).toBe(404)
+    expect((await page.request.delete(`${origin}/api/languages/${language.id}?clearRelated=true`)).ok()).toBe(true)
+    if (productID) await page.request.delete(`${origin}/api/products/${productID}`)
   }
-  expect((await request.get(`${origin}/api/translations/content?source=products&language=${code}`)).status()).toBe(404)
 })

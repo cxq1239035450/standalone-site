@@ -11,9 +11,11 @@
 export const getMediaUrl = (url: string | null | undefined, cacheTag?: string | null): string => {
   if (!url) return ''
 
-  if (cacheTag && cacheTag !== '') {
-    cacheTag = encodeURIComponent(cacheTag)
-  }
-
-  return cacheTag ? `${url}?${cacheTag}` : url
+  if (!cacheTag || url.startsWith('/assets/media/')) return url
+  const [base, fragment] = url.split('#', 2)
+  const queryIndex = base.indexOf('?')
+  const pathname = queryIndex < 0 ? base : base.slice(0, queryIndex)
+  const query = new URLSearchParams(queryIndex < 0 ? '' : base.slice(queryIndex + 1))
+  query.set('v', cacheTag)
+  return `${pathname}?${query.toString()}${fragment === undefined ? '' : `#${fragment}`}`
 }

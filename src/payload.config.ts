@@ -28,6 +28,7 @@ import { dynamicContentPlugin } from './i18n/contentPlugin'
 import { recordViewsPlugin } from './plugins/recordViews'
 import { translationEndpoints } from './i18n/endpoints'
 import { seoEndpoints } from './i18n/seoEndpoints'
+import { cacheStatusEndpoint } from './endpoints/cacheStatus'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -115,7 +116,7 @@ export default buildConfig({
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer, SearchSettings, InquiryMailSettings],
   plugins: [...plugins, dynamicContentPlugin, recordViewsPlugin],
-  endpoints: [...translationEndpoints, ...seoEndpoints, ...inquiryMailEndpoints],
+  endpoints: [...translationEndpoints, ...seoEndpoints, ...inquiryMailEndpoints, cacheStatusEndpoint],
   secret: process.env.PAYLOAD_SECRET,
   sharp,
   typescript: {

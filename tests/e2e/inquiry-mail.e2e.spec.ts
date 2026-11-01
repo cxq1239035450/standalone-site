@@ -63,9 +63,10 @@ test('QQ notification settings stay disabled without credentials and retain fail
     await editor.locator('input[name="fromName"]').fill('网站询盘（编辑验证）')
     await editor.getByRole('button', { name: /^Save$|^保存$/ }).click()
     await expect.poll(async () => (await (await page.request.get(`${base}/api/inquiry-mail/status`)).json()).fromName).toBe('网站询盘（编辑验证）')
-    await expect(editor.getByRole('region', { name: '询盘邮件通知管理' }).getByText('网站询盘（编辑验证） · 邮箱待配置', { exact: true })).toBeVisible()
+    const updatedSender = `网站询盘（编辑验证）${status.fromEmail ? ` <${status.fromEmail}>` : ' · 邮箱待配置'}`
+    await expect(editor.getByRole('region', { name: '询盘邮件通知管理' }).getByText(updatedSender, { exact: true })).toBeVisible()
     await editor.getByRole('button', { name: '关闭弹窗', exact: true }).click()
-    await expect(panel.getByText('网站询盘（编辑验证） · 邮箱待配置', { exact: true })).toBeVisible()
+    await expect(panel.getByText(updatedSender, { exact: true })).toBeVisible()
     expect(page.url()).toBe(initialURL)
     await page.screenshot({ path: '.deployment/inquiry-mail-settings.png', animations: 'disabled', fullPage: true })
     await page.setViewportSize({ width: 390, height: 844 })

@@ -11,6 +11,7 @@ import { fileURLToPath } from 'url'
 import { anyone } from '../access/anyone'
 import { authenticated } from '../access/authenticated'
 import { adminLabel } from '@/i18n/adminLabels'
+import { publicMediaURL } from '@/cache/media'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -22,6 +23,7 @@ export const Media: CollectionConfig = {
     plural: adminLabel('媒体库', 'Media'),
   },
   folders: true,
+  hooks: { afterRead: [publicMediaURL] },
   access: {
     create: authenticated,
     delete: authenticated,

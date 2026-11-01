@@ -1,6 +1,7 @@
 import { withPayload } from '@payloadcms/next/withPayload'
 import createNextIntlPlugin from 'next-intl/plugin'
 import type { NextConfig } from 'next'
+import { assetPolicy } from './src/cache/policy'
 
 import { redirects } from './redirects'
 
@@ -17,7 +18,10 @@ const nextConfig: NextConfig = {
     loadPaths: ['./node_modules/@payloadcms/ui/dist/scss/'],
   },
   images: {
+    minimumCacheTTL: assetPolicy.imageTTL,
+    maximumDiskCacheSize: assetPolicy.imageDiskBytes,
     localPatterns: [
+      { pathname: '/assets/media/**' },
       { pathname: '/pet-assets/**' },
       {
         pathname: '/api/media/file/**',
@@ -49,6 +53,11 @@ const nextConfig: NextConfig = {
     return webpackConfig
   },
   reactStrictMode: true,
+  async headers() {
+    return ['/media/:path*', '/pet-assets/:path*'].map(source => ({
+      source, headers: [{ key: 'Cache-Control', value: assetPolicy.legacy }],
+    }))
+  },
   redirects,
 }
 

@@ -37,7 +37,13 @@ export async function loadDiscovery(options: DiscoveryOptions = {}) {
       add({url, canonical:url, language:language.code, source:'core', title:path || '/'})
     }
     for (const source of contentSources) {
-      const result = await reader.find({collection:source, locale:language.code, fallbackLocale:false, depth:0, draft:false, pagination:false, overrideAccess:false, where:{_status:{equals:'published'}}})
+      const query = {collection:source, locale:language.code, fallbackLocale:false as const, depth:0, draft:false, limit:100, overrideAccess:false, where:{_status:{equals:'published'}}}
+      const result = await reader.find({...query, page:1})
+      let page = result
+      while (page.hasNextPage && page.nextPage) {
+        page = await reader.find({...query, page:page.nextPage})
+        result.docs.push(...page.docs)
+      }
       for (const doc of result.docs) {
         if (!doc.slug || (source === 'pages' && ['home','products','posts','contact','search'].includes(doc.slug))) continue
         const url = `${origin}/${language.code}${contentPath(source,doc.slug)}`
